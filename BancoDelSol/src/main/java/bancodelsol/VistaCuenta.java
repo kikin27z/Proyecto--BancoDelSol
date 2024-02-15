@@ -1,5 +1,13 @@
 package bancodelsol;
 
+import bancodelsoldominio.Cuenta;
+import bancodelsolpersistencia.conexion.Conexion;
+import bancodelsolpersistencia.conexion.IConexion;
+import bancodelsolpersistencia.daos.CuentaDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author José Karim Franco Valencia - 245138
@@ -7,6 +15,8 @@ package bancodelsol;
  */
 public class VistaCuenta extends javax.swing.JPanel {
 
+    Cuenta cuenta;
+    Long idCuenta;
     /**
      * Creates new form VistaCliente
      */
@@ -14,9 +24,11 @@ public class VistaCuenta extends javax.swing.JPanel {
     /**
      * Creates new form VistaCliente
      */
-    public VistaCuenta(Ventana ventana) {
+    public VistaCuenta(Ventana ventana, Long idCuenta ) {
         this.ventana = ventana;
+        this.idCuenta = idCuenta;
         initComponents();
+        cargarDatosCuenta();
     }
 
     /**
@@ -112,6 +124,11 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblTransferencia.setForeground(new java.awt.Color(255, 255, 255));
         lblTransferencia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTransferencia.setText("Transferencia");
+        lblTransferencia.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblTransferenciaMouseClicked(evt);
+            }
+        });
         add(lblTransferencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(123, 310, 200, 45));
 
         lblRetiro.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
@@ -194,6 +211,10 @@ public class VistaCuenta extends javax.swing.JPanel {
         add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    private void lblTransferenciaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTransferenciaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblTransferenciaMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblFecha1;
@@ -221,4 +242,28 @@ public class VistaCuenta extends javax.swing.JPanel {
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTransferencia;
     // End of variables declaration//GEN-END:variables
+
+    public void cargarDatosCuenta(){
+        try {
+            String cadenaConexion = "jdbc:mysql://localhost/banco_del_sol";
+            String user = "root";
+            String password = "JFK_jfk27";
+            
+            IConexion conexion = new Conexion(cadenaConexion, user, password);
+            
+            CuentaDAO cuentaDAO = new CuentaDAO(conexion);
+            this.cuenta = cuentaDAO.existe(this.idCuenta);
+            
+            if(cuenta != null){
+//                System.out.println(cuenta.toString());
+                lblNombreCuenta.setText("Hogar");
+                this.lblMontoActual.setText("$"+this.cuenta.getSaldo()+" MXN");
+                lblFechaApertura.setText(cuenta.getFechaApertura());
+                lblNumCuenta.setText(cuenta.getNumeroCuenta());
+            }
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(VistaCuenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

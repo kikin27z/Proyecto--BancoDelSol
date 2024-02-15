@@ -110,7 +110,7 @@ public class VistaCliente extends javax.swing.JPanel {
 
     private void lblCuenta1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCuenta1MouseClicked
         System.out.println("Cuenta1");
-        ventana.cambiarVistaCuenta();
+        ventana.cambiarVistaCuenta(Long.valueOf(1));
         
     }//GEN-LAST:event_lblCuenta1MouseClicked
 

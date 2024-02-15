@@ -36,13 +36,13 @@ public class Principal {
         ITransferenciaDAO transferenciaDAO = new TransferenciaDAO(conexion);
         
         Ventana ventana = new Ventana();
-        
-        VistaCliente vistaCliente = new VistaCliente(ventana);
-        
-        ventana.add(vistaCliente);
-        vistaCliente.setBounds(0, 0, 1000, 580);
-        ventana.setLocationRelativeTo(null);
-        ventana.setVisible(true);
+        ventana.cambiarVistaCliente();
+//        VistaCliente vistaCliente = new VistaCliente(ventana);
+//        
+//        ventana.add(vistaCliente);
+//        vistaCliente.setBounds(0, 0, 1000, 580);
+//        ventana.setLocationRelativeTo(null);
+//        ventana.setVisible(true);
         
         
         

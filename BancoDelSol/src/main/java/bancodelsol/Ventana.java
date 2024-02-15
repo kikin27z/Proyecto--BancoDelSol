@@ -46,17 +46,39 @@ public class Ventana extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
-    public void cambiarVistaCuenta(){
-        this.removeAll();
-
-        // Actualizar la interfaz gráfica
-            this.revalidate();
-        this.repaint();
-        VistaCuenta vistaCuenta = new VistaCuenta(this);
+    public void cambiarVistaCliente(){
+       
+        VistaCliente vistaClienta = new VistaCliente(this);
+        
+        this.add(vistaClienta);
+        vistaClienta.setBounds(0, 0, 1000, 580);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+    public void cambiarVistaCuenta(Long idCuenta){
+       
+        VistaCuenta vistaCuenta = new VistaCuenta(this,idCuenta);
         
         this.add(vistaCuenta);
         vistaCuenta.setBounds(0, 0, 1000, 580);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+    public void cambiarVistaTransferir(Long idCuenta){
+       
+        VistaTransferir vistaTransferencia = new VistaTransferir(this,idCuenta);
+        
+        this.add(vistaTransferencia);
+        vistaTransferencia.setBounds(0, 0, 1000, 580);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+    
+    public void limpiarFrame(){
+         this.removeAll();
+
+        // Actualizar la interfaz gráfica
+            this.revalidate();
+        this.repaint();
     }
 }
