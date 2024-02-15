@@ -14,25 +14,28 @@ public class Domicilio {
     private String numeroExterior;
     private String codigoPostal;
     private String ciudad;
+    private Long idCliente;
 
     public Domicilio() {
     }
 
-    public Domicilio(String calle, String colonia, String numeroExterior, String codigoPostal, String ciudad) {
+    public Domicilio(String calle, String colonia, String numeroExterior, String codigoPostal, String ciudad, Long idCliente) {
         this.calle = calle;
         this.colonia = colonia;
         this.numeroExterior = numeroExterior;
         this.codigoPostal = codigoPostal;
         this.ciudad = ciudad;
+        this.idCliente = idCliente;
     }
 
-    public Domicilio(Long idDomicilio, String calle, String colonia, String numeroExterior, String codigoPostal, String ciudad) {
+    public Domicilio(Long idDomicilio, String calle, String colonia, String numeroExterior, String codigoPostal, String ciudad, Long idCliente) {
         this.idDomicilio = idDomicilio;
         this.calle = calle;
         this.colonia = colonia;
         this.numeroExterior = numeroExterior;
         this.codigoPostal = codigoPostal;
         this.ciudad = ciudad;
+        this.idCliente = idCliente;
     }
 
     public String getCalle() {
@@ -75,6 +78,11 @@ public class Domicilio {
         this.ciudad = ciudad;
     }
 
+    public Long getIdCliente() {
+        return idCliente;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 5;
@@ -101,16 +109,14 @@ public class Domicilio {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Domicilio{");
-        sb.append("id=").append(idDomicilio);
+        sb.append("idDomicilio=").append(idDomicilio);
         sb.append(", calle=").append(calle);
         sb.append(", colonia=").append(colonia);
         sb.append(", numeroExterior=").append(numeroExterior);
         sb.append(", codigoPostal=").append(codigoPostal);
         sb.append(", ciudad=").append(ciudad);
+        sb.append(", idCliente=").append(idCliente);
         sb.append('}');
         return sb.toString();
-    }
-    
-    
-    
+    }    
 }

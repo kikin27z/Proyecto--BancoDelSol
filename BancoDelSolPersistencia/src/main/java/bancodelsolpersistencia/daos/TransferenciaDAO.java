@@ -26,9 +26,6 @@ public class TransferenciaDAO implements ITransferenciaDAO{
     public TransferenciaDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
     }
-
-    //INSERT INTO cuentas (fecha_apertura,numero_cuenta, saldo, id_cliente) VALUES
-//( NOW(),'1234567890923357', 1000.00, 1)
     
     @Override
     public Transferencia agregar(TransferenciaNuevaDTO transferenciaNueva,Long id_cuenta) throws PersistenciaException {

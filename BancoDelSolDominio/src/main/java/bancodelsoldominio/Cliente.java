@@ -15,22 +15,20 @@ public class Cliente {
     private String usuario;
     private String contrasena;
     private String fechaNacimiento;
-    private Long idDomicilio;
 
     public Cliente() {
     }
 
-    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, String usuario, String contrasena, String fechaNacimiento, Long idDomicilio) {
+    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, String usuario, String contrasena, String fechaNacimiento) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.usuario = usuario;
         this.contrasena = contrasena;
         this.fechaNacimiento = fechaNacimiento;
-        this.idDomicilio = idDomicilio;
     }
 
-    public Cliente(Long idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String usuario, String contrasena, String fechaNacimiento, Long idDomicilio) {
+    public Cliente(Long idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String usuario, String contrasena, String fechaNacimiento) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -38,7 +36,6 @@ public class Cliente {
         this.usuario = usuario;
         this.contrasena = contrasena;
         this.fechaNacimiento = fechaNacimiento;
-        this.idDomicilio = idDomicilio;
     }
 
     public Long getIdCliente() {
@@ -97,13 +94,6 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Long getIdDomicilio() {
-        return idDomicilio;
-    }
-
-    public void setIdDomicilio(Long idDomicilio) {
-        this.idDomicilio = idDomicilio;
-    }
 
     @Override
     public int hashCode() {
@@ -138,7 +128,6 @@ public class Cliente {
         sb.append(", usuario=").append(usuario);
         sb.append(", contrasena=").append(contrasena);
         sb.append(", fechaNacimiento=").append(fechaNacimiento);
-        sb.append(", idDomicilio=").append(idDomicilio);
         sb.append('}');
         return sb.toString();
     }
