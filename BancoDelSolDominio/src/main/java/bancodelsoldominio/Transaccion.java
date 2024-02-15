@@ -53,12 +53,20 @@ public class Transaccion {
         this.idCuenta = idCuenta;
     }
 
+    public Long getIdTransaccion() {
+        return idTransaccion;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 61 * hash + Objects.hashCode(this.idTransaccion);
         return hash;
     }
+    
+    
 
     @Override
     public boolean equals(Object obj) {
