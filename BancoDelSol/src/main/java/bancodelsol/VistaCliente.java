@@ -1,9 +1,12 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
 package bancodelsol;
 
 /**
  *
- * @author José Karim Franco Valencia - 245138
- * @author Jesús Roberto García Armenta - 244913
+ * @author karim
  */
 public class VistaCliente extends javax.swing.JPanel {
 
@@ -23,23 +26,82 @@ public class VistaCliente extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblTitulo = new javax.swing.JLabel();
-        lblFondo = new javax.swing.JLabel();
+        lblNombreCliente = new javax.swing.JLabel();
+        lblCuentaInfo = new javax.swing.JLabel();
+        lblNombreCuenta1 = new javax.swing.JLabel();
+        lblNombreCuenta2 = new javax.swing.JLabel();
+        lblNumeroCuenta1 = new javax.swing.JLabel();
+        lblNumeroCuenta2 = new javax.swing.JLabel();
+        lblSaldo1 = new javax.swing.JLabel();
+        lblSaldo2 = new javax.swing.JLabel();
+        lblAgregarCuenta = new javax.swing.JLabel();
+        fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblTitulo.setFont(new java.awt.Font("Amazon Ember", 1, 36)); // NOI18N
-        lblTitulo.setForeground(new java.awt.Color(149, 120, 64));
-        lblTitulo.setText("Cuenta");
-        add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 21, -1, -1));
+        lblNombreCliente.setFont(new java.awt.Font("Amazon Ember", 1, 36)); // NOI18N
+        lblNombreCliente.setForeground(new java.awt.Color(149, 120, 64));
+        lblNombreCliente.setText("Hola, Jose Karim");
+        add(lblNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 284, 43));
 
-        lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/imgVistaCliente.png"))); // NOI18N
-        add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
+        lblCuentaInfo.setFont(new java.awt.Font("Amazon Ember", 1, 24)); // NOI18N
+        lblCuentaInfo.setForeground(new java.awt.Color(143, 143, 143));
+        lblCuentaInfo.setText("Cuentas");
+        add(lblCuentaInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 125, 284, 43));
+
+        lblNombreCuenta1.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
+        lblNombreCuenta1.setForeground(new java.awt.Color(255, 255, 255));
+        lblNombreCuenta1.setText("Hogar");
+        add(lblNombreCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 187, 150, 24));
+
+        lblNombreCuenta2.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
+        lblNombreCuenta2.setForeground(new java.awt.Color(255, 255, 255));
+        lblNombreCuenta2.setText("Hogar");
+        add(lblNombreCuenta2, new org.netbeans.lib.awtextra.AbsoluteConstraints(365, 187, 150, 24));
+
+        lblNumeroCuenta1.setFont(new java.awt.Font("Amazon Ember Light", 1, 20)); // NOI18N
+        lblNumeroCuenta1.setForeground(new java.awt.Color(255, 255, 255));
+        lblNumeroCuenta1.setText("4444555566667777");
+        add(lblNumeroCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 219, 160, 24));
+
+        lblNumeroCuenta2.setFont(new java.awt.Font("Amazon Ember Light", 1, 20)); // NOI18N
+        lblNumeroCuenta2.setForeground(new java.awt.Color(255, 255, 255));
+        lblNumeroCuenta2.setText("4444555566667777");
+        add(lblNumeroCuenta2, new org.netbeans.lib.awtextra.AbsoluteConstraints(365, 219, 160, 24));
+
+        lblSaldo1.setFont(new java.awt.Font("Amazon Ember", 1, 22)); // NOI18N
+        lblSaldo1.setForeground(new java.awt.Color(255, 255, 255));
+        lblSaldo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSaldo1.setText("$112.00 MXN");
+        add(lblSaldo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 251, 180, 24));
+
+        lblSaldo2.setFont(new java.awt.Font("Amazon Ember", 1, 22)); // NOI18N
+        lblSaldo2.setForeground(new java.awt.Color(255, 255, 255));
+        lblSaldo2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSaldo2.setText("$112.00 MXN");
+        add(lblSaldo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 251, 190, 24));
+
+        lblAgregarCuenta.setFont(new java.awt.Font("Amazon Ember", 1, 22)); // NOI18N
+        lblAgregarCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        lblAgregarCuenta.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAgregarCuenta.setText("Agregar cuenta +");
+        add(lblAgregarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 214, 190, 44));
+
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/imgVistaCuenta.png"))); // NOI18N
+        add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lblFondo;
-    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JLabel fondo;
+    private javax.swing.JLabel lblAgregarCuenta;
+    private javax.swing.JLabel lblCuentaInfo;
+    private javax.swing.JLabel lblNombreCliente;
+    private javax.swing.JLabel lblNombreCuenta1;
+    private javax.swing.JLabel lblNombreCuenta2;
+    private javax.swing.JLabel lblNumeroCuenta1;
+    private javax.swing.JLabel lblNumeroCuenta2;
+    private javax.swing.JLabel lblSaldo1;
+    private javax.swing.JLabel lblSaldo2;
     // End of variables declaration//GEN-END:variables
 }

@@ -15,4 +15,6 @@ public interface ITransferenciaDAO {
     List<Transferencia> consultar() throws PersistenciaException;
 //    Transferencia actualizar(TransferenciaActualizadadaDTO transferenciaActualizada) throws PersistenciaException;
     Transferencia eliminar(Integer id)throws PersistenciaException;
+    
+    List<Transferencia> ultimas3() throws PersistenciaException;
 }

@@ -1,10 +1,8 @@
 package bancodelsolpersistencia.daos;
 
 import bancodelsol.dtos.CuentaNuevaDTO;
-import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Cuenta;
 import bancodelsolpersistencia.conexion.IConexion;
-import static bancodelsolpersistencia.daos.ClienteDAO.logger;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class CuentaDAO implements ICuentaDAO{
     final IConexion conexionBD;
-    static final Logger logger = Logger.getLogger(ClienteDAO.class.getName());
+    static final Logger logger = Logger.getLogger(CuentaDAO.class.getName());
 
     public CuentaDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
@@ -71,18 +69,22 @@ public class CuentaDAO implements ICuentaDAO{
                                          """;
         try (
             Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL,Statement.RETURN_GENERATED_KEYS);
             PreparedStatement comandoSelect = conexion.prepareStatement(sentenciaSQLTraerCuenta);
         ) {
             comandoSelect.setLong(1, idCuenta);
     
                 Cuenta cuenta = new Cuenta();
             try (ResultSet datosCuenta = comandoSelect.executeQuery()) {
-                logger.log(Level.INFO, "Se encontró al cliente");
-                cuenta.setSaldo(datosCuenta.getDouble("saldo"));
-                cuenta.setFechaApertura(datosCuenta.getString("fecha_apertura"));
-                cuenta.setNumeroCuenta(datosCuenta.getString("numero_cuenta"));
-                cuenta.setIdCliente(datosCuenta.getLong("id_cliente"));
+                if (datosCuenta.next()) { // Mover el cursor al primer registro
+                    logger.log(Level.INFO, "Se encontró la cuenta");
+                    cuenta.setSaldo(datosCuenta.getDouble("saldo"));
+                    cuenta.setFechaApertura(datosCuenta.getString("fecha_apertura"));
+                    cuenta.setNumeroCuenta(datosCuenta.getString("numero_cuenta"));
+                    cuenta.setIdCliente(datosCuenta.getLong("id_cliente"));
+                } else {
+                    throw new PersistenciaException("No se encontró la cuenta con ID: " + idCuenta);
+                }
             }
             
             Double saldoActualizado = nuevoSaldo + cuenta.getSaldo();
@@ -94,7 +96,7 @@ public class CuentaDAO implements ICuentaDAO{
             logger.log(Level.INFO, "Se actualizaron {0} cuentas", registrosActualizados);
             ResultSet idsGenerados = comando.getGeneratedKeys();
             idsGenerados.next();
-            cuenta.setSaldo(idsGenerados.getDouble("saldo"));
+//            cuenta.setSaldo(idsGenerados.getDouble("saldo"));
             return cuenta;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "No se pudo actualizar el socio.", e);
@@ -104,7 +106,38 @@ public class CuentaDAO implements ICuentaDAO{
 
     @Override
     public Cuenta existe(Long idCuenta) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sentenciaSQL = """
+                             SELECT * FROM cuentas 
+                               WHERE id_cuenta = ?;
+                              """;
+          try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
+            
+        ) {
+              
+            comando.setLong(1, idCuenta);
+    
+            try (ResultSet datosCuenta = comando.executeQuery()) {
+                if (!datosCuenta.next()) {
+                    logger.log(Level.INFO, "No se halló la cuenta con id {0}", idCuenta);
+                    return null;
+                }
+
+                logger.log(Level.INFO, "Se encontró la cuenta");
+                Cuenta cuenta = new Cuenta(
+                    idCuenta,
+                    datosCuenta.getString("fecha_apertura"),
+                    datosCuenta.getString("numero_cuenta"),
+                    datosCuenta.getDouble("saldo"),
+                    datosCuenta.getLong("id_cliente")
+                );
+                return cuenta;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudo encontrar la cuenta.", e);
+            throw new PersistenciaException("No se pudo encontrar la cuenta.", e);
+        }
     }
     
 }
