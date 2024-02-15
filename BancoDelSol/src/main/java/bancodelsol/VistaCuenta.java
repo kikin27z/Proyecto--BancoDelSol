@@ -10,7 +10,12 @@ public class VistaCuenta extends javax.swing.JPanel {
     /**
      * Creates new form VistaCliente
      */
-    public VistaCuenta() {
+    private  Ventana ventana;
+    /**
+     * Creates new form VistaCliente
+     */
+    public VistaCuenta(Ventana ventana) {
+        this.ventana = ventana;
         initComponents();
     }
 
@@ -48,6 +53,7 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblFecha3 = new javax.swing.JLabel();
         lblFondo = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(204, 204, 204));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblTitulo.setFont(new java.awt.Font("Amazon Ember", 1, 36)); // NOI18N
@@ -185,8 +191,6 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblFecha3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblFecha3.setText("03/06/2004 12:03:22");
         add(lblFecha3, new org.netbeans.lib.awtextra.AbsoluteConstraints(586, 510, 200, 22));
-
-        lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/imgVistaCliente.png"))); // NOI18N
         add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 

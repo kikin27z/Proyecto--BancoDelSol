@@ -35,16 +35,26 @@ public class Principal {
         ICuentaDAO cuentaDAO = new CuentaDAO(conexion);
         ITransferenciaDAO transferenciaDAO = new TransferenciaDAO(conexion);
         
+        Ventana ventana = new Ventana();
         
-        try {
-            TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
-            transferenciaNueva.setMonto(200);
-            transferenciaNueva.setCuentaDestino("1234567899123456");
-            
-            transferenciaDAO.agregar(transferenciaNueva, Long.valueOf(2));
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        VistaCliente vistaCliente = new VistaCliente(ventana);
+        
+        ventana.add(vistaCliente);
+        vistaCliente.setBounds(0, 0, 1000, 580);
+        ventana.setLocationRelativeTo(null);
+        ventana.setVisible(true);
+        
+        
+        
+//        try {
+//            TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
+//            transferenciaNueva.setMonto(200);
+//            transferenciaNueva.setCuentaDestino("1234567899123456");
+//            
+//            transferenciaDAO.agregar(transferenciaNueva, Long.valueOf(2));
+//        } catch (PersistenciaException ex) {
+//            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     
 }

@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package bancodelsol;
+
+import javax.swing.JFrame;
 
 /**
  *
@@ -10,10 +8,12 @@ package bancodelsol;
  */
 public class VistaCliente extends javax.swing.JPanel {
 
+    private  Ventana ventana;
     /**
      * Creates new form VistaCliente
      */
-    public VistaCliente() {
+    public VistaCliente(Ventana ventana) {
+        this.ventana = ventana;
         initComponents();
     }
 
@@ -26,6 +26,8 @@ public class VistaCliente extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblCuenta1 = new javax.swing.JLabel();
+        lblCuenta2 = new javax.swing.JLabel();
         lblNombreCliente = new javax.swing.JLabel();
         lblCuentaInfo = new javax.swing.JLabel();
         lblNombreCuenta1 = new javax.swing.JLabel();
@@ -37,7 +39,22 @@ public class VistaCliente extends javax.swing.JPanel {
         lblAgregarCuenta = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(204, 204, 204));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblCuenta1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCuenta1MouseClicked(evt);
+            }
+        });
+        add(lblCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(119, 166, 203, 140));
+
+        lblCuenta2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCuenta2MouseClicked(evt);
+            }
+        });
+        add(lblCuenta2, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 166, 203, 140));
 
         lblNombreCliente.setFont(new java.awt.Font("Amazon Ember", 1, 36)); // NOI18N
         lblNombreCliente.setForeground(new java.awt.Color(149, 120, 64));
@@ -87,14 +104,27 @@ public class VistaCliente extends javax.swing.JPanel {
         lblAgregarCuenta.setText("Agregar cuenta +");
         add(lblAgregarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 214, 190, 44));
 
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/imgVistaCuenta.png"))); // NOI18N
+        fondo.setBackground(new java.awt.Color(102, 102, 102));
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void lblCuenta1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCuenta1MouseClicked
+        System.out.println("Cuenta1");
+        ventana.cambiarVistaCuenta();
+        
+    }//GEN-LAST:event_lblCuenta1MouseClicked
+
+    private void lblCuenta2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCuenta2MouseClicked
+        // TODO add your handling code here:
+        System.out.println("Cuenta2");
+    }//GEN-LAST:event_lblCuenta2MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel lblAgregarCuenta;
+    private javax.swing.JLabel lblCuenta1;
+    private javax.swing.JLabel lblCuenta2;
     private javax.swing.JLabel lblCuentaInfo;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblNombreCuenta1;
