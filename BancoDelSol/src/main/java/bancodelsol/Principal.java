@@ -36,7 +36,7 @@ public class Principal {
         ITransferenciaDAO transferenciaDAO = new TransferenciaDAO(conexion);
         
         Ventana ventana = new Ventana();
-        ventana.cambiarVistaCliente();
+        ventana.cambiarVistaInicio();
 //        VistaCliente vistaCliente = new VistaCliente(ventana);
 //        
 //        ventana.add(vistaCliente);

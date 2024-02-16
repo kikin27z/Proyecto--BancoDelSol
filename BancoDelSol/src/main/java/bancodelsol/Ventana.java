@@ -46,6 +46,14 @@ public class Ventana extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
+    public void cambiarVistaInicio(){
+        VistaInicio vistaInicio = new VistaInicio(this);
+        
+        this.add(vistaInicio);
+        vistaInicio.setBounds(0, 0, 1000, 580);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
     public void cambiarVistaCliente(){
        
         VistaCliente vistaClienta = new VistaCliente(this);
