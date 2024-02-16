@@ -127,6 +127,7 @@ public class VistaInicio extends javax.swing.JPanel {
 
     private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
         // TODO add your handling code here:
+        ventana.cambiarVistaInicioSesion();
     }//GEN-LAST:event_btnInicioSesionActionPerformed
 
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
@@ -139,6 +140,7 @@ public class VistaInicio extends javax.swing.JPanel {
 
     private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
         // TODO add your handling code here:
+        ventana.cambiarVistaRegistro();
     }//GEN-LAST:event_btnRegistroActionPerformed
 
     private void btnNosotrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNosotrosActionPerformed

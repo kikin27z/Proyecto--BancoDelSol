@@ -101,6 +101,11 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         lblHazteCliente.setFont(new java.awt.Font("Amazon Ember", 0, 16)); // NOI18N
         lblHazteCliente.setForeground(new java.awt.Color(143, 143, 143));
         lblHazteCliente.setText("¿No eres cliente y quieres serlo?");
+        lblHazteCliente.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                lblHazteClienteMouseDragged(evt);
+            }
+        });
         add(lblHazteCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 370, -1, -1));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgInicioSesion.png"))); // NOI18N
@@ -108,12 +113,17 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaCliente();
     }//GEN-LAST:event_btnInicioSesionActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaInicio();
     }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void lblHazteClienteMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHazteClienteMouseDragged
+        // TODO add your handling code here:
+        ventana.cambiarVistaRegistro();
+    }//GEN-LAST:event_lblHazteClienteMouseDragged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

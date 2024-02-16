@@ -2,21 +2,20 @@ package bancodelsol;
 
 
 /**
- *
- * @author karim
+ * Clase que representa la segunda ventana de registro de clientes.
+ * En la sección de datos de domicilio.
+ * @author José Karim Franco Valencia - 245138
  */
 public class VistaRegistro2 extends javax.swing.JPanel {
-
-    /**
-     * Creates new form VistaRegistro
-     */
     private  Ventana ventana;
     /**
-     * Creates new form VistaCliente
+     * Constructor de la vista de registro 2.
+     * @param ventana JFrame donde se colocará este JPanel.
      */
     public VistaRegistro2(Ventana ventana ) {
         this.ventana = ventana;
         initComponents();
+        cargarDatos();
     }
 
     /**
@@ -152,12 +151,24 @@ public class VistaRegistro2 extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Redirige a la pantalla de registro en la sección
+     * de datos personales.
+     * @param evt Evento de un clic en un botón.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaRegistrarse();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    /**
+     * Redirige a la pantalla de registro en la sección
+     * de datos de la cuenta del cliente.
+     * @param evt Evento de un clic en un botón.
+     */
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        // TODO add your handling code here:
+        guardarDatosDomicilio();
+        ventana.cambiarVistaRegistrarse3();
+        
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
 
@@ -182,6 +193,30 @@ public class VistaRegistro2 extends javax.swing.JPanel {
     private javax.swing.JTextField txtNumExterior;
     // End of variables declaration//GEN-END:variables
 
-
+    /**
+     * Método que guarda los datos del domicilio en una variable auxiliar
+     * que sirve en caso de volver a esta parte del formulario y insertar
+     * los datos en su correspondiente campo.
+     */
+    public void guardarDatosDomicilio(){
+        ventana.getDomicilioDTO().setCalle(txtCalle.getText());
+        ventana.getDomicilioDTO().setCiudad(txtCiudad.getText());
+        ventana.getDomicilioDTO().setCodigoPostal(txtCodigoPostal.getText());
+        ventana.getDomicilioDTO().setColonia(txtColonia.getText());
+        ventana.getDomicilioDTO().setNumeroExterior(txtNumExterior.getText());
+    }
     
+    /**
+     * Método que carga los datos del formulario y los inserta en los campos, en caso de volver a una
+     * página anterior.
+     */
+    public void cargarDatos(){
+        if(ventana.getClienteDTO() != null && ventana.getDomicilioDTO().getCalle()!= null){
+            txtCalle.setText(ventana.getDomicilioDTO().getCalle());
+            txtCiudad.setText(ventana.getDomicilioDTO().getCiudad());
+            txtCodigoPostal.setText(ventana.getDomicilioDTO().getCodigoPostal());
+            txtColonia.setText(ventana.getDomicilioDTO().getColonia());
+            txtNumExterior.setText(ventana.getDomicilioDTO().getNumeroExterior());
+        }
+    }
 }

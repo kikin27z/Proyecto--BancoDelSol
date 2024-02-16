@@ -1,30 +1,30 @@
 package bancodelsol;
 
-import org.jdatepicker.JDatePanel;
-import org.jdatepicker.JDatePicker;
-import org.jdatepicker.UtilDateModel;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Calendar;
-import java.util.Properties;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
+ * Clase que representa la primera ventana de registro de clientes. En la
+ * sección de datos personales.
  *
- * @author karim
+ * @author José Karim Franco Valencia - 245138
  */
 public class VistaRegistro extends javax.swing.JPanel {
 
+    private Ventana ventana;
+
     /**
-     * Creates new form VistaRegistro
+     * Constructor de la vista de registro.
+     *
+     * @param ventana JFrame donde se colocará este JPanel.
      */
-    private  Ventana ventana;
-    /**
-     * Creates new form VistaCliente
-     */
-    public VistaRegistro(Ventana ventana ) {
+    public VistaRegistro(Ventana ventana) {
         this.ventana = ventana;
         initComponents();
+        cargarDatos();
     }
 
     /**
@@ -50,6 +50,7 @@ public class VistaRegistro extends javax.swing.JPanel {
         lblTitulo = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
+        txtFecha = new com.toedter.calendar.JDateChooser();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -137,17 +138,31 @@ public class VistaRegistro extends javax.swing.JPanel {
             }
         });
         add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 430, 142, 45));
+        add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 290, 300, 30));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgRegistrarse1.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Redirige a la pantalla de inicio del banco.
+     *
+     * @param evt Evento de un clic en un botón.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        ventana.setClienteDTO(null);
+        ventana.setDomicilioDTO(null);
+        ventana.cambiarVistaInicio();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    /**
+     * Redirige a la pantalla de registro en la sección de datos del domicilio.
+     *
+     * @param evt Evento de un clic en un botón.
+     */
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        // TODO add your handling code here:
+        guardarDatosCliente();
+        ventana.cambiarVistaRegistrarse2();
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
 
@@ -166,19 +181,45 @@ public class VistaRegistro extends javax.swing.JPanel {
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtApellidoMaterno;
     private javax.swing.JTextField txtApellidoPaterno;
+    private com.toedter.calendar.JDateChooser txtFecha;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Método que guarda los datos del cliente en una variable auxiliar que
+     * sirve en caso de volver a esta parte del formulario y insertar los datos
+     * en su correspondiente campo.
+     */
+    public void guardarDatosCliente() {
+        ventana.getClienteDTO().setNombres(txtNombre.getText());
+        ventana.getClienteDTO().setApellidoPaterno(txtApellidoPaterno.getText());
+        ventana.getClienteDTO().setApellidoMaterno(txtApellidoMaterno.getText());
+        java.sql.Date fechaNacimiento = new java.sql.Date(txtFecha.getDate().getTime());
+        ventana.getClienteDTO().setFecha(fechaNacimiento.toString());
+    }
 
-    public void ponerCalendario(){
-        UtilDateModel model = new UtilDateModel();
-        Properties properties = new Properties();
-        properties.put("text.today", "Today");
-        properties.put("text.month", "Month");
-        properties.put("text.year", "Year");
+    /**
+     * Método que carga los datos del formulario y los inserta en los campos, en
+     * caso de volver a una página anterior.
+     */
+    public void cargarDatos() {
+        if (ventana.getClienteDTO() != null && ventana.getClienteDTO().getNombres() != null) {
+            txtNombre.setText(ventana.getClienteDTO().getNombres());
+            txtApellidoPaterno.setText(ventana.getClienteDTO().getApellidoPaterno());
+            txtApellidoMaterno.setText(ventana.getClienteDTO().getApellidoMaterno());
 
-//        JDatePanel datePanel = new JDatePanel(model, properties);
-        JDatePanel datePanel = new JDatePanel(model);
-        this.add(datePanel);
+            String format = "yyyy-MM-dd";
+
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+
+            Date date = null;
+            try {
+                date = sdf.parse(ventana.getClienteDTO().getFecha());
+            } catch (ParseException ex) {
+                Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            txtFecha.setDate(date);
+        }
     }
 }

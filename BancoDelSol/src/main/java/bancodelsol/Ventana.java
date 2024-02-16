@@ -1,13 +1,21 @@
 package bancodelsol;
 
+import bancodelsol.dtos.ClienteNuevoDTO;
+import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsoldominio.Cliente;
+import javax.swing.JPanel;
 
 /**
  *
  * @author karim
  */
 public class Ventana extends javax.swing.JFrame {
+
     private Cliente cliente;
+    private ClienteNuevoDTO clienteDTO;
+    private DomicilioNuevoDTO domicilioDTO;
+    private JPanel panelActual;
+
     /**
      * Creates new form Ventana
      */
@@ -45,48 +53,102 @@ public class Ventana extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
-    public void cambiarVistaInicio(){
+    public void cambiarVistaInicio() {
+        limpiarFrame();
         VistaInicio vistaInicio = new VistaInicio(this);
-        
-        this.add(vistaInicio);
-        vistaInicio.setBounds(0, 0, 1000, 580);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
+        ponerEnJFrame(vistaInicio);
+        panelActual = vistaInicio;
     }
-    public void cambiarVistaCliente(){
-       
+
+    public void cambiarVistaCliente() {
+        limpiarFrame();
         VistaCliente vistaClienta = new VistaCliente(this);
-        
-        this.add(vistaClienta);
-        vistaClienta.setBounds(0, 0, 1000, 580);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
+        ponerEnJFrame(vistaClienta);
+        panelActual = vistaClienta;
     }
-    public void cambiarVistaCuenta(Long idCuenta){
-       
-        VistaCuenta vistaCuenta = new VistaCuenta(this,idCuenta);
-        
+
+    public void cambiarVistaCuenta(Long idCuenta) {
+
+        VistaCuenta vistaCuenta = new VistaCuenta(this, idCuenta);
+
         this.add(vistaCuenta);
         vistaCuenta.setBounds(0, 0, 1000, 580);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
-    public void cambiarVistaTransferir(Long idCuenta){
-       
-        VistaTransferir vistaTransferencia = new VistaTransferir(this,idCuenta);
-        
-        this.add(vistaTransferencia);
-        vistaTransferencia.setBounds(0, 0, 1000, 580);
+
+    public void cambiarVistaTransferir(Long idCuenta) {
+        this.limpiarFrame();
+        VistaTransferir vistaTransferencia = new VistaTransferir(this, idCuenta);
+        ponerEnJFrame(vistaTransferencia);
+        panelActual = vistaTransferencia;
+    }
+
+    public void limpiarFrame() {
+        if (panelActual != null) {
+            this.remove(panelActual);
+            panelActual = null;
+        }
+    }
+
+    public void cambiarVistaInicioSesion() {
+        limpiarFrame();
+        VistaInicioSesion vistaInicioSesion = new VistaInicioSesion(this);
+        ponerEnJFrame(vistaInicioSesion);
+        panelActual = vistaInicioSesion;
+    }
+
+    public void cambiarVistaRegistro() {
+        this.clienteDTO = new ClienteNuevoDTO();
+        this.domicilioDTO = new DomicilioNuevoDTO();
+        cambiarVistaRegistrarse();
+    }
+
+    public void cambiarVistaRegistrarse() {
+        limpiarFrame();
+        VistaRegistro vistaRegistro = new VistaRegistro(this);
+        ponerEnJFrame(vistaRegistro);
+        panelActual = vistaRegistro;
+    }
+
+    public void cambiarVistaRegistrarse2() {
+        limpiarFrame();
+        VistaRegistro2 vistaRegistro = new VistaRegistro2(this);
+        ponerEnJFrame(vistaRegistro);
+        panelActual = vistaRegistro;
+    }
+
+    public void cambiarVistaRegistrarse3() {
+        limpiarFrame();
+        VistaRegistro3 vistaRegistro = new VistaRegistro3(this);
+        ponerEnJFrame(vistaRegistro);
+        panelActual = vistaRegistro;
+    }
+
+    
+
+    public void ponerEnJFrame(JPanel panel) {
+        this.add(panel);
+        panel.setBounds(0, 0, 1000, 580);
         this.setLocationRelativeTo(null);
-        this.setVisible(true);
+        this.pack();  // Ajustar el tamaño automáticamente
+    }
+
+    public ClienteNuevoDTO getClienteDTO() {
+        return clienteDTO;
+    }
+
+    public void setClienteDTO(ClienteNuevoDTO clienteDTO) {
+        this.clienteDTO = clienteDTO;
+    }
+
+    public DomicilioNuevoDTO getDomicilioDTO() {
+        return domicilioDTO;
+    }
+
+    public void setDomicilioDTO(DomicilioNuevoDTO domicilioDTO) {
+        this.domicilioDTO = domicilioDTO;
     }
     
-    public void limpiarFrame(){
-         this.removeAll();
-
-        // Actualizar la interfaz gráfica
-            this.revalidate();
-        this.repaint();
-    }
+    
 }

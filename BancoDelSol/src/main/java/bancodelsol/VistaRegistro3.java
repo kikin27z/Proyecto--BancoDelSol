@@ -1,18 +1,15 @@
 package bancodelsol;
 
-
 /**
- *
- * @author karim
+ * Clase que representa la tercera ventana de registro de clientes.
+ * En la sección de datos la cuenta del cliente.
+ * @author José Karim Franco Valencia - 245138
  */
 public class VistaRegistro3 extends javax.swing.JPanel {
-
-    /**
-     * Creates new form VistaRegistro
-     */
     private  Ventana ventana;
     /**
-     * Creates new form VistaCliente
+     * Constructor de la vista de registro 3.
+     * @param ventana JFrame donde se colocará este JPanel.
      */
     public VistaRegistro3(Ventana ventana ) {
         this.ventana = ventana;
@@ -128,12 +125,26 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Redirige a la pantalla de registro en la sección
+     * de domicilio.
+     * @param evt Evento de un clic en un botón.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaRegistrarse2();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    /**
+     * Redirige a la pantalla de inicio sesión
+     * confirmando que se registro el cliente al banco.
+     * @param evt Evento de un clic en un botón.
+     */
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+        System.out.println(this.ventana.getClienteDTO().getNombres());
+        System.out.println(this.ventana.getDomicilioDTO().toString());
+        ventana.setClienteDTO(null);
+        ventana.setDomicilioDTO(null);
+        ventana.cambiarVistaInicioSesion();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
 
@@ -153,7 +164,6 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     private javax.swing.JTextField txtContrasena;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
-
 
     
 }
