@@ -1,5 +1,7 @@
 package bancodelsol;
 
+import bancodelsol.extras.Validador;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.logging.Logger;
 public class VistaRegistro extends javax.swing.JPanel {
 
     private Ventana ventana;
+    private Boolean camposValidos = false;
 
     /**
      * Constructor de la vista de registro.
@@ -162,7 +165,10 @@ public class VistaRegistro extends javax.swing.JPanel {
      */
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
         guardarDatosCliente();
-        ventana.cambiarVistaRegistrarse2();
+        validarDatos();
+        if (camposValidos) {
+            ventana.cambiarVistaRegistrarse2();
+        }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
 
@@ -185,6 +191,19 @@ public class VistaRegistro extends javax.swing.JPanel {
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
+    public void validarDatos() {
+        Validador valida = new Validador();
+        try {
+            ventana.getClienteDTO().esValido();
+            valida.validaSeccionDatosPersonales(ventana.getClienteDTO());
+            camposValidos = true;
+        } catch (ValidacionDTOException ex) {
+            camposValidos = false;
+            ventana.mostrarAviso(ex.getMessage());
+//            Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     /**
      * Método que guarda los datos del cliente en una variable auxiliar que
      * sirve en caso de volver a esta parte del formulario y insertar los datos
@@ -194,8 +213,11 @@ public class VistaRegistro extends javax.swing.JPanel {
         ventana.getClienteDTO().setNombres(txtNombre.getText());
         ventana.getClienteDTO().setApellidoPaterno(txtApellidoPaterno.getText());
         ventana.getClienteDTO().setApellidoMaterno(txtApellidoMaterno.getText());
-        java.sql.Date fechaNacimiento = new java.sql.Date(txtFecha.getDate().getTime());
-        ventana.getClienteDTO().setFecha(fechaNacimiento.toString());
+     
+        if(txtFecha.getDate() != null){
+            java.sql.Date fechaNacimiento = new java.sql.Date(txtFecha.getDate().getTime());
+            ventana.getClienteDTO().setFecha(fechaNacimiento.toString());
+        }
     }
 
     /**

@@ -35,7 +35,7 @@ public class Principal {
         ICuentaDAO cuentaDAO = new CuentaDAO(conexion);
         ITransferenciaDAO transferenciaDAO = new TransferenciaDAO(conexion);
         
-        Ventana ventana = new Ventana();
+        Ventana ventana = new Ventana(conexion);
         ventana.cambiarVistaRegistro();
         ventana.setVisible(true);
 //        VistaCliente vistaCliente = new VistaCliente(ventana);

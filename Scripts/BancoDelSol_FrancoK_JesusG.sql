@@ -54,6 +54,7 @@ CREATE TABLE `retiros` (
     `id_retiro` BIGINT NOT NULL AUTO_INCREMENT,
     `contrasena` VARCHAR(8) NOT NULL,
     `folio` VARCHAR(16) NOT NULL,
+    `estado` VARCHAR(50) DEFAULT 'en espera' CHECK (estado IN ('caducado', 'en espera', 'realizado')),
     `id_transaccion` BIGINT NOT NULL,
     PRIMARY KEY (`id_retiro`),
     FOREIGN KEY (`id_transaccion`) REFERENCES `transacciones`(`id_transaccion`)

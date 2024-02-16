@@ -1,5 +1,14 @@
 package bancodelsol;
 
+import bancodelsol.extras.Validador;
+import bancodelsoldominio.Cliente;
+import bancodelsolpersistencia.daos.ClienteDAO;
+import bancodelsolpersistencia.daos.DomicilioDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Clase que representa la tercera ventana de registro de clientes.
  * En la sección de datos la cuenta del cliente.
@@ -7,6 +16,7 @@ package bancodelsol;
  */
 public class VistaRegistro3 extends javax.swing.JPanel {
     private  Ventana ventana;
+    private Boolean camposValidos = false;
     /**
      * Constructor de la vista de registro 3.
      * @param ventana JFrame donde se colocará este JPanel.
@@ -131,7 +141,10 @@ public class VistaRegistro3 extends javax.swing.JPanel {
      * @param evt Evento de un clic en un botón.
      */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        ventana.getClienteDTO().setUsuario(null);
+        ventana.getClienteDTO().setContrasena(null);
         ventana.cambiarVistaRegistrarse2();
+        
     }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
@@ -140,13 +153,54 @@ public class VistaRegistro3 extends javax.swing.JPanel {
      * @param evt Evento de un clic en un botón.
      */
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        System.out.println(this.ventana.getClienteDTO().getNombres());
-        System.out.println(this.ventana.getDomicilioDTO().toString());
-        ventana.setClienteDTO(null);
-        ventana.setDomicilioDTO(null);
-        ventana.cambiarVistaInicioSesion();
+        validarDatos();
+        if (camposValidos) {
+            if(ventana.mostrarConfirmacion("¿Quiére confirmar su registro?", "Ha un paso de ser cliente")){
+                guardarDatosCliente();
+                registrarCliente();
+                ventana.setClienteDTO(null);
+                ventana.setDomicilioDTO(null);
+                ventana.cambiarVistaInicioSesion();
+            }
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    private void registrarCliente(){
+            ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
+            DomicilioDAO domicilioDAO = new DomicilioDAO(ventana.getConexion());
+            Cliente clienteAgregado;
+        try {
+            clienteAgregado = clienteDAO.agregar(ventana.getClienteDTO());
+            domicilioDAO.agregar(ventana.getDomicilioDTO(), clienteAgregado.getIdCliente());
+            
+            ventana.mostrarInformacion("!!!Ya eres cliente!!!", "Bienvenido");
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(VistaRegistro3.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void validarDatos() {
+        Validador valida = new Validador();
+        try {
+            ventana.getClienteDTO().esValido();
+            valida.validaSeccionDatosPersonales(ventana.getClienteDTO());
+            camposValidos = true;
+        } catch (ValidacionDTOException ex) {
+            camposValidos = false;
+            ventana.mostrarAviso(ex.getMessage());
+//            Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Método que guarda los datos del cliente en una variable auxiliar que
+     * sirve en caso de volver a esta parte del formulario y insertar los datos
+     * en su correspondiente campo.
+     */
+    public void guardarDatosCliente() {
+        ventana.getClienteDTO().setUsuario(txtUsuario.getText());
+        ventana.getClienteDTO().setContrasena(txtContrasena.getText());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;

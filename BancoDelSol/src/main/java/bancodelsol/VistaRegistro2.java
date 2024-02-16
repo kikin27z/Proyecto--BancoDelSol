@@ -1,5 +1,8 @@
 package bancodelsol;
 
+import bancodelsol.extras.Validador;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+
 
 /**
  * Clase que representa la segunda ventana de registro de clientes.
@@ -8,6 +11,7 @@ package bancodelsol;
  */
 public class VistaRegistro2 extends javax.swing.JPanel {
     private  Ventana ventana;
+     private Boolean camposValidos = false;
     /**
      * Constructor de la vista de registro 2.
      * @param ventana JFrame donde se colocará este JPanel.
@@ -167,7 +171,10 @@ public class VistaRegistro2 extends javax.swing.JPanel {
      */
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
         guardarDatosDomicilio();
-        ventana.cambiarVistaRegistrarse3();
+        validarDatos();
+        if (camposValidos) {
+            ventana.cambiarVistaRegistrarse3();
+        }
         
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -193,6 +200,19 @@ public class VistaRegistro2 extends javax.swing.JPanel {
     private javax.swing.JTextField txtNumExterior;
     // End of variables declaration//GEN-END:variables
 
+    public void validarDatos() {
+        Validador valida = new Validador();
+        try {
+            ventana.getDomicilioDTO().esValido();
+            valida.validaSeccionDatosDomicilio(ventana.getDomicilioDTO());
+            camposValidos = true;
+        } catch (ValidacionDTOException ex) {
+            camposValidos = false;
+            ventana.mostrarAviso(ex.getMessage());
+//            Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Método que guarda los datos del domicilio en una variable auxiliar
      * que sirve en caso de volver a esta parte del formulario y insertar

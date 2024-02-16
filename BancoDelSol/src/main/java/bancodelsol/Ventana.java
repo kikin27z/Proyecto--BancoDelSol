@@ -3,6 +3,9 @@ package bancodelsol;
 import bancodelsol.dtos.ClienteNuevoDTO;
 import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsoldominio.Cliente;
+import bancodelsolpersistencia.conexion.IConexion;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -15,11 +18,12 @@ public class Ventana extends javax.swing.JFrame {
     private ClienteNuevoDTO clienteDTO;
     private DomicilioNuevoDTO domicilioDTO;
     private JPanel panelActual;
-
+    private IConexion conexion;
     /**
      * Creates new form Ventana
      */
-    public Ventana() {
+    public Ventana(IConexion conexion) {
+        this.conexion = conexion;
         initComponents();
     }
 
@@ -148,6 +152,22 @@ public class Ventana extends javax.swing.JFrame {
 
     public void setDomicilioDTO(DomicilioNuevoDTO domicilioDTO) {
         this.domicilioDTO = domicilioDTO;
+    }
+    
+    public void mostrarAviso(String mensaje){
+        JOptionPane.showMessageDialog(this, mensaje,"Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+    public boolean mostrarConfirmacion(String mensaje, String titulo){
+        int respuesta = JOptionPane.showConfirmDialog(null, mensaje, titulo, JOptionPane.OK_CANCEL_OPTION);
+        return respuesta == JOptionPane.OK_OPTION;
+    }
+    
+    public void mostrarInformacion(String mensaje, String titulo){
+        JOptionPane.showMessageDialog(this, mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public IConexion getConexion() {
+        return conexion;
     }
     
     
