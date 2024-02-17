@@ -16,5 +16,5 @@ public interface IClienteDAO {
     List<Cliente> consultar() throws PersistenciaException;
     Cliente existe(Long idCliente) throws PersistenciaException;
     boolean existeUsuario(String usuario) throws ValidacionDTOException;
-    
+    boolean clienteValido(String usuario, String contrasena) throws ValidacionDTOException;
 }

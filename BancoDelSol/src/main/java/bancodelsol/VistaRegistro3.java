@@ -155,7 +155,7 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         validarDatos();
         if (camposValidos) {
-            if(ventana.mostrarConfirmacion("¿Quiére confirmar su registro?", "Ha un paso de ser cliente")){
+            if(ventana.mostrarConfirmacion("¿Desea confirmar su registro?", "Está a un paso de ser cliente")){
                 guardarDatosCliente();
                 registrarCliente();
                 ventana.setClienteDTO(null);
@@ -183,7 +183,7 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         Validador valida = new Validador();
         try {
             verificaCampos();
-            valida.validaSeccionDatosPersonales(ventana.getClienteDTO());
+            valida.validaSeccionDatosCuenta(ventana.getClienteDTO());
             ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
             
             camposValidos = true;

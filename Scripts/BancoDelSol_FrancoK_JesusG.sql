@@ -9,7 +9,7 @@ CREATE TABLE `clientes` (
     `apellido_materno` VARCHAR(30) NOT NULL,
     `fecha_nacimiento` DATE NOT NULL,
     `usuario` VARCHAR(30) NOT NULL UNIQUE,
-    `contrasena` VARCHAR(20) NOT NULL ,
+    `contrasena` VARCHAR(100) NOT NULL ,
     PRIMARY KEY (`id_cliente`)
 );
 

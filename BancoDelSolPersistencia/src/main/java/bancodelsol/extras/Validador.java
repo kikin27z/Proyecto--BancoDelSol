@@ -13,8 +13,6 @@ import java.util.regex.Pattern;
 public class Validador {
 
     public void validaSeccionDatosPersonales(ClienteNuevoDTO clienteDTO) throws ValidacionDTOException {
-//        String patronNombre = "^[a-zA-Z\\s]{1,50}$";
-//        String patronApellidos = "^[a-zA-Z\\s]{1,30}$";
         String patronNombre = extensionCadena(50);
         String patronApellidos = extensionCadena(30);
         Pattern pattern = Pattern.compile(patronNombre);
@@ -23,38 +21,37 @@ public class Validador {
         Matcher matcher = pattern.matcher(clienteDTO.getNombres());
 
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de nombre inválido (debe ser menor a 50 caracteres y contener letras)");
+            throw new ValidacionDTOException("Campo de nombre inválido (debe ser menor a 50 cáracteres y contener únicamente letras)");
         }
         
         matcher = pattern2.matcher(clienteDTO.getApellidoPaterno());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de apellido paterno inválido (debe ser menor a 30 caracteres y contener letras)");
+            throw new ValidacionDTOException("Campo de apellido paterno inválido (debe ser menor a 30 cáracteres y contener únicamente letras)");
         }
         matcher = pattern2.matcher(clienteDTO.getApellidoMaterno());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de apellido materno inválido (debe ser menor a 30 caracteres y contener letras)");
+            throw new ValidacionDTOException("Campo de apellido materno inválido (debe ser menor a 30 cáracteres y contener únicamente letras)");
         }
     }
     public void validaSeccionDatosCuenta(ClienteNuevoDTO clienteDTO) throws ValidacionDTOException {
-        String patronNombre = extensionCadena(50);
-        String patronApellidos = extensionCadena(30);
-        Pattern pattern = Pattern.compile(patronNombre);
-        Pattern pattern2 = Pattern.compile(patronApellidos);
+         String cadenaUsuario = "^[a-zA-Z0-9]{1,30}$";
+        String cadenaContraseña = "^[\\S]{1,20}$";
 
-        Matcher matcher = pattern.matcher(clienteDTO.getNombres());
+        Pattern patronUsuario = Pattern.compile(cadenaUsuario);
+        Pattern patronContraseña = Pattern.compile(cadenaContraseña);
 
+        // Verifica el campo de usuario
+        Matcher matcher = patronUsuario.matcher(clienteDTO.getUsuario());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de nombre inválido (debe ser menor a 50 caracteres y contener letras)");
+            throw new ValidacionDTOException("Nombre de usuario inválido (debe ser menor a 30 cáracteres usando solo letras y números)");
         }
-        
-        matcher = pattern2.matcher(clienteDTO.getApellidoPaterno());
+
+        // Verifica el campo de contraseña
+        matcher = patronContraseña.matcher(clienteDTO.getContrasena());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de apellido paterno inválido (debe ser menor a 30 caracteres y contener letras)");
+            throw new ValidacionDTOException("Contraseña inválida (debe contar con máximo 20 cáracteres)");
         }
-        matcher = pattern2.matcher(clienteDTO.getApellidoMaterno());
-        if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de apellido materno inválido (debe ser menor a 30 caracteres y contener letras)");
-        }
+
     }
     public void validaSeccionDatosDomicilio(DomicilioNuevoDTO domicilioDTO) throws ValidacionDTOException {
         String cadenaCalle = extensionCadena(50);
@@ -71,29 +68,29 @@ public class Validador {
         // Verifica el campo calle
         Matcher matcher = patronCalle.matcher(domicilioDTO.getCalle());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de calle (debe ser menor a 50 caracteres y contener letras)");
+            throw new ValidacionDTOException("Campo de calle inválido (debe ser menor a 50 caracteres y contener letras)");
         }
         //Verifica el campo de colonia
         matcher = patronCalle.matcher(domicilioDTO.getColonia());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de colonia (debe ser menor a 50 caracteres y contener letras)");
+            throw new ValidacionDTOException("Campo de colonia inválido (debe ser menor a 50 caracteres y contener letras)");
         }
         //Verifica el campo de ciudad
         matcher = patronCiudad.matcher(domicilioDTO.getCiudad());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de ciudad (debe ser menor a 20 caracteres y contener letras)");
+            throw new ValidacionDTOException("Campo de ciudad inválido (debe ser menor a 20 caracteres y contener letras)");
         }
         
         //Verifica el campo de numero exterior
         matcher = patronNumExterior.matcher(domicilioDTO.getNumeroExterior());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de número exterior (debe ser menor a 10 caracteres y contener exclusivamente letras o números)");
+            throw new ValidacionDTOException("Campo de número exterior inválido (debe ser menor a 10 caracteres y contener exclusivamente letras o números)");
         }
         
         //Verifica el campo de codigo postal
         matcher = patronCodigoPostal.matcher(domicilioDTO.getCodigoPostal());
         if (!matcher.matches()) {
-            throw new ValidacionDTOException("Campo de código postal (debe ser de 5 caracteres y contener exclusivamente números)");
+            throw new ValidacionDTOException("Campo de código postal inválido (debe ser de 5 caracteres y contener exclusivamente números)");
         }
         
     }

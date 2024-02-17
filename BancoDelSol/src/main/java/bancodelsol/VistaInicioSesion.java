@@ -4,6 +4,14 @@
  */
 package bancodelsol;
 
+import bancodelsoldominio.Cliente;
+import bancodelsolpersistencia.daos.ClienteDAO;
+import bancodelsolpersistencia.daos.DomicilioDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 /**
  *
  * @author karim
@@ -138,4 +146,17 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     private javax.swing.JTextField txtContrasena;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
+
+//    private void validarInicioSesion(){
+//            ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
+//        try {
+//            clienteAgregado = clienteDAO.existe(ventana.getClienteDTO());
+//            domicilioDAO.agregar(ventana.getDomicilioDTO(), clienteAgregado.getIdCliente());
+//            
+//            ventana.mostrarInformacion("!!!Ya eres cliente!!!", "Bienvenido");
+//        } catch (PersistenciaException ex) {
+//            Logger.getLogger(VistaRegistro3.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+
 }
