@@ -65,7 +65,7 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         txtUsuario.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtUsuario.setForeground(new java.awt.Color(143, 143, 143));
         txtUsuario.setBorder(null);
-        add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 287, 208, 36));
+        add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 287, 300, 36));
 
         txtContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtContrasena.setForeground(new java.awt.Color(143, 143, 143));
@@ -182,8 +182,10 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     public void validarDatos() {
         Validador valida = new Validador();
         try {
-            ventana.getClienteDTO().esValido();
+            verificaCampos();
             valida.validaSeccionDatosPersonales(ventana.getClienteDTO());
+            ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
+            
             camposValidos = true;
         } catch (ValidacionDTOException ex) {
             camposValidos = false;
@@ -200,6 +202,17 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     public void guardarDatosCliente() {
         ventana.getClienteDTO().setUsuario(txtUsuario.getText());
         ventana.getClienteDTO().setContrasena(txtContrasena.getText());
+    }
+    
+    private void verificaCampos() throws ValidacionDTOException{
+        if (txtConfirmarContrasena.getText() == null || txtConfirmarContrasena.getText().isBlank()
+                || txtContrasena.getText() == null || txtContrasena.getText().isBlank()
+                || txtUsuario.getText() == null || txtUsuario.getText().isBlank()) {
+            throw new ValidacionDTOException("Llene todos los campos");
+        }
+        if(!txtContrasena.getText().equals(txtConfirmarContrasena.getText())){
+            throw new ValidacionDTOException("Las contraseñas no coinciden");
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

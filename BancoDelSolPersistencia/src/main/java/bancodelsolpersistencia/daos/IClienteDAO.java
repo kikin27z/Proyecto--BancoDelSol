@@ -3,6 +3,7 @@ package bancodelsolpersistencia.daos;
 import bancodelsol.dtos.ClienteNuevoDTO;
 import bancodelsoldominio.Cliente;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import java.util.List;
 
 /**
@@ -14,5 +15,6 @@ public interface IClienteDAO {
     Cliente agregar(ClienteNuevoDTO clienteNuevo)throws PersistenciaException;
     List<Cliente> consultar() throws PersistenciaException;
     Cliente existe(Long idCliente) throws PersistenciaException;
+    boolean existeUsuario(String usuario) throws ValidacionDTOException;
     
 }

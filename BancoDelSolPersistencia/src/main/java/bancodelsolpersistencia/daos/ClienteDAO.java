@@ -4,6 +4,7 @@ import bancodelsol.dtos.ClienteNuevoDTO;
 import bancodelsoldominio.Cliente;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -99,5 +100,33 @@ public class ClienteDAO implements IClienteDAO{
         }
         
     }
+
+    @Override
+    public boolean existeUsuario(String usuario) throws ValidacionDTOException {
+        String sentenciaSQL = """
+                             SELECT * FROM clientes 
+                               WHERE usuario = ?;
+                              """;
+          try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
+            comando.setString(1, usuario);
     
+            try (ResultSet datosCliente = comando.executeQuery()) {
+                if (!datosCliente.next()) {
+                    logger.log(Level.INFO, "No se halló al cliente con usuario{0}", usuario);
+                    throw new ValidacionDTOException("Ya existe ese usuario.");
+                    
+                }
+
+                logger.log(Level.INFO, "Se encontró al cliente");
+                
+                return true;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudo encontrar el cliente.", e);
+             throw new ValidacionDTOException("No se pudo consultar intente de nuevo.");
+        }
+    }
 }
