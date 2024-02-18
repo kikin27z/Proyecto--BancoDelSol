@@ -153,8 +153,15 @@ public class Cuenta {
     public void setNombreCuenta(String nombreCuenta) {
         this.nombreCuenta = nombreCuenta;
     }
-    
-    
+
+    /**
+     * Obtiene el id de la cuenta.
+     * @return El id de la cuenta.
+     */
+    public Long getIdCuenta() {
+        return idCuenta;
+    }
+
     /**
      * Calcula el hash code de la cuenta.
      * @return El hash code de la cuenta.
@@ -202,10 +209,5 @@ public class Cuenta {
         sb.append(", idCliente=").append(idCliente);
         sb.append('}');
         return sb.toString();
-    }
-
-   
-    
-    
-    
+    }    
 }

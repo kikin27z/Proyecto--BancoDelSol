@@ -1,10 +1,8 @@
 package bancodelsolpersistencia.daos;
 
 import bancodelsol.dtos.DomicilioNuevoDTO;
-import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Domicilio;
 import bancodelsolpersistencia.conexion.IConexion;
-import static bancodelsolpersistencia.daos.ClienteDAO.logger;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,19 +13,35 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author karim
+ * La clase DomicilioDAO implementa la interfaz IDomicilioDAO y proporciona
+ * implementaciones para realizar operaciones relacionadas con los domicilios en la
+ * base de datos.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class DomicilioDAO implements IDomicilioDAO{
 
     final IConexion conexionBD;
     static final Logger logger = Logger.getLogger(DomicilioDAO.class.getName());
 
+    /**
+    * Constructor de la clase DomicilioDAO.
+    *
+    * @param conexionBD La conexión a la base de datos que se utilizará para realizar operaciones de persistencia.
+    */
     public DomicilioDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
     }
 
-    
+    /**
+     * Agrega un domicilio nuevo a la base de datos.
+     *
+     * @param domicilioNuevo  La información del nuevo domicilio a agregar.
+     * @param idCliente El identificador del cliente a asociar el domicilio
+     * @return El domicilio recién agregada.
+     * @throws PersistenciaException Si ocurre un error durante la consulta a la base de datos.
+     */
     @Override
     public Domicilio agregar(DomicilioNuevoDTO domicilioNuevo, Long idCliente) throws PersistenciaException {
         String sentenciaSQL = """
@@ -58,3 +72,4 @@ public class DomicilioDAO implements IDomicilioDAO{
     }
     
 }
+

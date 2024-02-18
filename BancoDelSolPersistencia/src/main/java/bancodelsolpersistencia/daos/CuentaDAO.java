@@ -16,7 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * La clase CuentaDAO implementa la interfaz ICuentaDAO y proporciona
+ * implementaciones para realizar operaciones relacionadas con las cuentas en la
+ * base de datos.
+ * 
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
  */
@@ -24,11 +27,23 @@ public class CuentaDAO implements ICuentaDAO{
     final IConexion conexionBD;
     static final Logger logger = Logger.getLogger(CuentaDAO.class.getName());
 
+    /**
+    * Constructor de la clase CuentaDAO.
+    *
+    * @param conexionBD La conexión a la base de datos que se utilizará para realizar operaciones de persistencia.
+    */
     public CuentaDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
     }
     
     
+    /**
+     * Agrega una nueva cuenta a la base de datos.
+     *
+     * @param cuentaNueva La información de la nueva cuenta a agregar.
+     * @return La cuenta recién agregada.
+     * @throws PersistenciaException Si ocurre un error durante la consulta a la base de datos.
+     */
     @Override
     public Cuenta agregar(CuentaNuevaDTO cuentaNueva) throws PersistenciaException {
             String sentenciaSQL = """
@@ -60,8 +75,16 @@ public class CuentaDAO implements ICuentaDAO{
             logger.log(Level.SEVERE, "No se pudo guardar la cuenta.", e);
             throw new PersistenciaException("No se pudo guardar la cuenta.", e);
         }
-        }
+    }
 
+    /**
+     * Actualiza el saldo de una cuenta existente.
+     *
+     * @param idCuenta El identificador único de la cuenta a actualizar.
+     * @param nuevoSaldo El nuevo saldo a establecer para la cuenta.
+     * @return La cuenta actualizada.
+     * @throws PersistenciaException Si ocurre un error durante la actualización.
+     */
     @Override
     public Cuenta actualizar(Long idCuenta,double nuevoSaldo) throws PersistenciaException {
         String sentenciaSQL = """
@@ -109,6 +132,13 @@ public class CuentaDAO implements ICuentaDAO{
         }
     }
 
+    /**
+     * Verifica si una cuenta con el identificador especificado existe en la base de datos.
+     *
+     * @param idCuenta El identificador único de la cuenta a verificar.
+     * @return La cuenta si existe, null si no existe.
+     * @throws PersistenciaException Si ocurre un error durante la verificación.
+     */
     @Override
     public Cuenta existe(Long idCuenta) throws PersistenciaException {
         String sentenciaSQL = """
@@ -146,6 +176,13 @@ public class CuentaDAO implements ICuentaDAO{
         }
     }
 
+    /**
+     * Consulta todas las cuentas asociadas a un cliente específico.
+     *
+     * @param idCliente El identificador único del cliente cuyas cuentas se desean consultar.
+     * @return Una lista de cuentas asociadas al cliente especificado.
+     * @throws PersistenciaException Si ocurre un error durante la consulta.
+     */
     @Override
     public List<Cuenta> consultar(Long idCliente) throws PersistenciaException {
         String sentenciaSQL = """

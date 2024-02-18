@@ -18,7 +18,8 @@ import java.util.logging.Logger;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
 /**
- *
+ * La clase ClienteDAO implementa la interfaz IClienteDAO y se encarga de interactuar
+ * con la base de datos para realizar operaciones relacionadas con los clientes.
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
  */
@@ -27,10 +28,22 @@ public class ClienteDAO implements IClienteDAO {
     final IConexion conexionBD;
     static final Logger logger = Logger.getLogger(ClienteDAO.class.getName());
 
+    /**
+    * Constructor de la clase ClienteDAO.
+    *
+    * @param conexionBD La conexión a la base de datos que se utilizará para realizar operaciones de persistencia.
+    */
     public ClienteDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
     }
 
+    /**
+     * Agrega un nuevo cliente a la base de datos.
+     *
+     * @param clienteNuevo La información del nuevo cliente a agregar.
+     * @return El cliente recién agregado.
+     * @throws PersistenciaException Si ocurre un error durante la consulta a la base de datos.
+     */
     @Override
     public Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException {
 
@@ -71,6 +84,12 @@ public class ClienteDAO implements IClienteDAO {
         }
     }
 
+    /**
+     * Consulta todos los clientes almacenados en la base de datos.
+     *
+     * @return Una lista de clientes almacenados en la base de datos.
+     * @throws PersistenciaException Si ocurre un error durante la consulta a la base de datos.
+     */
     @Override
     public List<Cliente> consultar() throws PersistenciaException {
         String sentencia = """

@@ -63,6 +63,16 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblFecha1 = new javax.swing.JLabel();
         lblFecha2 = new javax.swing.JLabel();
         lblFecha3 = new javax.swing.JLabel();
+        iconAjustes = new javax.swing.JLabel();
+        btnInicio = new javax.swing.JButton();
+        iconInicio = new javax.swing.JLabel();
+        btnPerfil = new javax.swing.JButton();
+        iconPerfil = new javax.swing.JLabel();
+        btnHistorial = new javax.swing.JButton();
+        iconHistorial = new javax.swing.JLabel();
+        btnCerrarSesion = new javax.swing.JButton();
+        iconCerrarSesion = new javax.swing.JLabel();
+        iconLogo = new javax.swing.JLabel();
         lblFondo = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(204, 204, 204));
@@ -209,6 +219,68 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblFecha3.setText("03/06/2004 12:03:22");
         add(lblFecha3, new org.netbeans.lib.awtextra.AbsoluteConstraints(586, 510, 200, 22));
 
+        iconAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconAjustes.png"))); // NOI18N
+        add(iconAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 10, 35, 35));
+
+        btnInicio.setBorderPainted(false);
+        btnInicio.setContentAreaFilled(false);
+        btnInicio.setFocusPainted(false);
+        btnInicio.setFocusable(false);
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
+        add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 58, 35, 35));
+
+        iconInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconInicio.png"))); // NOI18N
+        add(iconInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 58, 35, 35));
+
+        btnPerfil.setBorderPainted(false);
+        btnPerfil.setContentAreaFilled(false);
+        btnPerfil.setFocusPainted(false);
+        btnPerfil.setFocusable(false);
+        btnPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPerfilActionPerformed(evt);
+            }
+        });
+        add(btnPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 111, 35, 35));
+
+        iconPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconPerfil.png"))); // NOI18N
+        add(iconPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 111, 35, 35));
+
+        btnHistorial.setBorderPainted(false);
+        btnHistorial.setContentAreaFilled(false);
+        btnHistorial.setFocusPainted(false);
+        btnHistorial.setFocusable(false);
+        btnHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistorialActionPerformed(evt);
+            }
+        });
+        add(btnHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 164, 35, 35));
+
+        iconHistorial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconHistorial.png"))); // NOI18N
+        add(iconHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 164, 35, 35));
+
+        btnCerrarSesion.setBorderPainted(false);
+        btnCerrarSesion.setContentAreaFilled(false);
+        btnCerrarSesion.setFocusPainted(false);
+        btnCerrarSesion.setFocusable(false);
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+        add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 213, 35, 35));
+
+        iconCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconCerrarSesion.png"))); // NOI18N
+        add(iconCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 213, 35, 35));
+
+        iconLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo.png"))); // NOI18N
+        add(iconLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 538, 35, 35));
+
         lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgVistaCuenta.png"))); // NOI18N
         add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
@@ -217,8 +289,38 @@ public class VistaCuenta extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_lblTransferenciaMouseClicked
 
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+
+    }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPerfilActionPerformed
+
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnHistorialActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        if(ventana.mostrarConfirmacion("¿Seguro que querer cerrar sesión?", "Cerrar sesión")){
+            ventana.setCliente(null);
+            ventana.setCuenta(null);
+            ventana.cambiarVistaInicio();
+        }
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnHistorial;
+    private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnPerfil;
+    private javax.swing.JLabel iconAjustes;
+    private javax.swing.JLabel iconCerrarSesion;
+    private javax.swing.JLabel iconHistorial;
+    private javax.swing.JLabel iconInicio;
+    private javax.swing.JLabel iconLogo;
+    private javax.swing.JLabel iconPerfil;
     private javax.swing.JLabel lblFecha1;
     private javax.swing.JLabel lblFecha2;
     private javax.swing.JLabel lblFecha3;
@@ -247,25 +349,21 @@ public class VistaCuenta extends javax.swing.JPanel {
 
     public void cargarDatosCuenta(){
         try {
-            String cadenaConexion = "jdbc:mysql://localhost/banco_del_sol";
-            String user = "root";
-            String password = "JFK_jfk27";
-            
-            IConexion conexion = new Conexion(cadenaConexion, user, password);
-            
-            CuentaDAO cuentaDAO = new CuentaDAO(conexion);
+            CuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
             this.cuenta = cuentaDAO.existe(this.idCuenta);
             
             if(cuenta != null){
-//                System.out.println(cuenta.toString());
                 lblNombreCuenta.setText("Hogar");
                 this.lblMontoActual.setText("$"+this.cuenta.getSaldo()+" MXN");
                 lblFechaApertura.setText(cuenta.getFechaApertura());
                 lblNumCuenta.setText(cuenta.getNumeroCuenta());
             }
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(VistaCuenta.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            } catch (PersistenciaException ex) {
+                ventana.setCuenta(null);
+                Logger.getLogger(VistaCuenta.class.getName()).log(Level.SEVERE, null, ex);
+                ventana.mostrarAviso(ex.getMessage());
+            }
+
     }
 
 }

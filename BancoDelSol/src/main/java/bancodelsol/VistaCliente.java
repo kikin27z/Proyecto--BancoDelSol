@@ -49,7 +49,7 @@ public class VistaCliente extends javax.swing.JPanel {
     private void initComponents() {
 
         btnAgregarCuenta = new javax.swing.JButton();
-        btnAgregarCuenta1 = new javax.swing.JButton();
+        btnCuentaSeleccionada = new javax.swing.JButton();
         cbxCuentas = new javax.swing.JComboBox<>();
         lblNombreCliente = new javax.swing.JLabel();
         lblCuentaInfo = new javax.swing.JLabel();
@@ -57,6 +57,16 @@ public class VistaCliente extends javax.swing.JPanel {
         lblNumeroCuenta = new javax.swing.JLabel();
         lblSaldo = new javax.swing.JLabel();
         lblAgregarCuenta = new javax.swing.JLabel();
+        iconAjustes = new javax.swing.JLabel();
+        btnInicio = new javax.swing.JButton();
+        iconInicio = new javax.swing.JLabel();
+        btnPerfil = new javax.swing.JButton();
+        iconPerfil = new javax.swing.JLabel();
+        btnHistorial = new javax.swing.JButton();
+        iconHistorial = new javax.swing.JLabel();
+        btnCerrarSesion = new javax.swing.JButton();
+        iconCerrarSesion = new javax.swing.JLabel();
+        iconLogo = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(204, 204, 204));
@@ -66,7 +76,6 @@ public class VistaCliente extends javax.swing.JPanel {
         btnAgregarCuenta.setContentAreaFilled(false);
         btnAgregarCuenta.setFocusPainted(false);
         btnAgregarCuenta.setFocusable(false);
-        btnAgregarCuenta.setLabel("");
         btnAgregarCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarCuentaActionPerformed(evt);
@@ -74,19 +83,20 @@ public class VistaCliente extends javax.swing.JPanel {
         });
         add(btnAgregarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 153, 200, 140));
 
-        btnAgregarCuenta1.setBorderPainted(false);
-        btnAgregarCuenta1.setContentAreaFilled(false);
-        btnAgregarCuenta1.setFocusPainted(false);
-        btnAgregarCuenta1.setFocusable(false);
-        btnAgregarCuenta1.addActionListener(new java.awt.event.ActionListener() {
+        btnCuentaSeleccionada.setBorderPainted(false);
+        btnCuentaSeleccionada.setContentAreaFilled(false);
+        btnCuentaSeleccionada.setFocusPainted(false);
+        btnCuentaSeleccionada.setFocusable(false);
+        btnCuentaSeleccionada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarCuenta1ActionPerformed(evt);
+                btnCuentaSeleccionadaActionPerformed(evt);
             }
         });
-        add(btnAgregarCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 153, 205, 140));
+        add(btnCuentaSeleccionada, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 153, 205, 140));
 
         cbxCuentas.setFont(new java.awt.Font("Amazon Ember Light", 0, 18)); // NOI18N
         cbxCuentas.setForeground(new java.awt.Color(157, 134, 90));
+        cbxCuentas.setFocusable(false);
         cbxCuentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxCuentasActionPerformed(evt);
@@ -126,18 +136,85 @@ public class VistaCliente extends javax.swing.JPanel {
         lblAgregarCuenta.setText("Agregar cuenta +");
         add(lblAgregarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 210, 200, -1));
 
+        iconAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconAjustes.png"))); // NOI18N
+        add(iconAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 10, 35, 35));
+
+        btnInicio.setBorderPainted(false);
+        btnInicio.setContentAreaFilled(false);
+        btnInicio.setFocusPainted(false);
+        btnInicio.setFocusable(false);
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
+        add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 58, 35, 35));
+
+        iconInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconInicio.png"))); // NOI18N
+        add(iconInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 58, 35, 35));
+
+        btnPerfil.setBorderPainted(false);
+        btnPerfil.setContentAreaFilled(false);
+        btnPerfil.setFocusPainted(false);
+        btnPerfil.setFocusable(false);
+        btnPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPerfilActionPerformed(evt);
+            }
+        });
+        add(btnPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 111, 35, 35));
+
+        iconPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconPerfil.png"))); // NOI18N
+        add(iconPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 111, 35, 35));
+
+        btnHistorial.setBorderPainted(false);
+        btnHistorial.setContentAreaFilled(false);
+        btnHistorial.setFocusPainted(false);
+        btnHistorial.setFocusable(false);
+        btnHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistorialActionPerformed(evt);
+            }
+        });
+        add(btnHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 164, 35, 35));
+
+        iconHistorial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconHistorial.png"))); // NOI18N
+        add(iconHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 164, 35, 35));
+
+        btnCerrarSesion.setBorderPainted(false);
+        btnCerrarSesion.setContentAreaFilled(false);
+        btnCerrarSesion.setFocusPainted(false);
+        btnCerrarSesion.setFocusable(false);
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+        add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 213, 35, 35));
+
+        iconCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconCerrarSesion.png"))); // NOI18N
+        add(iconCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 213, 35, 35));
+
+        iconLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo.png"))); // NOI18N
+        add(iconLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 538, 35, 35));
+
         fondo.setBackground(new java.awt.Color(102, 102, 102));
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgVistaCliente.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
 
-    private void btnAgregarCuenta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuenta1ActionPerformed
+    private void btnCuentaSeleccionadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaSeleccionadaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgregarCuenta1ActionPerformed
+                if(cbxCuentas.isEnabled()){
+             Cuenta cuentaSeleccionada = listaCuentas.get(cbxCuentas.getSelectedIndex());
+             ventana.setCuenta(cuentaSeleccionada);
+            ventana.cambiarVistaCuenta(cuentaSeleccionada.getIdCuenta());
+        }
+    }//GEN-LAST:event_btnCuentaSeleccionadaActionPerformed
 
     private void cbxCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCuentasActionPerformed
         Cuenta cuentaSeleccionada = listaCuentas.get(cbxCuentas.getSelectedIndex());
@@ -146,6 +223,26 @@ public class VistaCliente extends javax.swing.JPanel {
         lblNumeroCuenta.setText(cuentaSeleccionada.getNumeroCuenta());
         lblSaldo.setText("$"+String.valueOf(cuentaSeleccionada.getSaldo())+" MXN");
     }//GEN-LAST:event_cbxCuentasActionPerformed
+
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+        
+    }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPerfilActionPerformed
+
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnHistorialActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        if(ventana.mostrarConfirmacion("¿Seguro que querer cerrar sesión?", "Cerrar sesión")){
+            ventana.setCliente(null);
+            ventana.setCuenta(null);
+            ventana.cambiarVistaInicio();
+        }
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
 
     /**
@@ -178,9 +275,19 @@ public class VistaCliente extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCuenta;
-    private javax.swing.JButton btnAgregarCuenta1;
+    private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnCuentaSeleccionada;
+    private javax.swing.JButton btnHistorial;
+    private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnPerfil;
     private javax.swing.JComboBox<String> cbxCuentas;
     private javax.swing.JLabel fondo;
+    private javax.swing.JLabel iconAjustes;
+    private javax.swing.JLabel iconCerrarSesion;
+    private javax.swing.JLabel iconHistorial;
+    private javax.swing.JLabel iconInicio;
+    private javax.swing.JLabel iconLogo;
+    private javax.swing.JLabel iconPerfil;
     private javax.swing.JLabel lblAgregarCuenta;
     private javax.swing.JLabel lblCuentaInfo;
     private javax.swing.JLabel lblNombreCliente;

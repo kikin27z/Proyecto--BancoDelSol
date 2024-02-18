@@ -3,6 +3,7 @@ package bancodelsol;
 import bancodelsol.dtos.ClienteNuevoDTO;
 import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsoldominio.Cliente;
+import bancodelsoldominio.Cuenta;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import javax.swing.JOptionPane;
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 public class Ventana extends javax.swing.JFrame {
 
     private Cliente cliente;
+    private Cuenta cuenta;
     private ClienteNuevoDTO clienteDTO;
     private DomicilioNuevoDTO domicilioDTO;
     private JPanel panelActual;
@@ -224,6 +226,24 @@ public class Ventana extends javax.swing.JFrame {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+
+    /**
+    * Método para obtener la cuenta actual del cliente.
+    * @return La cuenta actual.
+    */
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    /**
+    * Método para establecer el cuenta actual del cliente.
+    * @param cuenta El cuanta actual a establecer.
+    */
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
+    }
+    
+    
     
     /**
      * Método para obtener el DTO del cliente.
@@ -256,5 +276,6 @@ public class Ventana extends javax.swing.JFrame {
     public void setDomicilioDTO(DomicilioNuevoDTO domicilioDTO) {
         this.domicilioDTO = domicilioDTO;
     } 
+    
     
 }
