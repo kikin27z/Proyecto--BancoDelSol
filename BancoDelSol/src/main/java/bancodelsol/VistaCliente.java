@@ -2,7 +2,9 @@ package bancodelsol;
 
 import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Cuenta;
+import bancodelsolpersistencia.daos.ClienteDAO;
 import bancodelsolpersistencia.daos.CuentaDAO;
+import bancodelsolpersistencia.daos.IClienteDAO;
 import bancodelsolpersistencia.daos.ICuentaDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import java.util.LinkedList;
@@ -15,6 +17,7 @@ import javax.swing.JFrame;
  * Clase que representa la vista de un cliente en el sistema bancario.
  * Esta clase contiene componentes de interfaz de usuario para mostrar información sobre las cuentas del cliente.
  * Además, gestiona la recuperación de cuentas del cliente y la visualización de detalles de cuenta seleccionada.
+ * 
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
  */
@@ -29,16 +32,26 @@ public class VistaCliente extends javax.swing.JPanel {
      * @param ventana La ventana principal de la aplicación.
      */
     public VistaCliente(Ventana ventana) {
-        this.listaCuentas = new LinkedList<>();
+        
         this.ventana = ventana;
         initComponents();
        
-        clienteActual = new Cliente();
-        clienteActual.setIdCliente(Long.valueOf(2));
-//        clienteActual = ventana.getCliente();
+        clienteProvisional();
+        this.listaCuentas = new LinkedList<>();
         recuperarCuentas();
     }
 
+    private void clienteProvisional(){
+        try {
+            IClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
+            clienteActual = clienteDAO.existe(Long.valueOf(2));
+            
+            ventana.setCliente(clienteActual);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -204,12 +217,12 @@ public class VistaCliente extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
-
+        ventana.cambiarVistaCrearCuenta();
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
 
     private void btnCuentaSeleccionadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaSeleccionadaActionPerformed
         // TODO add your handling code here:
-                if(cbxCuentas.isEnabled()){
+            if(cbxCuentas.isEnabled()){
              Cuenta cuentaSeleccionada = listaCuentas.get(cbxCuentas.getSelectedIndex());
              ventana.setCuenta(cuentaSeleccionada);
             ventana.cambiarVistaCuenta(cuentaSeleccionada.getIdCuenta());
@@ -224,18 +237,38 @@ public class VistaCliente extends javax.swing.JPanel {
         lblSaldo.setText("$"+String.valueOf(cuentaSeleccionada.getSaldo())+" MXN");
     }//GEN-LAST:event_cbxCuentasActionPerformed
 
+    /**
+    * Cambia la vista actual a la vista principal del cliente.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
         
     }//GEN-LAST:event_btnInicioActionPerformed
 
+    /**
+    * Cambia la vista del perfil del cliente.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPerfilActionPerformed
 
+    /**
+    * Cambia la vista del historial de operaciones totales.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHistorialActionPerformed
 
+    /**
+    * Cambia la vista actual a la pantalla de inicio del banco.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         if(ventana.mostrarConfirmacion("¿Seguro que querer cerrar sesión?", "Cerrar sesión")){
             ventana.setCliente(null);
@@ -264,6 +297,9 @@ public class VistaCliente extends javax.swing.JPanel {
     private void insertarCuentas(){
         if(listaCuentas.isEmpty()){
             cbxCuentas.setEnabled(false);
+            lblNombreCuenta.setText("Cree una cuenta");
+            lblNumeroCuenta.setText("--------");
+            lblSaldo.setText("");
         }else{
             cbxCuentas.setEnabled(true);
             for (Cuenta cuenta : listaCuentas) {

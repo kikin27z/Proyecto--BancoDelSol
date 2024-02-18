@@ -77,6 +77,10 @@ public class Ventana extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Método para cambiar a la vista de inicio del banco.
+     * Este método elimina el panel actual y muestra la vista de inicio del banco.
+     */
     public void cambiarVistaInicio() {
         limpiarFrame();
         VistaInicio vistaInicio = new VistaInicio(this);
@@ -84,6 +88,10 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaInicio;
     }
 
+    /**
+     * Método para cambiar a la vista del cliente.
+     * Este método elimina el panel actual y muestra la vista a la pantalla del cliente.
+     */
     public void cambiarVistaCliente() {
         limpiarFrame();
         VistaCliente vistaClienta = new VistaCliente(this);
@@ -91,6 +99,10 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaClienta;
     }
 
+    /**
+     * Método para cambiar a la vista de una cuenta en especifico del cliente.
+     * Este método elimina el panel actual y muestra la vista a la pantalla de la cuenta del cliente.
+     */
     public void cambiarVistaCuenta(Long idCuenta) {
 
         VistaCuenta vistaCuenta = new VistaCuenta(this, idCuenta);
@@ -101,6 +113,11 @@ public class Ventana extends javax.swing.JFrame {
         this.setVisible(true);
     }
 
+    
+    /**
+     * Método para cambiar a la vista del apartado de transferencias.
+     * Este método elimina el panel actual y muestra el apartado de transferencias.
+     */
     public void cambiarVistaTransferir(Long idCuenta) {
         this.limpiarFrame();
         VistaTransferir vistaTransferencia = new VistaTransferir(this, idCuenta);
@@ -161,6 +178,16 @@ public class Ventana extends javax.swing.JFrame {
         VistaRegistro3 vistaRegistro = new VistaRegistro3(this);
         ponerEnJFrame(vistaRegistro);
         panelActual = vistaRegistro;
+    }
+    /**
+    * Método para cambiar a la ventana para crear una cuenta de un cliente.
+    * Este método elimina el panel actual y muestra la pestaña de crear una nueva cuenta.
+    */
+    public void cambiarVistaCrearCuenta() {
+        limpiarFrame();
+        VistaCrearCuenta vistaCrearCuenta = new VistaCrearCuenta(this);
+        ponerEnJFrame(vistaCrearCuenta);
+        panelActual = vistaCrearCuenta;
     }
 
     /**

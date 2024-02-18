@@ -1,5 +1,7 @@
 package bancodelsol.dtos;
 
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+
 /**
  * Representa un objeto de transferencia de datos (DTO) para una nueva cuenta.
  * Esta clase almacena información sobre una nueva cuenta bancaria,
@@ -10,7 +12,7 @@ package bancodelsol.dtos;
 public class CuentaNuevaDTO {
     private String numeroCuenta;
     private String nombreCuenta;
-    private double saldo;
+    private String saldo;
     private String fechaApertura;
     private Long idCliente;
 
@@ -34,7 +36,7 @@ public class CuentaNuevaDTO {
      * Obtiene el saldo de la cuenta.
      * @return El saldo de la cuenta.
      */
-    public double getSaldo() {
+    public String getSaldo() {
         return saldo;
     }
 
@@ -42,7 +44,7 @@ public class CuentaNuevaDTO {
      * Establece el saldo de la cuenta.
      * @param saldo El nuevo saldo de la cuenta.
      */
-    public void setSaldo(double saldo) {
+    public void setSaldo(String saldo) {
         this.saldo = saldo;
     }
 
@@ -92,5 +94,16 @@ public class CuentaNuevaDTO {
      */
     public void setNombreCuenta(String nombreCuenta) {
         this.nombreCuenta = nombreCuenta;
+    }
+    
+    /**
+     * Verifica que todos los campos de la sección de la cuenta no estén vacíos o solo existan espacios en blanco
+     * @throws ValidacionDTOException arroja Si algún dato de la cuenta es inválido o vacio.
+     */
+    public void esValido() throws ValidacionDTOException{
+        if (this.nombreCuenta == null || this.nombreCuenta.isBlank()
+                || this.saldo == null || this.saldo.isBlank()) {
+            throw new ValidacionDTOException("Llene todos los campos");
+        }
     }
 }

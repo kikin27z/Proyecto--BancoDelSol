@@ -1,5 +1,17 @@
 package bancodelsol;
 
+import bancodelsol.dtos.CuentaNuevaDTO;
+import bancodelsol.validaciones.ValidadorCampos;
+import bancodelsoldominio.Cliente;
+import bancodelsoldominio.Cuenta;
+import bancodelsolpersistencia.daos.CuentaDAO;
+import bancodelsolpersistencia.daos.ICuentaDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * La clase VistaCrearCuenta es un panel de interfaz de usuario que representa
  * la vista para crear una cuenta en la aplicación bancaria.
@@ -10,6 +22,9 @@ package bancodelsol;
 public class VistaCrearCuenta extends javax.swing.JPanel {
 
     private Ventana ventana;
+    private Cliente clienteActual;
+    private CuentaNuevaDTO cuentaNueva;
+    private boolean camposValidados;
 
     /**
      * Constructor de la clase VistaCrearCuenta.
@@ -18,6 +33,7 @@ public class VistaCrearCuenta extends javax.swing.JPanel {
      */
     public VistaCrearCuenta(Ventana ventana) {
         this.ventana = ventana;
+        this.clienteActual = ventana.getCliente();
         initComponents();
     }
 
@@ -179,30 +195,138 @@ public class VistaCrearCuenta extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+    * Cambia la vista actual a la vista principal del cliente.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
         ventana.cambiarVistaCliente();
     }//GEN-LAST:event_btnInicioActionPerformed
-
+    
+    /**
+    * Cambia la vista del perfil del cliente.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPerfilActionPerformed
 
+    /**
+    * Cambia la vista del historial de operaciones totales.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHistorialActionPerformed
 
+    /**
+    * Cambia la vista actual a la pantalla de inicio del banco.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        
+        if(ventana.mostrarConfirmacion("¿Seguro que querer cerrar sesión?", "Cerrar sesión")){
+            ventana.setCliente(null);
+            ventana.setCuenta(null);
+            ventana.cambiarVistaInicio();
+        }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
-
+    
+    /**
+    * Cambia la vista actual a la vista principal del cliente.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        ventana.cambiarVistaCliente();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    /**
+    * Guarda los datos ingresados por el usuario, los valida, y si son válidos,
+    * confirma la creación de la nueva cuenta y la registra en la base de datos.
+    * Finalmente, cambia la vista actual a la vista principal del cliente.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnCrearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCuentaActionPerformed
-        
+        guardarDatos();
+        validarDatos();
+        if (camposValidados) {
+            if(ventana.mostrarConfirmacion("¿Desea crear la cuenta nueva?", "Ha un paso de abrir una nueva cuenta")){
+                registrarCuenta();
+                ventana.cambiarVistaCliente();
+            }
+        }
     }//GEN-LAST:event_btnCrearCuentaActionPerformed
 
+    /**
+    * Guarda los datos ingresados por el usuario en un objeto CuentaNuevaDTO.
+    * Los datos se toman de los campos de texto txtNombreCuenta y txtSaldo.
+    */
+    private void guardarDatos() {
+        cuentaNueva = new CuentaNuevaDTO();
+        cuentaNueva.setNombreCuenta(txtNombreCuenta.getText());
+        cuentaNueva.setSaldo(txtSaldo.getText());
+    }
+    
+    /**
+    * Valida los datos ingresados por el usuario.
+    * Utiliza un objeto ValidadorCampos para realizar las validaciones necesarias.
+    * Si los datos son válidos, genera un número de cuenta aleatorio y establece
+    * el ID del cliente actual en el objeto CuentaNuevaDTO.
+    * En caso de error, muestra un mensaje de advertencia en la ventana.
+    */
+    public void validarDatos() {
+           ValidadorCampos valida = new ValidadorCampos();
+           try {
+               cuentaNueva.esValido();
+               valida.validaCuenta(cuentaNueva);
+               cuentaNueva.setNumeroCuenta(generaNumeroCuenta());
+               cuentaNueva.setIdCliente(clienteActual.getIdCliente());
+               camposValidados = true;
+           } catch (ValidacionDTOException ex) {
+               camposValidados = false;
+               ventana.mostrarAviso(ex.getMessage());
+   //            Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       }
+    
+    /**
+    * Registra la nueva cuenta en la base de datos.
+    * Utiliza un objeto ICuentaDAO para interactuar con la capa de persistencia.
+    * Muestra un mensaje informativo en la ventana cuando la cuenta se ha creado
+    * exitosamente. En caso de error, registra un mensaje de error en el registro.
+    */
+    private void registrarCuenta(){
+           try {
+               ICuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
+               Cuenta cuentaCreada = cuentaDAO.agregar(cuentaNueva);
 
+               ventana.mostrarInformacion("La cuenta "+ cuentaCreada.getNombreCuenta()+" ha sido agregada", TOOL_TIP_TEXT_KEY);
+           } catch (PersistenciaException ex) {
+               Logger.getLogger(VistaCrearCuenta.class.getName()).log(Level.SEVERE, null, ex);
+           }
+    }
+ 
+    /**
+     * Método que genera un número de cuenta aleatorio asegurando que ya no exista
+     * en la base datos .
+     * @return La cadena que representa el número de cuenta generado.
+     */
+    private String generaNumeroCuenta(){
+           Random random = new Random();
+           int numeroAleatorio = random.nextInt(10000); // Genera un número entre 0 y 9999
+           String numeroAleatorioStr = String.format("%04d", numeroAleatorio); // Asegura que tenga cuatro dígitos
+
+           // Construir el número con el prefijo "2710"
+           String numeroCuenta = "2710" + numeroAleatorioStr;
+
+        return numeroCuenta;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnCrearCuenta;

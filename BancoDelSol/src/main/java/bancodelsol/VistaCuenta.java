@@ -1,28 +1,27 @@
 package bancodelsol;
 
 import bancodelsoldominio.Cuenta;
-import bancodelsolpersistencia.conexion.Conexion;
-import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.daos.CuentaDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * La clase VistaCuenta es un panel de interfaz de usuario que representa
+ * la vista de una cuenta  con su información en la aplicación bancaria.
+ * 
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaCuenta extends javax.swing.JPanel {
-
     Cuenta cuenta;
     Long idCuenta;
-    /**
-     * Creates new form VistaCliente
-     */
     private  Ventana ventana;
+    
     /**
-     * Creates new form VistaCliente
+     * Constructor de la clase VistaCuenta.
+     *
+     * @param ventana La ventana principal de la aplicación.
      */
     public VistaCuenta(Ventana ventana, Long idCuenta ) {
         this.ventana = ventana;
@@ -289,18 +288,38 @@ public class VistaCuenta extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_lblTransferenciaMouseClicked
 
+    /**
+    * Cambia la vista actual a la vista principal del cliente.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
 
     }//GEN-LAST:event_btnInicioActionPerformed
 
+    /**
+    * Cambia la vista del perfil del cliente.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPerfilActionPerformed
 
+    /**
+    * Cambia la vista del historial de operaciones totales.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHistorialActionPerformed
 
+    /**
+    * Cambia la vista actual a la pantalla de inicio del banco.
+    *
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         if(ventana.mostrarConfirmacion("¿Seguro que querer cerrar sesión?", "Cerrar sesión")){
             ventana.setCliente(null);
