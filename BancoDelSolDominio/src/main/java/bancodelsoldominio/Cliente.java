@@ -38,6 +38,17 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public Cliente(Long idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String usuario, String fechaNacimiento) {
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.usuario = usuario;
+        this.fechaNacimiento = fechaNacimiento;
+    }
+    
+    
+
     public Long getIdCliente() {
         return idCliente;
     }

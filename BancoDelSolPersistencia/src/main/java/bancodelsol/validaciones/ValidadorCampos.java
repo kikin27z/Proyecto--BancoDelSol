@@ -1,4 +1,4 @@
-package bancodelsol.extras;
+package bancodelsol.validaciones;
 
 import bancodelsol.dtos.ClienteNuevoDTO;
 import bancodelsol.dtos.DomicilioNuevoDTO;
@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  *
  * @author karim
  */
-public class Validador {
+public class ValidadorCampos {
 
     public void validaSeccionDatosPersonales(ClienteNuevoDTO clienteDTO) throws ValidacionDTOException {
         String patronNombre = extensionCadena(50);
@@ -23,7 +23,7 @@ public class Validador {
         if (!matcher.matches()) {
             throw new ValidacionDTOException("Campo de nombre inválido (debe ser menor a 50 cáracteres y contener únicamente letras)");
         }
-        
+
         matcher = pattern2.matcher(clienteDTO.getApellidoPaterno());
         if (!matcher.matches()) {
             throw new ValidacionDTOException("Campo de apellido paterno inválido (debe ser menor a 30 cáracteres y contener únicamente letras)");
@@ -33,8 +33,9 @@ public class Validador {
             throw new ValidacionDTOException("Campo de apellido materno inválido (debe ser menor a 30 cáracteres y contener únicamente letras)");
         }
     }
+
     public void validaSeccionDatosCuenta(ClienteNuevoDTO clienteDTO) throws ValidacionDTOException {
-         String cadenaUsuario = "^[a-zA-Z0-9]{1,30}$";
+        String cadenaUsuario = "^[a-zA-Z0-9]{1,30}$";
         String cadenaContraseña = "^[\\S]{1,20}$";
 
         Pattern patronUsuario = Pattern.compile(cadenaUsuario);
@@ -53,13 +54,13 @@ public class Validador {
         }
 
     }
+
     public void validaSeccionDatosDomicilio(DomicilioNuevoDTO domicilioDTO) throws ValidacionDTOException {
         String cadenaCalle = extensionCadena(50);
         String cadenaCiudad = extensionCadena(20);
         String cadenaNumExterior = "^[a-zA-Z0-9]{1,10}$";
         String cadenaCodigoPostal = "^[0-9]{5}$";
-        
-        
+
         Pattern patronCalle = Pattern.compile(cadenaCalle);
         Pattern patronCiudad = Pattern.compile(cadenaCiudad);
         Pattern patronNumExterior = Pattern.compile(cadenaNumExterior);
@@ -80,22 +81,24 @@ public class Validador {
         if (!matcher.matches()) {
             throw new ValidacionDTOException("Campo de ciudad inválido (debe ser menor a 20 caracteres y contener letras)");
         }
-        
+
         //Verifica el campo de numero exterior
         matcher = patronNumExterior.matcher(domicilioDTO.getNumeroExterior());
         if (!matcher.matches()) {
             throw new ValidacionDTOException("Campo de número exterior inválido (debe ser menor a 10 caracteres y contener exclusivamente letras o números)");
         }
-        
+
         //Verifica el campo de codigo postal
         matcher = patronCodigoPostal.matcher(domicilioDTO.getCodigoPostal());
         if (!matcher.matches()) {
             throw new ValidacionDTOException("Campo de código postal inválido (debe ser de 5 caracteres y contener exclusivamente números)");
         }
-        
+
     }
-    
-    private String extensionCadena(int longitud){
-        return "^[a-zA-Z\\s]{1,"+longitud+"}$";
+
+
+
+    private String extensionCadena(int longitud) {
+        return "^[a-zA-Z\\s]{1," + longitud + "}$";
     }
 }

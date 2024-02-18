@@ -4,13 +4,11 @@
  */
 package bancodelsol;
 
-import bancodelsoldominio.Cliente;
-import bancodelsolpersistencia.daos.ClienteDAO;
-import bancodelsolpersistencia.daos.DomicilioDAO;
-import bancodelsolpersistencia.excepciones.PersistenciaException;
+import bancodelsol.validaciones.IValidacion;
+import bancodelsol.validaciones.Validacion;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jasypt.util.password.StrongPasswordEncryptor;
 
 /**
  *
@@ -21,12 +19,15 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     /**
      * Creates new form VistaInicioSesion
      */
-    private  Ventana ventana;
+    private Ventana ventana;
+    private IValidacion validacion;
+
     /**
      * Creates new form VistaCliente
      */
-    public VistaInicioSesion(Ventana ventana ) {
+    public VistaInicioSesion(Ventana ventana) {
         this.ventana = ventana;
+        this.validacion = new Validacion(ventana.getConexion());
         initComponents();
     }
 
@@ -121,7 +122,9 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
-        ventana.cambiarVistaCliente();
+        if (validarInicioSesion()) {
+            ventana.cambiarVistaCliente();
+        }
     }//GEN-LAST:event_btnInicioSesionActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
@@ -133,6 +136,31 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         ventana.cambiarVistaRegistro();
     }//GEN-LAST:event_lblHazteClienteMouseDragged
 
+    private boolean validarInicioSesion() {
+        try {
+            verificaCampos();
+            return validacion.clienteValido(txtUsuario.getText(), txtContrasena.getText());
+        } catch (ValidacionDTOException e) {
+            Logger.getLogger(VistaInicioSesion.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return false;
+    }
+    
+    private void verificaCampos() throws ValidacionDTOException {
+    if (txtUsuario.getText().isBlank() || txtContrasena.getText().isBlank()) {
+        throw new ValidacionDTOException("Llene todos los campos");
+    }
+    
+    // Verifica la longitud del usuario
+    if (txtUsuario.getText().length() > 30) {
+        throw new ValidacionDTOException("El nombre de usuario debe tener como máximo 30 caracteres");
+    }
+    
+    // Verifica la longitud de la contraseña
+    if (txtContrasena.getText().length() > 20) {
+        throw new ValidacionDTOException("La contraseña debe tener como máximo 20 caracteres");
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicio;
@@ -147,16 +175,6 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 
-//    private void validarInicioSesion(){
-//            ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
-//        try {
-//            clienteAgregado = clienteDAO.existe(ventana.getClienteDTO());
-//            domicilioDAO.agregar(ventana.getDomicilioDTO(), clienteAgregado.getIdCliente());
-//            
-//            ventana.mostrarInformacion("!!!Ya eres cliente!!!", "Bienvenido");
-//        } catch (PersistenciaException ex) {
-//            Logger.getLogger(VistaRegistro3.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+    
 
 }

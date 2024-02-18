@@ -1,6 +1,7 @@
 package bancodelsolpersistencia.daos;
 
 import bancodelsol.dtos.ClienteNuevoDTO;
+import bancodelsol.validaciones.Validacion;
 import bancodelsoldominio.Cliente;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
@@ -10,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,35 +33,19 @@ public class ClienteDAO implements IClienteDAO {
 
     @Override
     public Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException {
-            //        String sentenciaSQL = """
-//                         SELECT COUNT(*) AS total FROM clientes WHERE usuario = ?;
-//                         """;
-//        try (
-//                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
-//            comando.setString(1, clienteNuevo.getUsuario());
-//            ResultSet resultado = comando.executeQuery();
-//            resultado.next();
-//            int totalClienntes = resultado.getInt("total");
-//            if (totalClienntes > 0) {
-//                throw new PersistenciaException("El usuario ya existe en la base de datos.");
-//            }
-//        } catch (SQLException e) {
-//            logger.log(Level.SEVERE, "No se pudo verificar la existencia del usuario.", e);
-//            throw new PersistenciaException("No se pudo verificar la existencia del usuario.", e);
-//        }
 
+        Validacion validacion = new Validacion(conexionBD);
         try {
-            if (existeUsuario(clienteNuevo.getUsuario())) {
+            if (validacion.existeUsuario(clienteNuevo.getUsuario())) {
                 throw new PersistenciaException("El usuario ya existe en la base de datos.");
             }
         } catch (ValidacionDTOException e) {
             logger.log(Level.SEVERE, "El usuario ya existe en la base de datos.", e);
         }
-        
-        
+
         StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
         String contrasenaEnctriptada = encryptor.encryptPassword(clienteNuevo.getContrasena());
-        
+
         String sentenciaSQL = """
                              INSERT INTO clientes (nombres, apellido_paterno, apellido_materno, fecha_nacimiento, usuario, contrasena) 
                               VALUES (?, ?, ?, ?, ?, ?);
@@ -87,79 +73,30 @@ public class ClienteDAO implements IClienteDAO {
 
     @Override
     public List<Cliente> consultar() throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
-    @Override
-    public Cliente existe(Long idCliente) throws PersistenciaException {
-        String sentenciaSQL = """
-                             SELECT * FROM clientes 
-                               WHERE id_cliente = ?;
-                              """;
+        String sentencia = """
+                           SELECT id_cliente, nombres, apellido_paterno, apellido_materno, fecha_nacimiento, usuario
+                           FROM socios;
+                           """;
+        List<Cliente> listaClientes = new LinkedList<>();
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentencia); ResultSet resultados = comando.executeQuery();) {
+            while (resultados.next()) {
+                Long idCliente = resultados.getLong("id_cliente");
+                String nombre = resultados.getString("nombre");
+                String apellidoPaterno = resultados.getString("apellido_paterno");
+                String apellidoMaterno = resultados.getString("apellido_materno");
+                String usuario = resultados.getString("usuario");
+                String fechaNacimiento = resultados.getString("fecha_nacimiento");
+                Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, usuario, fechaNacimiento);
 
-            comando.setLong(1, idCliente);
-
-            try (ResultSet datosCliente = comando.executeQuery()) {
-                if (!datosCliente.next()) {
-                    logger.log(Level.INFO, "No se halló al cliente con id {0}", idCliente);
-                    return null;
-                }
-
-                logger.log(Level.INFO, "Se encontró al cliente");
-                Cliente cliente = new Cliente(
-                        idCliente,
-                        datosCliente.getString("nombres"),
-                        datosCliente.getString("apellido_paterno"),
-                        datosCliente.getString("apellido_materno"),
-                        datosCliente.getString("usuario"),
-                        datosCliente.getString("contrasena"),
-                        datosCliente.getString("fecha_nacimiento")
-                );
-                return cliente;
+                listaClientes.add(cliente);
             }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "No se pudo encontrar el cliente.", e);
-            throw new PersistenciaException("No se pudo encontrar el cliente.", e);
-        }
-
-    }
-
-    @Override
-    public boolean existeUsuario(String usuario) throws ValidacionDTOException {
-        String sentenciaSQL = """
-                             SELECT * FROM clientes 
-                               WHERE usuario = ?;
-                              """;
-        try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
-            comando.setString(1, usuario);
-
-            try (ResultSet datosCliente = comando.executeQuery()) {
-                if (!datosCliente.next()) {
-                    logger.log(Level.INFO, "No se halló al cliente con usuario {0}", usuario);
-                    return false;
-                }
-                logger.log(Level.INFO, "Se encontró al cliente");
-                return true;
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "No se pudo encontrar el cliente.", e);
-            throw new ValidacionDTOException("No se pudo consultar intente de nuevo.");
+            logger.log(Level.INFO, "Se consultaron {0} clientes", listaClientes.size());
+            return listaClientes;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "No se pudieron consultar los clientes", e);
+            throw new PersistenciaException("No se pudieron consular los clientes", e);
         }
     }
 
-    @Override
-    public boolean clienteValido(String usuario, String contrasena) throws ValidacionDTOException {
-        StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
-        String sentenciaSQL = """
-                             SELECT * FROM clientes 
-                               WHERE usuario = ? and contrasna = ?;
-                              """;
-        return false;
-
-    
-    
-    }
 }

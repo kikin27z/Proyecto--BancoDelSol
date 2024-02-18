@@ -1,6 +1,6 @@
 package bancodelsol;
 
-import bancodelsol.extras.Validador;
+import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -192,7 +192,7 @@ public class VistaRegistro extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     public void validarDatos() {
-        Validador valida = new Validador();
+        ValidadorCampos valida = new ValidadorCampos();
         try {
             ventana.getClienteDTO().esValido();
             valida.validaSeccionDatosPersonales(ventana.getClienteDTO());

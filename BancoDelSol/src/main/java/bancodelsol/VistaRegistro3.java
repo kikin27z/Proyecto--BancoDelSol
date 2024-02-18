@@ -1,6 +1,6 @@
 package bancodelsol;
 
-import bancodelsol.extras.Validador;
+import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsoldominio.Cliente;
 import bancodelsolpersistencia.daos.ClienteDAO;
 import bancodelsolpersistencia.daos.DomicilioDAO;
@@ -10,18 +10,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Clase que representa la tercera ventana de registro de clientes.
- * En la sección de datos la cuenta del cliente.
+ * Clase que representa la tercera ventana de registro de clientes. En la
+ * sección de datos la cuenta del cliente.
+ *
  * @author José Karim Franco Valencia - 245138
  */
 public class VistaRegistro3 extends javax.swing.JPanel {
-    private  Ventana ventana;
+
+    private Ventana ventana;
     private Boolean camposValidos = false;
+
     /**
      * Constructor de la vista de registro 3.
+     *
      * @param ventana JFrame donde se colocará este JPanel.
      */
-    public VistaRegistro3(Ventana ventana ) {
+    public VistaRegistro3(Ventana ventana) {
         this.ventana = ventana;
         initComponents();
     }
@@ -136,26 +140,29 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Redirige a la pantalla de registro en la sección
-     * de domicilio.
+     * Redirige a la pantalla de registro en la sección de domicilio.
+     *
      * @param evt Evento de un clic en un botón.
      */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         ventana.getClienteDTO().setUsuario(null);
         ventana.getClienteDTO().setContrasena(null);
         ventana.cambiarVistaRegistrarse2();
-        
+
     }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
-     * Redirige a la pantalla de inicio sesión
-     * confirmando que se registro el cliente al banco.
+     * Redirige a la pantalla de inicio sesión confirmando que se registro el
+     * cliente al banco.
+     *
      * @param evt Evento de un clic en un botón.
      */
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        ventana.getClienteDTO().setContrasena(txtContrasena.getText());
+        ventana.getClienteDTO().setUsuario(txtUsuario.getText());
         validarDatos();
         if (camposValidos) {
-            if(ventana.mostrarConfirmacion("¿Desea confirmar su registro?", "Está a un paso de ser cliente")){
+            if (ventana.mostrarConfirmacion("¿Desea confirmar su registro?", "Está a un paso de ser cliente")) {
                 guardarDatosCliente();
                 registrarCliente();
                 ventana.setClienteDTO(null);
@@ -165,27 +172,26 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
-    private void registrarCliente(){
-            ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
-            DomicilioDAO domicilioDAO = new DomicilioDAO(ventana.getConexion());
-            Cliente clienteAgregado;
+    private void registrarCliente() {
+        ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
+        DomicilioDAO domicilioDAO = new DomicilioDAO(ventana.getConexion());
+        Cliente clienteAgregado;
         try {
             clienteAgregado = clienteDAO.agregar(ventana.getClienteDTO());
             domicilioDAO.agregar(ventana.getDomicilioDTO(), clienteAgregado.getIdCliente());
-            
+
             ventana.mostrarInformacion("!!!Ya eres cliente!!!", "Bienvenido");
         } catch (PersistenciaException ex) {
             Logger.getLogger(VistaRegistro3.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void validarDatos() {
-        Validador valida = new Validador();
+        ValidadorCampos valida = new ValidadorCampos();
         try {
             verificaCampos();
             valida.validaSeccionDatosCuenta(ventana.getClienteDTO());
             ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
-            
             camposValidos = true;
         } catch (ValidacionDTOException ex) {
             camposValidos = false;
@@ -193,7 +199,7 @@ public class VistaRegistro3 extends javax.swing.JPanel {
 //            Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Método que guarda los datos del cliente en una variable auxiliar que
      * sirve en caso de volver a esta parte del formulario y insertar los datos
@@ -203,14 +209,14 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         ventana.getClienteDTO().setUsuario(txtUsuario.getText());
         ventana.getClienteDTO().setContrasena(txtContrasena.getText());
     }
-    
-    private void verificaCampos() throws ValidacionDTOException{
+
+    private void verificaCampos() throws ValidacionDTOException {
         if (txtConfirmarContrasena.getText() == null || txtConfirmarContrasena.getText().isBlank()
                 || txtContrasena.getText() == null || txtContrasena.getText().isBlank()
                 || txtUsuario.getText() == null || txtUsuario.getText().isBlank()) {
             throw new ValidacionDTOException("Llene todos los campos");
         }
-        if(!txtContrasena.getText().equals(txtConfirmarContrasena.getText())){
+        if (!txtContrasena.getText().equals(txtConfirmarContrasena.getText())) {
             throw new ValidacionDTOException("Las contraseñas no coinciden");
         }
     }
@@ -232,5 +238,4 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 
-    
 }
