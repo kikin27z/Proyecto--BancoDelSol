@@ -1,6 +1,7 @@
 package bancodelsol.validaciones;
 
 import bancodelsol.dtos.ClienteNuevoDTO;
+import bancodelsol.dtos.CuentaNuevaDTO;
 import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import java.text.ParseException;
@@ -13,11 +14,31 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author karim
+ * Clase que proporciona métodos para validar los campos de diferentes DTOs
+ * utilizados en la aplicación.
+ * Los métodos de esta clase lanzan excepciones de tipo ValidacionDTOException
+ * en caso de que los datos proporcionados no cumplan con los criterios de
+ * validación especificados.
+ * 
+ * Esta clase realiza validaciones como:
+ *  - Longitud máxima y tipo de caracteres permitidos en nombres, apellidos,
+ *    usuario, contraseña, calle, ciudad, colonia, número exterior, código postal,
+ *    nombre de cuenta y saldo.
+ *  - Formato de contraseña y saldo.
+ *  - Rango de valores para el saldo de una cuenta.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class ValidadorCampos {
 
+    /**
+     * Valida los campos relacionados con los datos personales de un cliente
+     * recibidos en un objeto ClienteNuevoDTO.
+     * 
+     * @param clienteDTO Objeto ClienteNuevoDTO que contiene los datos personales del cliente a validar.
+     * @throws ValidacionDTOException Si los datos personales no cumplen con los criterios de validación.
+     */
     public void validaSeccionDatosPersonales(ClienteNuevoDTO clienteDTO) throws ValidacionDTOException {
         String patronNombre = extensionCadena(50);
         String patronApellidos = extensionCadena(30);
@@ -51,6 +72,13 @@ public class ValidadorCampos {
 
     }
 
+    /**
+     * Valida los campos relacionados con los datos de cuenta de un cliente
+     * recibidos en un objeto ClienteNuevoDTO.
+     * 
+     * @param clienteDTO Objeto ClienteNuevoDTO que contiene los datos de cuenta del cliente a validar.
+     * @throws ValidacionDTOException Si los datos de cuenta no cumplen con los criterios de validación.
+     */
     public void validaSeccionDatosCuenta(ClienteNuevoDTO clienteDTO) throws ValidacionDTOException {
         String cadenaUsuario = "^[a-zA-Z0-9]{1,30}$";
         String cadenaContraseña = "^[\\S]{1,20}$";
@@ -72,6 +100,13 @@ public class ValidadorCampos {
 
     }
 
+     /**
+     * Valida los campos relacionados con los datos de domicilio recibidos en
+     * un objeto DomicilioNuevoDTO.
+     * 
+     * @param domicilioDTO Objeto DomicilioNuevoDTO que contiene los datos de domicilio a validar.
+     * @throws ValidacionDTOException Si los datos de domicilio no cumplen con los criterios de validación.
+     */
     public void validaSeccionDatosDomicilio(DomicilioNuevoDTO domicilioDTO) throws ValidacionDTOException {
         String cadenaCalle = extensionCadena(50);
         String cadenaCiudad = extensionCadena(20);
@@ -112,6 +147,17 @@ public class ValidadorCampos {
         }
 
     }
+    
+    /**
+     * Valida los campos relacionados con una nueva cuenta recibidos en un
+     * objeto CuentaNuevaDTO.
+     * 
+     * @param cuentaDTO Objeto CuentaNuevaDTO que contiene los datos de la nueva cuenta a validar.
+     * @throws ValidacionDTOException Si los datos de la nueva cuenta no cumplen con los criterios de validación.
+     */
+    public void validaCuenta(CuentaNuevaDTO cuentaDTO) throws ValidacionDTOException {
+        String cadenaNombreCuenta = "^[a-zA-Z0-9\\s]{1,15}$";
+        String cadenaSaldoCuenta = "^[\\d]{1,5}([.][\\d]{1,2})?$";
 
     public Date obtenerFecha(String fecha) {
         String format = "yyyy-MM-dd";
@@ -124,8 +170,35 @@ public class ValidadorCampos {
         }
         return date;
     }
+        Pattern patronCalle = Pattern.compile(cadenaNombreCuenta);
+        Pattern patronSaldo = Pattern.compile(cadenaSaldoCuenta);
 
+        // Verifica el campo calle
+        Matcher matcher = patronCalle.matcher(cuentaDTO.getNombreCuenta());
+        if (!matcher.matches()) {
+            throw new ValidacionDTOException("Campo de nombre de cuenta inválido (debe ser menor a 16 caracteres y contener letras o números)");
+        }
+        matcher = patronSaldo.matcher(cuentaDTO.getSaldo());
+        if (!matcher.matches()) {
+            throw new ValidacionDTOException("Formato de saldo inválido, no se aceptan numeros negativos o cualquier otro simbolo formato deseado Ejemplo: 00000.00");
+        }
+        
+        double saldo = Double.parseDouble(cuentaDTO.getSaldo());
+        if(saldo > 10000 || saldo < 100){
+            throw new ValidacionDTOException("El saldo máximo posible a agregar es de $10,000.00 MXN y el minimo son $100.00 MXN");
+
+        }
+    }
+
+    /**
+     * Genera un patrón de expresión regular para validar la longitud de una cadena.
+     * 
+     * @param longitud La longitud máxima permitida para la cadena.
+     * @return Un patrón de expresión regular para validar la longitud de una cadena.
+     */
     private String extensionCadena(int longitud) {
         return "^[a-zA-Z\\s]{1," + longitud + "}$";
     }
+    
+    
 }

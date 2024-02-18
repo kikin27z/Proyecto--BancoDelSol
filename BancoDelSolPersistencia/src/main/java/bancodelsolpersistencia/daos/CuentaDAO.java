@@ -49,27 +49,35 @@ public class CuentaDAO implements ICuentaDAO{
             String sentenciaSQL = """
                                   INSERT INTO cuentas (fecha_apertura, nombre_cuenta, numero_cuenta, saldo, id_cliente) 
                                   VALUES (?, ?, ?, ?, ?);
-                                  INSERT INTO cuentas (fecha_apertura, numero_cuenta, saldo, id_cliente, nombre_cuenta) 
-                                  VALUES (?,?, ?, ?,?);
                               """;
         try (
             Connection conexion = this.conexionBD.obtenerConexion(); 
             PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
         ) {
-            
-            comando.setString(1, LocalDate.now().toString());
+            //Insertar datos en el comando mySql
+            java.sql.Date fechaHoy = java.sql.Date.valueOf(LocalDate.now());
+            comando.setDate(1, fechaHoy);
             comando.setString(2, cuentaNueva.getNombreCuenta());
             comando.setString(3, cuentaNueva.getNumeroCuenta());
-            comando.setDouble(4, cuentaNueva.getSaldo());
+            comando.setDouble(4, Double.parseDouble(cuentaNueva.getSaldo()));
             comando.setLong(5, cuentaNueva.getIdCliente());
-            
 
-            
+            // Se muestran los cambios de la base de datos
             int numeroRegistrosInsertados = comando.executeUpdate();
             logger.log(Level.INFO, "Se agregaron {0} cuentas", numeroRegistrosInsertados);
             ResultSet filaGenerada = comando.getGeneratedKeys();
             filaGenerada.next();
-            Cuenta cuenta = new Cuenta(filaGenerada.getLong(1), filaGenerada.getDate("fecha_apertura").toString(),filaGenerada.getString("nombre_cuenta"), filaGenerada.getString("numero_cuenta"), filaGenerada.getDouble("saldo"), filaGenerada.getLong("id_cliente"));
+            
+            //Se insertan los datos de la cuenta a devolver
+            Cuenta cuenta = new Cuenta(
+                    filaGenerada.getLong(1),
+                    LocalDate.now().toString(),
+                    cuentaNueva.getNombreCuenta(),
+                    cuentaNueva.getNumeroCuenta(),
+                    Double.parseDouble(cuentaNueva.getSaldo()),
+                    cuentaNueva.getIdCliente()
+                );
+            cuenta.toString();
             return cuenta;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "No se pudo guardar la cuenta.", e);

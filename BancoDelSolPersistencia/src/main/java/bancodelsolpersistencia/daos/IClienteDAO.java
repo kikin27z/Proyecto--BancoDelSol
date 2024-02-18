@@ -29,7 +29,13 @@ public interface IClienteDAO {
      * @throws PersistenciaException Si ocurre un error durante la consulta a la base de datos.
      */
     List<Cliente> consultar() throws PersistenciaException;
-//    Cliente existe(Long idCliente) throws PersistenciaException;
-//    boolean existeUsuario(String usuario) throws ValidacionDTOException;
-//    boolean clienteValido(String usuario, String contrasena) throws ValidacionDTOException;
+    
+     /**
+     * Verifica si un cliente con el identificador especificado existe en la base de datos.
+     *
+     * @param idCliente El identificador único del cliente a verificar.
+     * @return El cliente si existente, null si no existe.
+     * @throws PersistenciaException Si ocurre un error durante la verificación.
+     */
+    Cliente existe(Long idCliente) throws PersistenciaException;
 }

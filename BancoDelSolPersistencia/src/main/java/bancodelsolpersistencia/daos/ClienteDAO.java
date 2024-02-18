@@ -64,7 +64,9 @@ public class ClienteDAO implements IClienteDAO {
                               VALUES (?, ?, ?, ?, ?, ?);
                               """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
+                Connection conexion = this.conexionBD.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
+                ) {
             comando.setString(1, clienteNuevo.getNombres());
             comando.setString(2, clienteNuevo.getApellidoPaterno());
             comando.setString(3, clienteNuevo.getApellidoMaterno());
@@ -117,6 +119,53 @@ public class ClienteDAO implements IClienteDAO {
             logger.log(Level.SEVERE, "No se pudieron consultar los clientes", e);
             throw new PersistenciaException("No se pudieron consular los clientes", e);
         }
+    }
+
+    
+    /**
+     * Verifica si un cliente con el identificador especificado existe en la base de datos.
+     *
+     * @param idCliente El identificador único del cliente a verificar.
+     * @return El cliente si existente, null si no existe.
+     * @throws PersistenciaException Si ocurre un error durante la verificación.
+     */
+    @Override
+    public Cliente existe(Long idCliente) throws PersistenciaException {
+        String sentenciaSQL = """
+                             SELECT * FROM clientes 
+                               WHERE id_cliente = ?;
+                              """;
+          try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
+            
+        ) {
+              
+            comando.setLong(1, idCliente);
+    
+            try (ResultSet datosCuenta = comando.executeQuery()) {
+                if (!datosCuenta.next()) {
+                    logger.log(Level.INFO, "No se halló la cuenta con id {0}", idCliente);
+                    return null;
+                }
+
+                logger.log(Level.INFO, "Se encontró la cuenta");
+                Cliente cliente = new Cliente(
+                    idCliente,
+                    datosCuenta.getString("nombres"),
+                    datosCuenta.getString("apellido_paterno"),
+                    datosCuenta.getString("apellido_materno"),
+                    datosCuenta.getString("usuario"),
+                    datosCuenta.getString("contrasena"),
+                    datosCuenta.getString("fecha_nacimiento")
+                );
+                return cliente;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudo encontrar la cuenta.", e);
+            throw new PersistenciaException("No se pudo encontrar la cuenta.", e);
+        }
+    
     }
 
 }
