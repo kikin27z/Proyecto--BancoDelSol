@@ -6,8 +6,8 @@ import bancodelsolpersistencia.excepciones.ValidacionDTOException;
  * Esta clase representa un DTO (Data Transfer Object) para un cliente nuevo.
  * Contiene información básica sobre el cliente, como nombres, apellidos, fecha de nacimiento, usuario y contraseña.
  * También incluye un método para verificar la validez de los datos ingresados.
- *
  * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class ClienteNuevoDTO {
     private String nombres;

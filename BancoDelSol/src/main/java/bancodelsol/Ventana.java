@@ -9,8 +9,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- *
- * @author karim
+ * La clase Ventana representa la ventana principal de la aplicación bancaria.
+ * Se encarga de gestionar la navegación entre diferentes vistas de la interfaz de usuario,
+ * así como de interactuar con el usuario mediante ventanas emergentes.
+ * También mantiene instancias de DTOs y una conexión a la base de datos.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class Ventana extends javax.swing.JFrame {
 
@@ -19,8 +24,10 @@ public class Ventana extends javax.swing.JFrame {
     private DomicilioNuevoDTO domicilioDTO;
     private JPanel panelActual;
     private IConexion conexion;
+    
     /**
-     * Creates new form Ventana
+     * Constructor de la clase Ventana.
+     * @param conexion Objeto que representa la conexión a la base de datos.
      */
     public Ventana(IConexion conexion) {
         this.conexion = conexion;
@@ -57,6 +64,17 @@ public class Ventana extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    /**
+     * Método para limpiar el contenido de la ventana.
+     * Si hay un panel actualmente mostrado, lo elimina de la ventana.
+     */
+    public void limpiarFrame() {
+        if (panelActual != null) {
+            this.remove(panelActual);
+            panelActual = null;
+        }
+    }
+    
     public void cambiarVistaInicio() {
         limpiarFrame();
         VistaInicio vistaInicio = new VistaInicio(this);
@@ -88,13 +106,11 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaTransferencia;
     }
 
-    public void limpiarFrame() {
-        if (panelActual != null) {
-            this.remove(panelActual);
-            panelActual = null;
-        }
-    }
 
+    /**
+     * Método para cambiar a la vista de inicio de sesión.
+     * Este método elimina el panel actual y muestra la vista de inicio de sesión en su lugar.
+     */
     public void cambiarVistaInicioSesion() {
         limpiarFrame();
         VistaInicioSesion vistaInicioSesion = new VistaInicioSesion(this);
@@ -102,12 +118,20 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaInicioSesion;
     }
 
+    /**
+    * Método para cambiar a la vista de registro.
+    * Este método inicializa los DTOs necesarios y cambia a la vista de registro inicial.
+    */
     public void cambiarVistaRegistro() {
         this.clienteDTO = new ClienteNuevoDTO();
         this.domicilioDTO = new DomicilioNuevoDTO();
         cambiarVistaRegistrarse();
     }
 
+    /**
+    * Método para cambiar a la vista de registro del cliente.
+    * Este método elimina el panel actual y muestra la vista de registro en su lugar.
+    */
     public void cambiarVistaRegistrarse() {
         limpiarFrame();
         VistaRegistro vistaRegistro = new VistaRegistro(this);
@@ -115,6 +139,10 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaRegistro;
     }
 
+    /**
+    * Método para cambiar a la segunda parte del registro de cliente.
+    * Este método elimina el panel actual y muestra la segunda vista de registro en su lugar.
+    */
     public void cambiarVistaRegistrarse2() {
         limpiarFrame();
         VistaRegistro2 vistaRegistro = new VistaRegistro2(this);
@@ -122,6 +150,10 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaRegistro;
     }
 
+    /**
+    * Método para cambiar a la tercera parte del registro de cliente.
+    * Este método elimina el panel actual y muestra la tercera vista de registro en su lugar.
+    */
     public void cambiarVistaRegistrarse3() {
         limpiarFrame();
         VistaRegistro3 vistaRegistro = new VistaRegistro3(this);
@@ -129,46 +161,100 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaRegistro;
     }
 
-    
-
+    /**
+    * Método para agregar un panel a la ventana.
+    * Este método agrega el panel especificado a la ventana, lo posiciona y ajusta su tamaño automáticamente.
+    * @param panel El panel que se va a agregar a la ventana.
+    */
     public void ponerEnJFrame(JPanel panel) {
         this.add(panel);
         panel.setBounds(0, 0, 1000, 580);
         this.setLocationRelativeTo(null);
         this.pack();  // Ajustar el tamaño automáticamente
     }
-
-    public ClienteNuevoDTO getClienteDTO() {
-        return clienteDTO;
-    }
-
-    public void setClienteDTO(ClienteNuevoDTO clienteDTO) {
-        this.clienteDTO = clienteDTO;
-    }
-
-    public DomicilioNuevoDTO getDomicilioDTO() {
-        return domicilioDTO;
-    }
-
-    public void setDomicilioDTO(DomicilioNuevoDTO domicilioDTO) {
-        this.domicilioDTO = domicilioDTO;
-    }
-    
+  
+    /**
+    * Método para mostrar un aviso al usuario mediante una ventana emergente.
+    * @param mensaje El mensaje a mostrar en el aviso.
+    */
     public void mostrarAviso(String mensaje){
         JOptionPane.showMessageDialog(this, mensaje,"Aviso", JOptionPane.WARNING_MESSAGE);
     }
+    
+    /**
+    * Método para mostrar una ventana emergente de confirmación al usuario.
+    * @param mensaje El mensaje a mostrar en la ventana de confirmación.
+    * @param titulo El título de la ventana de confirmación.
+    * @return true si el usuario selecciona "OK", false si selecciona "Cancelar".
+    */
     public boolean mostrarConfirmacion(String mensaje, String titulo){
         int respuesta = JOptionPane.showConfirmDialog(null, mensaje, titulo, JOptionPane.OK_CANCEL_OPTION);
         return respuesta == JOptionPane.OK_OPTION;
     }
     
+    /**
+    * Método para mostrar una ventana emergente de información al usuario.
+    * @param mensaje El mensaje a mostrar en la ventana de información.
+    * @param titulo El título de la ventana de información.
+    */
     public void mostrarInformacion(String mensaje, String titulo){
         JOptionPane.showMessageDialog(this, mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
     }
-
+    
+    /**
+    * Método para obtener la conexión a la base de datos.
+    * @return La conexión a la base de datos.
+    */
     public IConexion getConexion() {
         return conexion;
     }
     
+    /**
+    * Método para obtener el cliente actual.
+    * @return El cliente actual.
+    */
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    /**
+    * Método para establecer el cliente actual.
+    * @param cliente El cliente actual a establecer.
+    */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
+    /**
+     * Método para obtener el DTO del cliente.
+     * @return El DTO del cliente.
+     */
+    public ClienteNuevoDTO getClienteDTO() {
+        return clienteDTO;
+    }
+
+    /**
+     * Método para establecer el DTO del cliente.
+     * @param clienteDTO El DTO del cliente a establecer.
+     */
+    public void setClienteDTO(ClienteNuevoDTO clienteDTO) {
+        this.clienteDTO = clienteDTO;
+    }
+
+    /**
+     * Método para obtener el DTO del domicilio.
+     * @return El DTO del domicilio.
+     */
+    public DomicilioNuevoDTO getDomicilioDTO() {
+        return domicilioDTO;
+    }
+
+    /**
+     * Método para establecer el DTO del domicilio.
+     * @param domicilioDTO El DTO del domicilio a establecer.
+     */
+    public void setDomicilioDTO(DomicilioNuevoDTO domicilioDTO) {
+        this.domicilioDTO = domicilioDTO;
+    } 
     
 }

@@ -208,6 +208,8 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblFecha3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblFecha3.setText("03/06/2004 12:03:22");
         add(lblFecha3, new org.netbeans.lib.awtextra.AbsoluteConstraints(586, 510, 200, 22));
+
+        lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgVistaCuenta.png"))); // NOI18N
         add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 

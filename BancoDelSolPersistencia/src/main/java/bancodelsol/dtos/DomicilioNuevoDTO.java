@@ -7,8 +7,8 @@ import bancodelsolpersistencia.excepciones.ValidacionDTOException;
  * Contiene información básica sobre un domicilio, como calle, colonia, código postal, ciudad y número exterior.
  * También incluye un método para validar los datos del domicilio.
  * Además, implementa un método toString() para representar el objeto como una cadena de texto.
- * 
  * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class DomicilioNuevoDTO {
     private String calle;
@@ -85,7 +85,7 @@ public class DomicilioNuevoDTO {
      * Verifica que todos los campos de la sección de datos personales no estén vacíos o solo existan espacios en blanco
      * @return Devuelve true si todos los campos son válidos y no son solo 
      * espacios en blanco.
-     * @throws ValidacionDTOException 
+     * @throws ValidacionDTOException Si algún campo está vacío o contiene solo espacios en blanco.
      */
     public boolean esValido() throws ValidacionDTOException {
         if (this.calle == null || this.calle.isBlank()
@@ -114,6 +114,10 @@ public class DomicilioNuevoDTO {
         this.numeroExterior = numeroExterior;
     }
 
+    /**
+     * Genera una representación en formato de cadena del objeto DomicilioNuevoDTO.
+     * @return Una cadena que representa el objeto DomicilioNuevoDTO.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

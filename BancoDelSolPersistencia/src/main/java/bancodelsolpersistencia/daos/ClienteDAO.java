@@ -86,8 +86,9 @@ public class ClienteDAO implements IClienteDAO {
                 String apellidoPaterno = resultados.getString("apellido_paterno");
                 String apellidoMaterno = resultados.getString("apellido_materno");
                 String usuario = resultados.getString("usuario");
+//                String contraseña = resultados.getString(nombre);
                 String fechaNacimiento = resultados.getString("fecha_nacimiento");
-                Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, usuario, fechaNacimiento);
+                Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, usuario,"", fechaNacimiento);
 
                 listaClientes.add(cliente);
             }

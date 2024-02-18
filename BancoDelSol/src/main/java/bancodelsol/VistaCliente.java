@@ -1,20 +1,42 @@
 package bancodelsol;
 
+import bancodelsoldominio.Cliente;
+import bancodelsoldominio.Cuenta;
+import bancodelsolpersistencia.daos.CuentaDAO;
+import bancodelsolpersistencia.daos.ICuentaDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
- *
- * @author karim
+ * Clase que representa la vista de un cliente en el sistema bancario.
+ * Esta clase contiene componentes de interfaz de usuario para mostrar información sobre las cuentas del cliente.
+ * Además, gestiona la recuperación de cuentas del cliente y la visualización de detalles de cuenta seleccionada.
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaCliente extends javax.swing.JPanel {
 
     private  Ventana ventana;
+    private Cliente clienteActual;
+    private List<Cuenta> listaCuentas;
+    
     /**
-     * Creates new form VistaCliente
+     * Constructor de la clase VistaCliente.
+     * @param ventana La ventana principal de la aplicación.
      */
     public VistaCliente(Ventana ventana) {
+        this.listaCuentas = new LinkedList<>();
         this.ventana = ventana;
         initComponents();
+       
+        clienteActual = new Cliente();
+        clienteActual.setIdCliente(Long.valueOf(2));
+//        clienteActual = ventana.getCliente();
+        recuperarCuentas();
     }
 
     /**
@@ -26,35 +48,51 @@ public class VistaCliente extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblCuenta1 = new javax.swing.JLabel();
-        lblCuenta2 = new javax.swing.JLabel();
+        btnAgregarCuenta = new javax.swing.JButton();
+        btnAgregarCuenta1 = new javax.swing.JButton();
+        cbxCuentas = new javax.swing.JComboBox<>();
         lblNombreCliente = new javax.swing.JLabel();
         lblCuentaInfo = new javax.swing.JLabel();
-        lblNombreCuenta1 = new javax.swing.JLabel();
-        lblNombreCuenta2 = new javax.swing.JLabel();
-        lblNumeroCuenta1 = new javax.swing.JLabel();
-        lblNumeroCuenta2 = new javax.swing.JLabel();
-        lblSaldo1 = new javax.swing.JLabel();
-        lblSaldo2 = new javax.swing.JLabel();
+        lblNombreCuenta = new javax.swing.JLabel();
+        lblNumeroCuenta = new javax.swing.JLabel();
+        lblSaldo = new javax.swing.JLabel();
         lblAgregarCuenta = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblCuenta1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblCuenta1MouseClicked(evt);
+        btnAgregarCuenta.setBorderPainted(false);
+        btnAgregarCuenta.setContentAreaFilled(false);
+        btnAgregarCuenta.setFocusPainted(false);
+        btnAgregarCuenta.setFocusable(false);
+        btnAgregarCuenta.setLabel("");
+        btnAgregarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCuentaActionPerformed(evt);
             }
         });
-        add(lblCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(119, 166, 203, 140));
+        add(btnAgregarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 153, 200, 140));
 
-        lblCuenta2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblCuenta2MouseClicked(evt);
+        btnAgregarCuenta1.setBorderPainted(false);
+        btnAgregarCuenta1.setContentAreaFilled(false);
+        btnAgregarCuenta1.setFocusPainted(false);
+        btnAgregarCuenta1.setFocusable(false);
+        btnAgregarCuenta1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCuenta1ActionPerformed(evt);
             }
         });
-        add(lblCuenta2, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 166, 203, 140));
+        add(btnAgregarCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 153, 205, 140));
+
+        cbxCuentas.setFont(new java.awt.Font("Amazon Ember Light", 0, 18)); // NOI18N
+        cbxCuentas.setForeground(new java.awt.Color(157, 134, 90));
+        cbxCuentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCuentasActionPerformed(evt);
+            }
+        });
+        add(cbxCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 302, 205, 39));
 
         lblNombreCliente.setFont(new java.awt.Font("Amazon Ember", 1, 36)); // NOI18N
         lblNombreCliente.setForeground(new java.awt.Color(149, 120, 64));
@@ -64,74 +102,90 @@ public class VistaCliente extends javax.swing.JPanel {
         lblCuentaInfo.setFont(new java.awt.Font("Amazon Ember", 1, 24)); // NOI18N
         lblCuentaInfo.setForeground(new java.awt.Color(143, 143, 143));
         lblCuentaInfo.setText("Cuentas");
-        add(lblCuentaInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 125, 284, 43));
+        add(lblCuentaInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 115, 284, 43));
 
-        lblNombreCuenta1.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
-        lblNombreCuenta1.setForeground(new java.awt.Color(255, 255, 255));
-        lblNombreCuenta1.setText("Hogar");
-        add(lblNombreCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 187, 150, 24));
+        lblNombreCuenta.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
+        lblNombreCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        lblNombreCuenta.setText("Hogar");
+        add(lblNombreCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 170, 170, 24));
 
-        lblNombreCuenta2.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
-        lblNombreCuenta2.setForeground(new java.awt.Color(255, 255, 255));
-        lblNombreCuenta2.setText("Hogar");
-        add(lblNombreCuenta2, new org.netbeans.lib.awtextra.AbsoluteConstraints(365, 187, 150, 24));
+        lblNumeroCuenta.setFont(new java.awt.Font("Amazon Ember Light", 1, 20)); // NOI18N
+        lblNumeroCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        lblNumeroCuenta.setText("4444555566667777");
+        add(lblNumeroCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, 160, 24));
 
-        lblNumeroCuenta1.setFont(new java.awt.Font("Amazon Ember Light", 1, 20)); // NOI18N
-        lblNumeroCuenta1.setForeground(new java.awt.Color(255, 255, 255));
-        lblNumeroCuenta1.setText("4444555566667777");
-        add(lblNumeroCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 219, 160, 24));
-
-        lblNumeroCuenta2.setFont(new java.awt.Font("Amazon Ember Light", 1, 20)); // NOI18N
-        lblNumeroCuenta2.setForeground(new java.awt.Color(255, 255, 255));
-        lblNumeroCuenta2.setText("4444555566667777");
-        add(lblNumeroCuenta2, new org.netbeans.lib.awtextra.AbsoluteConstraints(365, 219, 160, 24));
-
-        lblSaldo1.setFont(new java.awt.Font("Amazon Ember", 1, 22)); // NOI18N
-        lblSaldo1.setForeground(new java.awt.Color(255, 255, 255));
-        lblSaldo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblSaldo1.setText("$112.00 MXN");
-        add(lblSaldo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 251, 180, 24));
-
-        lblSaldo2.setFont(new java.awt.Font("Amazon Ember", 1, 22)); // NOI18N
-        lblSaldo2.setForeground(new java.awt.Color(255, 255, 255));
-        lblSaldo2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblSaldo2.setText("$112.00 MXN");
-        add(lblSaldo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 251, 190, 24));
+        lblSaldo.setFont(new java.awt.Font("Amazon Ember", 1, 22)); // NOI18N
+        lblSaldo.setForeground(new java.awt.Color(255, 255, 255));
+        lblSaldo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSaldo.setText("$112.00 MXN");
+        add(lblSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 180, 24));
 
         lblAgregarCuenta.setFont(new java.awt.Font("Amazon Ember", 1, 22)); // NOI18N
         lblAgregarCuenta.setForeground(new java.awt.Color(255, 255, 255));
         lblAgregarCuenta.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAgregarCuenta.setText("Agregar cuenta +");
-        add(lblAgregarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 214, 190, 44));
+        add(lblAgregarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 210, 200, -1));
 
         fondo.setBackground(new java.awt.Color(102, 102, 102));
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgVistaCliente.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lblCuenta1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCuenta1MouseClicked
-        System.out.println("Cuenta1");
-        ventana.cambiarVistaCuenta(Long.valueOf(1));
-        
-    }//GEN-LAST:event_lblCuenta1MouseClicked
-
-    private void lblCuenta2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCuenta2MouseClicked
+    private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
         // TODO add your handling code here:
-        System.out.println("Cuenta2");
-    }//GEN-LAST:event_lblCuenta2MouseClicked
+    }//GEN-LAST:event_btnAgregarCuentaActionPerformed
+
+    private void btnAgregarCuenta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuenta1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarCuenta1ActionPerformed
+
+    private void cbxCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCuentasActionPerformed
+        Cuenta cuentaSeleccionada = listaCuentas.get(cbxCuentas.getSelectedIndex());
+        
+        lblNombreCuenta.setText(cuentaSeleccionada.getNombreCuenta());
+        lblNumeroCuenta.setText(cuentaSeleccionada.getNumeroCuenta());
+        lblSaldo.setText("$"+String.valueOf(cuentaSeleccionada.getSaldo())+" MXN");
+    }//GEN-LAST:event_cbxCuentasActionPerformed
 
 
+    /**
+     * Método que recupera las cuentas existentes del cliente
+     */
+    private void  recuperarCuentas(){
+        listaCuentas = new LinkedList<>();
+        try {
+            ICuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
+            listaCuentas = cuentaDAO.consultar(clienteActual.getIdCliente());
+            insertarCuentas();
+        } catch (PersistenciaException ex) {
+            ventana.mostrarAviso(ex.getMessage());
+//            Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void insertarCuentas(){
+        if(listaCuentas.isEmpty()){
+            cbxCuentas.setEnabled(false);
+        }else{
+            cbxCuentas.setEnabled(true);
+            for (Cuenta cuenta : listaCuentas) {
+                cbxCuentas.addItem(cuenta.getNombreCuenta());
+            }
+            
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarCuenta;
+    private javax.swing.JButton btnAgregarCuenta1;
+    private javax.swing.JComboBox<String> cbxCuentas;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel lblAgregarCuenta;
-    private javax.swing.JLabel lblCuenta1;
-    private javax.swing.JLabel lblCuenta2;
     private javax.swing.JLabel lblCuentaInfo;
     private javax.swing.JLabel lblNombreCliente;
-    private javax.swing.JLabel lblNombreCuenta1;
-    private javax.swing.JLabel lblNombreCuenta2;
-    private javax.swing.JLabel lblNumeroCuenta1;
-    private javax.swing.JLabel lblNumeroCuenta2;
-    private javax.swing.JLabel lblSaldo1;
-    private javax.swing.JLabel lblSaldo2;
+    private javax.swing.JLabel lblNombreCuenta;
+    private javax.swing.JLabel lblNumeroCuenta;
+    private javax.swing.JLabel lblSaldo;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,8 +32,10 @@ public class CuentaDAO implements ICuentaDAO{
     @Override
     public Cuenta agregar(CuentaNuevaDTO cuentaNueva) throws PersistenciaException {
             String sentenciaSQL = """
-                                  INSERT INTO cuentas (fecha_apertura, numero_cuenta, saldo, id_cliente) 
-                                  VALUES (?,?, ?, ?);
+                                  INSERT INTO cuentas (fecha_apertura, nombre_cuenta, numero_cuenta, saldo, id_cliente) 
+                                  VALUES (?, ?, ?, ?, ?);
+                                  INSERT INTO cuentas (fecha_apertura, numero_cuenta, saldo, id_cliente, nombre_cuenta) 
+                                  VALUES (?,?, ?, ?,?);
                               """;
         try (
             Connection conexion = this.conexionBD.obtenerConexion(); 
@@ -39,9 +43,10 @@ public class CuentaDAO implements ICuentaDAO{
         ) {
             
             comando.setString(1, LocalDate.now().toString());
-            comando.setString(2, cuentaNueva.getNumeroCuenta());
-            comando.setDouble(3, cuentaNueva.getSaldo());
-            comando.setLong(4, cuentaNueva.getIdCliente());
+            comando.setString(2, cuentaNueva.getNombreCuenta());
+            comando.setString(3, cuentaNueva.getNumeroCuenta());
+            comando.setDouble(4, cuentaNueva.getSaldo());
+            comando.setLong(5, cuentaNueva.getIdCliente());
             
 
             
@@ -49,7 +54,7 @@ public class CuentaDAO implements ICuentaDAO{
             logger.log(Level.INFO, "Se agregaron {0} cuentas", numeroRegistrosInsertados);
             ResultSet filaGenerada = comando.getGeneratedKeys();
             filaGenerada.next();
-            Cuenta cuenta = new Cuenta(filaGenerada.getLong(1), filaGenerada.getDate("fecha_apertura").toString(), filaGenerada.getString("numero_cuenta"), filaGenerada.getDouble("saldo"), filaGenerada.getLong("id_cliente"));
+            Cuenta cuenta = new Cuenta(filaGenerada.getLong(1), filaGenerada.getDate("fecha_apertura").toString(),filaGenerada.getString("nombre_cuenta"), filaGenerada.getString("numero_cuenta"), filaGenerada.getDouble("saldo"), filaGenerada.getLong("id_cliente"));
             return cuenta;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "No se pudo guardar la cuenta.", e);
@@ -128,6 +133,7 @@ public class CuentaDAO implements ICuentaDAO{
                 Cuenta cuenta = new Cuenta(
                     idCuenta,
                     datosCuenta.getString("fecha_apertura"),
+                    datosCuenta.getString("nombre_cuenta"),
                     datosCuenta.getString("numero_cuenta"),
                     datosCuenta.getDouble("saldo"),
                     datosCuenta.getLong("id_cliente")
@@ -137,6 +143,38 @@ public class CuentaDAO implements ICuentaDAO{
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "No se pudo encontrar la cuenta.", e);
             throw new PersistenciaException("No se pudo encontrar la cuenta.", e);
+        }
+    }
+
+    @Override
+    public List<Cuenta> consultar(Long idCliente) throws PersistenciaException {
+        String sentenciaSQL = """
+                              SELECT * FROM cuentas 
+                              WHERE id_cliente = ?;
+                              """;
+        
+        List<Cuenta> listaCuentas = new LinkedList<>();
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+                ) {
+            comando.setLong(1, idCliente);
+            try (ResultSet resultados = comando.executeQuery()) {
+                while (resultados.next()) {
+                    Long id = resultados.getLong("id_cuenta");
+                    String fechaApertura = resultados.getString("fecha_apertura");
+                    String numCuenta = resultados.getString("numero_cuenta");
+                    String nombreCuenta = resultados.getString("nombre_cuenta");
+                    double saldo = resultados.getDouble("saldo");
+                    Cuenta cuenta = new Cuenta(id, fechaApertura,nombreCuenta, numCuenta, saldo,idCliente);
+                    listaCuentas.add(cuenta);
+                }
+             }
+            logger.log(Level.INFO,"Se consultaron {0} cuentas", listaCuentas.size());
+            return listaCuentas;
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se pudieron consultar las cuentas", ex);
+            throw new PersistenciaException("No se pudieron consultar las cuentas",ex);
         }
     }
     

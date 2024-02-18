@@ -32,6 +32,7 @@ DROP TABLE IF EXISTS `cuentas`;
 CREATE TABLE `cuentas` (
     `id_cuenta` BIGINT NOT NULL AUTO_INCREMENT,
     `fecha_apertura` DATE  NULL,
+    `nombre_cuenta` VARCHAR(15) NOT NULL,
     `numero_cuenta` VARCHAR(16) NOT NULL UNIQUE,
     `saldo` DOUBLE NOT NULL DEFAULT 0,
     `id_cliente` BIGINT NOT NULL,

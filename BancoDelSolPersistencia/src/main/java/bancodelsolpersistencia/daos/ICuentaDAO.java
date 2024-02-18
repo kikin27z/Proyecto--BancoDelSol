@@ -3,6 +3,7 @@ package bancodelsolpersistencia.daos;
 import bancodelsol.dtos.CuentaNuevaDTO;
 import bancodelsoldominio.Cuenta;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.util.List;
 
 /**
  *
@@ -13,7 +14,7 @@ public interface ICuentaDAO {
     Cuenta agregar(CuentaNuevaDTO cuentaNueva)throws PersistenciaException;
     Cuenta actualizar(Long idCuenta,double nuevoSaldo) throws PersistenciaException;
     Cuenta existe(Long idCuenta) throws PersistenciaException;
-//    List<Transferencia> consultar() throws PersistenciaException;
+    List<Cuenta> consultar(Long idCliente) throws PersistenciaException;
 //    Transferencia actualizar(TransferenciaActualizadadaDTO transferenciaActualizada) throws PersistenciaException;
 //    Transferencia eliminar(Integer id)throws PersistenciaException;
 }
