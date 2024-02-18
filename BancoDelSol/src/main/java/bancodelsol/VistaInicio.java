@@ -37,6 +37,7 @@ public class VistaInicio extends javax.swing.JPanel {
         lblEslogan = new javax.swing.JLabel();
         lblPiePagina = new javax.swing.JLabel();
         iconFamilia = new javax.swing.JLabel();
+        lblIcon = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -44,14 +45,14 @@ public class VistaInicio extends javax.swing.JPanel {
         btnInicioSesion.setBackground(new java.awt.Color(180, 154, 102));
         btnInicioSesion.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
         btnInicioSesion.setForeground(new java.awt.Color(255, 255, 255));
-        btnInicioSesion.setText("Inicio Sesión");
+        btnInicioSesion.setText("Iniciar Sesión");
         btnInicioSesion.setBorderPainted(false);
         btnInicioSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInicioSesionActionPerformed(evt);
             }
         });
-        add(btnInicioSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 348, 142, 45));
+        add(btnInicioSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 150, 45));
 
         btnRetiro.setBackground(new java.awt.Color(180, 154, 102));
         btnRetiro.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
@@ -63,7 +64,7 @@ public class VistaInicio extends javax.swing.JPanel {
                 btnRetiroActionPerformed(evt);
             }
         });
-        add(btnRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(195, 348, 142, 45));
+        add(btnRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 350, 180, 45));
 
         btnInicio.setBackground(new java.awt.Color(143, 143, 143));
         btnInicio.setFont(new java.awt.Font("Amazon Ember Light", 0, 18)); // NOI18N
@@ -104,13 +105,12 @@ public class VistaInicio extends javax.swing.JPanel {
 
         lblBanco.setFont(new java.awt.Font("TrajanusBricks", 0, 44)); // NOI18N
         lblBanco.setForeground(new java.awt.Color(149, 120, 64));
-        lblBanco.setText("BANCO DEL SOL");
+        lblBanco.setText("banco del sol");
         add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
 
         lblEslogan.setFont(new java.awt.Font("Amazon Ember Light", 0, 18)); // NOI18N
-        lblEslogan.setForeground(new java.awt.Color(143, 143, 143));
-        lblEslogan.setText("BANCO DEL SOL");
-        add(lblEslogan, new org.netbeans.lib.awtextra.AbsoluteConstraints(82, 263, 192, 50));
+        lblEslogan.setForeground(new java.awt.Color(33, 33, 33));
+        add(lblEslogan, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 240, 230, 70));
 
         lblPiePagina.setFont(new java.awt.Font("Amazon Ember", 0, 16)); // NOI18N
         lblPiePagina.setForeground(new java.awt.Color(255, 255, 255));
@@ -119,7 +119,11 @@ public class VistaInicio extends javax.swing.JPanel {
 
         iconFamilia.setFont(new java.awt.Font("Amazon Ember", 0, 16)); // NOI18N
         iconFamilia.setForeground(new java.awt.Color(255, 255, 255));
+        iconFamilia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/familiaIcon.png"))); // NOI18N
         add(iconFamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(562, 180, 322, 246));
+
+        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo(2).png"))); // NOI18N
+        add(lblIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, -1, -1));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgInicio.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
@@ -158,6 +162,7 @@ public class VistaInicio extends javax.swing.JPanel {
     private javax.swing.JLabel iconFamilia;
     private javax.swing.JLabel lblBanco;
     private javax.swing.JLabel lblEslogan;
+    private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblPiePagina;
     // End of variables declaration//GEN-END:variables
 }

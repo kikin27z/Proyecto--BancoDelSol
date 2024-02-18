@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package bancodelsol.validaciones;
 
 import bancodelsoldominio.Cliente;
-import bancodelsolpersistencia.conexion.Conexion;
 import bancodelsolpersistencia.conexion.IConexion;
-import bancodelsolpersistencia.daos.ClienteDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import java.sql.Connection;
@@ -20,8 +14,10 @@ import java.util.logging.Logger;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
 /**
- *
- * @author rover
+ * Esta clase proporciona métodos para validar la existencia y autenticación de clientes delbanco.
+ * Implementa la interfaz IValidacion.
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class Validacion implements IValidacion {
 
@@ -52,7 +48,8 @@ public class Validacion implements IValidacion {
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "No se pudo encontrar el cliente.", e);
-            throw new ValidacionDTOException("Error al consultar el usuario en la base de datos.");        }
+            throw new ValidacionDTOException("Error al consultar el usuario en la base de datos.");
+        }
     }
 
     @Override
@@ -94,21 +91,17 @@ public class Validacion implements IValidacion {
     public boolean clienteValido(String usuario, String contrasena) throws ValidacionDTOException {
         StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
         String sentenciaSQL = """
-                             SELECT contrasena FROM clientes 
-                             WHERE usuario = ?
-                              """;
+                          SELECT * FROM clientes 
+                          WHERE usuario = ? AND contrasena = ?
+                          """;
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setString(1, usuario);
-
+            String contrasenaEncriptada = encryptor.encryptPassword(contrasena);
+            comando.setString(2, contrasenaEncriptada);
             try (ResultSet resultado = comando.executeQuery()) {
-                if (resultado.next()) {
-                    String contrasenaEncriptada = resultado.getString("contrasena");
-                    return encryptor.checkPassword(contrasena, contrasenaEncriptada);
-                } else {
-                    throw new ValidacionDTOException("No se pudo validar el cliente.");
-                }
-            }
+                return resultado.next();
+            } 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al validar el cliente.", e);
             throw new ValidacionDTOException("Error al validar el cliente.", e);

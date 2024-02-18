@@ -21,6 +21,7 @@ public class VistaInicioSesion extends javax.swing.JPanel {
      */
     private Ventana ventana;
     private IValidacion validacion;
+    private boolean loginValido;
 
     /**
      * Creates new form VistaCliente
@@ -49,6 +50,7 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         btnInicioSesion = new javax.swing.JButton();
         btnInicio = new javax.swing.JButton();
         lblHazteCliente = new javax.swing.JLabel();
+        lblIcon = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -61,12 +63,15 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         txtContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtContrasena.setForeground(new java.awt.Color(143, 143, 143));
         txtContrasena.setBorder(null);
+        txtContrasena.setInheritsPopupMenu(true);
         add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 327, 447, 37));
+        txtContrasena.getAccessibleContext().setAccessibleName("");
+        txtContrasena.getAccessibleContext().setAccessibleDescription("");
 
         lblBanco.setFont(new java.awt.Font("TrajanusBricks", 0, 36)); // NOI18N
         lblBanco.setForeground(new java.awt.Color(149, 120, 64));
-        lblBanco.setText("BANCO DEL SOL");
-        add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 21, -1, -1));
+        lblBanco.setText("banco del sol");
+        add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 14, -1, -1));
 
         lblTitulo.setFont(new java.awt.Font("Amazon Ember", 1, 54)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(143, 143, 143));
@@ -117,12 +122,19 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         });
         add(lblHazteCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 370, -1, -1));
 
+        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo(2).png"))); // NOI18N
+        add(lblIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgInicioSesion.png"))); // NOI18N
+        fondo.setMaximumSize(new java.awt.Dimension(1000, 580));
+        fondo.setMinimumSize(new java.awt.Dimension(1000, 580));
+        fondo.setPreferredSize(new java.awt.Dimension(1000, 580));
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
-        if (validarInicioSesion()) {
+        validarInicioSesion();
+        if (loginValido) {
             ventana.cambiarVistaCliente();
         }
     }//GEN-LAST:event_btnInicioSesionActionPerformed
@@ -136,31 +148,30 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         ventana.cambiarVistaRegistro();
     }//GEN-LAST:event_lblHazteClienteMouseDragged
 
-    private boolean validarInicioSesion() {
+    private void validarInicioSesion() {
         try {
             verificaCampos();
-            return validacion.clienteValido(txtUsuario.getText(), txtContrasena.getText());
+            loginValido = validacion.clienteValido(txtUsuario.getText(), txtContrasena.getText());
         } catch (ValidacionDTOException e) {
-            Logger.getLogger(VistaInicioSesion.class.getName()).log(Level.SEVERE, null, e);
+            ventana.mostrarAviso(e.getMessage());
         }
-        return false;
     }
-    
+
     private void verificaCampos() throws ValidacionDTOException {
-    if (txtUsuario.getText().isBlank() || txtContrasena.getText().isBlank()) {
-        throw new ValidacionDTOException("Llene todos los campos");
+        if (txtUsuario.getText().isBlank() || txtContrasena.getText().isBlank()) {
+            throw new ValidacionDTOException("Llene todos los campos");
+        }
+
+        // Verifica la longitud del usuario
+        if (txtUsuario.getText().length() > 30) {
+            throw new ValidacionDTOException("El nombre de usuario debe tener como máximo 30 caracteres");
+        }
+
+        // Verifica la longitud de la contraseña
+        if (txtContrasena.getText().length() > 20) {
+            throw new ValidacionDTOException("La contraseña debe tener como máximo 20 caracteres");
+        }
     }
-    
-    // Verifica la longitud del usuario
-    if (txtUsuario.getText().length() > 30) {
-        throw new ValidacionDTOException("El nombre de usuario debe tener como máximo 30 caracteres");
-    }
-    
-    // Verifica la longitud de la contraseña
-    if (txtContrasena.getText().length() > 20) {
-        throw new ValidacionDTOException("La contraseña debe tener como máximo 20 caracteres");
-    }
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicio;
@@ -169,12 +180,11 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     private javax.swing.JLabel lblBanco;
     private javax.swing.JLabel lblContrasena;
     private javax.swing.JLabel lblHazteCliente;
+    private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JTextField txtContrasena;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
-
-    
 
 }

@@ -2,11 +2,14 @@ package bancodelsol;
 
 import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFormattedTextField;
 
 /**
  * Clase que representa la primera ventana de registro de clientes. En la
@@ -28,6 +31,7 @@ public class VistaRegistro extends javax.swing.JPanel {
         this.ventana = ventana;
         initComponents();
         cargarDatos();
+        restriccionEdad();
     }
 
     /**
@@ -53,15 +57,16 @@ public class VistaRegistro extends javax.swing.JPanel {
         lblTitulo = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        txtFecha = new com.toedter.calendar.JDateChooser();
+        jdcFecha = new com.toedter.calendar.JDateChooser();
+        lblIcon = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblBanco.setFont(new java.awt.Font("TrajanusBricks", 0, 36)); // NOI18N
         lblBanco.setForeground(new java.awt.Color(149, 120, 64));
-        lblBanco.setText("BANCO DEL SOL");
-        add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 21, -1, -1));
+        lblBanco.setText("banco del sol");
+        add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 14, -1, -1));
 
         txtApellidoPaterno.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtApellidoPaterno.setForeground(new java.awt.Color(143, 143, 143));
@@ -141,9 +146,19 @@ public class VistaRegistro extends javax.swing.JPanel {
             }
         });
         add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 430, 142, 45));
-        add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(504, 288, 310, 34));
 
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgRegistrarse1.png"))); // NOI18N
+        jdcFecha.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        jdcFecha.setMaxSelectableDate(new java.util.Date(253370793714000L));
+        jdcFecha.setMinSelectableDate(new java.util.Date(-62135740686000L));
+        add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(509, 288, 302, 34));
+
+        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo(2).png"))); // NOI18N
+        lblIcon.setMaximumSize(new java.awt.Dimension(60, 60));
+        lblIcon.setMinimumSize(new java.awt.Dimension(60, 60));
+        lblIcon.setPreferredSize(new java.awt.Dimension(60, 60));
+        add(lblIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mgRegistrarse1(2).png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
@@ -176,10 +191,12 @@ public class VistaRegistro extends javax.swing.JPanel {
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel fondo;
+    private com.toedter.calendar.JDateChooser jdcFecha;
     private javax.swing.JLabel lblApellidoMaterno;
     private javax.swing.JLabel lblApellidoPaterno;
     private javax.swing.JLabel lblBanco;
     private javax.swing.JLabel lblFechaNacimiento;
+    private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblIndicador1;
     private javax.swing.JLabel lblIndicador2;
     private javax.swing.JLabel lblIndicador3;
@@ -187,7 +204,6 @@ public class VistaRegistro extends javax.swing.JPanel {
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtApellidoMaterno;
     private javax.swing.JTextField txtApellidoPaterno;
-    private com.toedter.calendar.JDateChooser txtFecha;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
@@ -213,9 +229,8 @@ public class VistaRegistro extends javax.swing.JPanel {
         ventana.getClienteDTO().setNombres(txtNombre.getText());
         ventana.getClienteDTO().setApellidoPaterno(txtApellidoPaterno.getText());
         ventana.getClienteDTO().setApellidoMaterno(txtApellidoMaterno.getText());
-     
-        if(txtFecha.getDate() != null){
-            java.sql.Date fechaNacimiento = new java.sql.Date(txtFecha.getDate().getTime());
+        if (jdcFecha.getDate() != null) {
+            java.sql.Date fechaNacimiento = new java.sql.Date(jdcFecha.getDate().getTime());
             ventana.getClienteDTO().setFecha(fechaNacimiento.toString());
         }
     }
@@ -225,6 +240,13 @@ public class VistaRegistro extends javax.swing.JPanel {
      * caso de volver a una página anterior.
      */
     public void cargarDatos() {
+        // Obtener el campo de texto asociado al JDateChooser
+        JFormattedTextField textField = ((JFormattedTextField) jdcFecha.getDateEditor().getUiComponent());
+        textField.setBackground(new Color(253, 253, 253));
+        textField.setForeground(new Color(0,0,0));
+        // Deshabilitar la edición del campo de texto
+        textField.setEditable(false);
+//        textField.setText("");
         if (ventana.getClienteDTO() != null && ventana.getClienteDTO().getNombres() != null) {
             txtNombre.setText(ventana.getClienteDTO().getNombres());
             txtApellidoPaterno.setText(ventana.getClienteDTO().getApellidoPaterno());
@@ -240,8 +262,24 @@ public class VistaRegistro extends javax.swing.JPanel {
             } catch (ParseException ex) {
                 Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            txtFecha.setDate(date);
+            jdcFecha.setDate(date);
         }
+    }
+
+    public final void restriccionEdad() {
+        Calendar calendar = Calendar.getInstance();
+        Date fechaActual = calendar.getTime();
+
+        // Calcular la fecha mínima (hace 120 años desde la fecha actual)
+        calendar.add(Calendar.YEAR, -120);
+        Date fechaMinima = calendar.getTime();
+
+        // Calcular la fecha máxima (hace 18 años desde la fecha actual)
+        calendar.setTime(fechaActual);
+        calendar.add(Calendar.YEAR, -18);
+        Date fechaMaxima = calendar.getTime();
+
+        // Establece el rango de fechas permitidas en el JDateChooser
+        jdcFecha.setSelectableDateRange(fechaMinima, fechaMaxima);
     }
 }

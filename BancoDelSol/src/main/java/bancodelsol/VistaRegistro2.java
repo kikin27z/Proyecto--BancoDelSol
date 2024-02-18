@@ -48,14 +48,15 @@ public class VistaRegistro2 extends javax.swing.JPanel {
         lblTitulo = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
+        lblIcon = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblBanco.setFont(new java.awt.Font("TrajanusBricks", 0, 36)); // NOI18N
         lblBanco.setForeground(new java.awt.Color(149, 120, 64));
-        lblBanco.setText("BANCO DEL SOL");
-        add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 21, -1, -1));
+        lblBanco.setText("banco del sol");
+        add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 14, -1, -1));
 
         txtColonia.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtColonia.setForeground(new java.awt.Color(143, 143, 143));
@@ -151,6 +152,9 @@ public class VistaRegistro2 extends javax.swing.JPanel {
         });
         add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 430, 142, 45));
 
+        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo(2).png"))); // NOI18N
+        add(lblIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgRegistrarse2.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
@@ -188,6 +192,7 @@ public class VistaRegistro2 extends javax.swing.JPanel {
     private javax.swing.JLabel lblCalle;
     private javax.swing.JLabel lblCodigoPostal;
     private javax.swing.JLabel lblColonia;
+    private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblIndicador1;
     private javax.swing.JLabel lblIndicador2;
     private javax.swing.JLabel lblIndicador3;

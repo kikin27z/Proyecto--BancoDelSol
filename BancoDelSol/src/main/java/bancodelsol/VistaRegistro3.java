@@ -52,18 +52,21 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         lblTitulo = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
+        lblIcon = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblBanco.setFont(new java.awt.Font("TrajanusBricks", 0, 36)); // NOI18N
         lblBanco.setForeground(new java.awt.Color(149, 120, 64));
-        lblBanco.setText("BANCO DEL SOL");
-        add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 21, -1, -1));
+        lblBanco.setText("banco del sol");
+        add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 14, -1, -1));
 
         txtConfirmarContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtConfirmarContrasena.setForeground(new java.awt.Color(143, 143, 143));
         txtConfirmarContrasena.setBorder(null);
+        txtConfirmarContrasena.setName(""); // NOI18N
+        txtConfirmarContrasena.setOpaque(true);
         add(txtConfirmarContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 375, 296, 36));
 
         txtUsuario.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
@@ -134,6 +137,9 @@ public class VistaRegistro3 extends javax.swing.JPanel {
             }
         });
         add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 430, 142, 45));
+
+        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo(2).png"))); // NOI18N
+        add(lblIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgRegistrarse3.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
@@ -228,6 +234,7 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     private javax.swing.JLabel lblBanco;
     private javax.swing.JLabel lblConfirmar;
     private javax.swing.JLabel lblContrasena;
+    private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblIndicador1;
     private javax.swing.JLabel lblIndicador2;
     private javax.swing.JLabel lblIndicador3;

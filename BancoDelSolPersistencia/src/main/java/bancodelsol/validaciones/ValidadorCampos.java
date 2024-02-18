@@ -3,6 +3,12 @@ package bancodelsol.validaciones;
 import bancodelsol.dtos.ClienteNuevoDTO;
 import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,9 +23,11 @@ public class ValidadorCampos {
         String patronApellidos = extensionCadena(30);
         Pattern pattern = Pattern.compile(patronNombre);
         Pattern pattern2 = Pattern.compile(patronApellidos);
+//        Calendar fechaNacimiento = Calendar.getInstance();
+//        Calendar fechaMenos18 = Calendar.getInstance();
+//        Calendar fechaMas120 = Calendar.getInstance();
 
         Matcher matcher = pattern.matcher(clienteDTO.getNombres());
-
         if (!matcher.matches()) {
             throw new ValidacionDTOException("Campo de nombre inválido (debe ser menor a 50 cáracteres y contener únicamente letras)");
         }
@@ -32,6 +40,15 @@ public class ValidadorCampos {
         if (!matcher.matches()) {
             throw new ValidacionDTOException("Campo de apellido materno inválido (debe ser menor a 30 cáracteres y contener únicamente letras)");
         }
+//        fechaMenos18.setTime(new Date());
+//        fechaMenos18.add(Calendar.YEAR, -18);
+//        fechaMas120.setTime(new Date());
+//        fechaMas120.add(Calendar.YEAR, -120);
+//        fechaNacimiento.setTime(obtenerFecha(clienteDTO.getFecha()));
+//        if (fechaNacimiento.getTimeInMillis() > fechaMenos18.getTimeInMillis()) {
+//            throw new ValidacionDTOException("Campo de fecha inválido (debes ser mayor de edad)");
+//        }
+
     }
 
     public void validaSeccionDatosCuenta(ClienteNuevoDTO clienteDTO) throws ValidacionDTOException {
@@ -96,7 +113,17 @@ public class ValidadorCampos {
 
     }
 
-
+    public Date obtenerFecha(String fecha) {
+        String format = "yyyy-MM-dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date date = null;
+        try {
+            date = sdf.parse(fecha);
+        } catch (ParseException ex) {
+            Logger.getLogger(ValidadorCampos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return date;
+    }
 
     private String extensionCadena(int longitud) {
         return "^[a-zA-Z\\s]{1," + longitud + "}$";
