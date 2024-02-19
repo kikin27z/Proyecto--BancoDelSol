@@ -3,6 +3,7 @@ package bancodelsol;
 import bancodelsoldominio.Cuenta;
 import bancodelsolpersistencia.daos.CuentaDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,18 +54,6 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblOperacionInfo = new javax.swing.JLabel();
         lblTransferencia = new javax.swing.JLabel();
         lblRetiro = new javax.swing.JLabel();
-        lblTipoInfo = new javax.swing.JLabel();
-        lblMontoInfo = new javax.swing.JLabel();
-        lblFechaInfo = new javax.swing.JLabel();
-        lblTipo1 = new javax.swing.JLabel();
-        lblTipo2 = new javax.swing.JLabel();
-        lblTipo3 = new javax.swing.JLabel();
-        lblMonto1 = new javax.swing.JLabel();
-        lblMonto2 = new javax.swing.JLabel();
-        lblMonto3 = new javax.swing.JLabel();
-        lblFecha1 = new javax.swing.JLabel();
-        lblFecha2 = new javax.swing.JLabel();
-        lblFecha3 = new javax.swing.JLabel();
         iconAjustes = new javax.swing.JLabel();
         btnInicio = new javax.swing.JButton();
         iconInicio = new javax.swing.JLabel();
@@ -180,78 +169,6 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblRetiro.setText("Retiro sin cuenta");
         add(lblRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(347, 310, 200, 45));
 
-        lblTipoInfo.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
-        lblTipoInfo.setForeground(new java.awt.Color(186, 180, 168));
-        lblTipoInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTipoInfo.setText("Tipo");
-        add(lblTipoInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 430, 122, 22));
-
-        lblMontoInfo.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblMontoInfo.setForeground(new java.awt.Color(186, 180, 168));
-        lblMontoInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMontoInfo.setText("Monto");
-        add(lblMontoInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 430, 54, 22));
-
-        lblFechaInfo.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblFechaInfo.setForeground(new java.awt.Color(186, 180, 168));
-        lblFechaInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblFechaInfo.setText("Fecha y hora");
-        add(lblFechaInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(623, 430, 110, 22));
-
-        lblTipo1.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblTipo1.setForeground(new java.awt.Color(186, 180, 168));
-        lblTipo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTipo1.setText("Retiro");
-        add(lblTipo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 460, 122, 22));
-
-        lblTipo2.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblTipo2.setForeground(new java.awt.Color(186, 180, 168));
-        lblTipo2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTipo2.setText("Retiro");
-        add(lblTipo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 485, 122, 22));
-
-        lblTipo3.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblTipo3.setForeground(new java.awt.Color(186, 180, 168));
-        lblTipo3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTipo3.setText("Retiro");
-        add(lblTipo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 510, 122, 22));
-
-        lblMonto1.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblMonto1.setForeground(new java.awt.Color(186, 180, 168));
-        lblMonto1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMonto1.setText("Retiro");
-        add(lblMonto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(408, 460, 122, 22));
-
-        lblMonto2.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblMonto2.setForeground(new java.awt.Color(186, 180, 168));
-        lblMonto2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMonto2.setText("Retiro");
-        add(lblMonto2, new org.netbeans.lib.awtextra.AbsoluteConstraints(408, 485, 122, 22));
-
-        lblMonto3.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblMonto3.setForeground(new java.awt.Color(186, 180, 168));
-        lblMonto3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMonto3.setText("Retiro");
-        add(lblMonto3, new org.netbeans.lib.awtextra.AbsoluteConstraints(408, 510, 122, 22));
-
-        lblFecha1.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblFecha1.setForeground(new java.awt.Color(186, 180, 168));
-        lblFecha1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblFecha1.setText("03/06/2004 12:03:22");
-        add(lblFecha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(586, 460, 200, 22));
-
-        lblFecha2.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblFecha2.setForeground(new java.awt.Color(186, 180, 168));
-        lblFecha2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblFecha2.setText("03/06/2004 12:03:22");
-        add(lblFecha2, new org.netbeans.lib.awtextra.AbsoluteConstraints(586, 485, 200, 22));
-
-        lblFecha3.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        lblFecha3.setForeground(new java.awt.Color(186, 180, 168));
-        lblFecha3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblFecha3.setText("03/06/2004 12:03:22");
-        add(lblFecha3, new org.netbeans.lib.awtextra.AbsoluteConstraints(586, 510, 200, 22));
-
         iconAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconAjustes.png"))); // NOI18N
         add(iconAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 10, 35, 35));
 
@@ -324,6 +241,7 @@ public class VistaCuenta extends javax.swing.JPanel {
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+        ventana.setCuenta(null);
         ventana.cambiarVistaCliente();
     }//GEN-LAST:event_btnInicioActionPerformed
 
@@ -359,11 +277,23 @@ public class VistaCuenta extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnCancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarCuentaActionPerformed
-      
+      if(ventana.mostrarConfirmacion("¿Seguro que quieres cancelar la cuenta?\nYa no se podrá recuperar y perderás el saldo de esta", "Cancelar la cuenta")){
+          try {
+              CuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
+              cuentaDAO.desactivarCuenta(cuenta);
+              ventana.mostrarInformacion("Cuenta con número de cuenta: "+cuenta.getNumeroCuenta()+" fue inhabilitada", "Cuenta cancelada");
+              ventana.setCuenta(null);
+              ventana.cambiarVistaCliente();
+          } catch (PersistenciaException ex) {
+              Logger.getLogger(VistaCuenta.class.getName()).log(Level.SEVERE, null, ex);
+          }
+          
+      }
     }//GEN-LAST:event_btnCancelarCuentaActionPerformed
 
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
         ventana.cambiarVistaTransferir();
+        
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
@@ -385,49 +315,29 @@ public class VistaCuenta extends javax.swing.JPanel {
     private javax.swing.JLabel iconInicio;
     private javax.swing.JLabel iconLogo;
     private javax.swing.JLabel iconPerfil;
-    private javax.swing.JLabel lblFecha1;
-    private javax.swing.JLabel lblFecha2;
-    private javax.swing.JLabel lblFecha3;
     private javax.swing.JLabel lblFechaApertura;
     private javax.swing.JLabel lblFechaAperturaInfo;
-    private javax.swing.JLabel lblFechaInfo;
     private javax.swing.JLabel lblFondo;
-    private javax.swing.JLabel lblMonto1;
-    private javax.swing.JLabel lblMonto2;
-    private javax.swing.JLabel lblMonto3;
     private javax.swing.JLabel lblMontoActual;
-    private javax.swing.JLabel lblMontoInfo;
     private javax.swing.JLabel lblNombreCuenta;
     private javax.swing.JLabel lblNumCuenta;
     private javax.swing.JLabel lblNumCuentaInfo;
     private javax.swing.JLabel lblOperacionInfo;
     private javax.swing.JLabel lblRetiro;
     private javax.swing.JLabel lblSaldoInfo;
-    private javax.swing.JLabel lblTipo1;
-    private javax.swing.JLabel lblTipo2;
-    private javax.swing.JLabel lblTipo3;
-    private javax.swing.JLabel lblTipoInfo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTransferencia;
     // End of variables declaration//GEN-END:variables
 
     public void cargarDatosCuenta(){
-        try {
-            CuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
-            this.cuenta = cuentaDAO.existe(this.idCuenta);
-            
-            if(cuenta != null){
-                lblNombreCuenta.setText("Hogar");
-                this.lblMontoActual.setText("$"+this.cuenta.getSaldo()+" MXN");
-                lblFechaApertura.setText(cuenta.getFechaApertura());
-                lblNumCuenta.setText(cuenta.getNumeroCuenta());
-            }
-            } catch (PersistenciaException ex) {
-                ventana.setCuenta(null);
-                Logger.getLogger(VistaCuenta.class.getName()).log(Level.SEVERE, null, ex);
-                ventana.mostrarAviso(ex.getMessage());
-            }
-
+        
+        // Formatear el número usando el objeto DecimalFormat
+        String numeroFormateado = String.format("%.2f", this.cuenta.getSaldo());
+        
+        lblNombreCuenta.setText(cuenta.getNombreCuenta());
+        this.lblMontoActual.setText("$"+numeroFormateado+" MXN");
+        lblFechaApertura.setText(cuenta.getFechaApertura());
+        lblNumCuenta.setText(cuenta.getNumeroCuenta());
     }
 
 }

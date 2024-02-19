@@ -12,8 +12,10 @@ import bancodelsolpersistencia.excepciones.ValidacionDTOException;
  */
 public class TransferenciaNuevaDTO {
     private String fecha;
+    private String montoCadena;
     private double monto;
-     private String motivo;
+    private String motivo;
+    private Long idCuenta;
     private String cuentaDestino;
 
      /**
@@ -57,6 +59,39 @@ public class TransferenciaNuevaDTO {
     }
 
     /**
+     * Obtiene el monto de la transferencia.
+     * @return El monto de la transferencia.
+     */
+    public String getMontoCadena() {
+        return montoCadena;
+    }
+
+    /**
+     * Establece el monto de la transferencia.
+     * @param montoCadena  El monto de la transferencia.
+     */
+    public void setMontoCadena(String montoCadena) {
+        this.montoCadena = montoCadena;
+    }
+
+    /**
+     * Obtiene el id de la cuenta que realizo la transferencia.
+     */
+    public Long getIdCuenta() {
+        return idCuenta;
+    }
+
+    /**
+     * Establece el id de la cuenta que realizo la transferencia.
+     * @param idCuenta  El id de la cuenta que realizo la transferencia.
+     */
+    public void setIdCuenta(Long idCuenta) {
+        this.idCuenta = idCuenta;
+    }
+    
+    
+
+    /**
      * Establece el motivo de la transferencia.
      * @param motivo El motivo de la transferencia.
      */
@@ -82,22 +117,20 @@ public class TransferenciaNuevaDTO {
     
     /**
      * Verifica que los datos de la transferencia sean válidos.
-     * @return true si los datos son válidos, false en caso contrario.
      * @throws ValidacionDTOException Si algún dato de la transferencia es inválido o vacio.
      */
-    public boolean esValido() throws ValidacionDTOException {
-        if (this.motivo == null || this.motivo.isBlank() || this.motivo.length() > 30) {
-            throw new ValidacionDTOException("Motivo de la transferencia inválida");
+    public void esValido() throws ValidacionDTOException {
+        if (this.motivo == null || this.motivo.isBlank() || this.motivo.length() > 50) {
+            throw new ValidacionDTOException("Motivo de la transferencia inválida, no debe superar los 50 caracteres");
 
         }
-        if(this.cuentaDestino == null || this.cuentaDestino.isBlank() || this.cuentaDestino.trim().length() == 16 ){
-            throw new ValidacionDTOException("Número de cuenta destino inválido"); 
+        try {
+            this.monto = Double.parseDouble(this.montoCadena);
+            if(monto <= 0 ){
+                throw new ValidacionDTOException("El monto debe ser mayor a 0");
+            }
+        } catch (NumberFormatException e) {
+            throw new ValidacionDTOException("El campo de monto no es un número");
         }
-        
-        if(this.monto < 0){
-            throw new ValidacionDTOException("Monto negativo inválido");
-        }
-        return false;
-
     }
 }

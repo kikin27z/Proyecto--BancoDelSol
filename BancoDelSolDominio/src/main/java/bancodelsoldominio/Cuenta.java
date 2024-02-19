@@ -14,6 +14,7 @@ public class Cuenta {
     private String fechaApertura;
     private String nombreCuenta;
     private String numeroCuenta;
+    private String estadoCuenta;
     private double saldo;
     private Long idCliente;
 
@@ -47,12 +48,13 @@ public class Cuenta {
      * @param saldo El saldo de la cuenta.
      * @param idCliente El ID del cliente asociado a la cuenta.
      */
-    public Cuenta(String fechaApertura, String nombreCuenta, String numeroCuenta, double saldo, Long idCliente) {
+    public Cuenta(String fechaApertura, String nombreCuenta, String numeroCuenta, double saldo, Long idCliente,String estadoCuenta) {
         this.fechaApertura = fechaApertura;
         this.nombreCuenta = nombreCuenta;
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
         this.idCliente = idCliente;
+        this.estadoCuenta = estadoCuenta;
     }
     
     /**
@@ -154,6 +156,22 @@ public class Cuenta {
         this.nombreCuenta = nombreCuenta;
     }
 
+    /**
+     * Obtiene el estado de la cuenta.
+     * @return El estado de la cuenta.
+     */
+    public String getEstadoCuenta() {
+        return estadoCuenta;
+    }
+
+     /**
+     * Establece el estado de la cuenta.
+     * @param estadoCuenta  El nuevo estado de la cuenta.
+     */
+    public void setEstadoCuenta(String estadoCuenta) {
+        this.estadoCuenta = estadoCuenta;
+    }
+    
     /**
      * Obtiene el id de la cuenta.
      * @return El id de la cuenta.

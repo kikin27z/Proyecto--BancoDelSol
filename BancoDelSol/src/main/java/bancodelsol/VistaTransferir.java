@@ -1,23 +1,40 @@
 package bancodelsol;
 
+import bancodelsol.dtos.TransferenciaNuevaDTO;
+import bancodelsol.validaciones.IValidacion;
+import bancodelsol.validaciones.Validacion;
+import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsoldominio.Cuenta;
+import bancodelsoldominio.Transferencia;
+import bancodelsolpersistencia.daos.ITransferenciaDAO;
+import bancodelsolpersistencia.daos.TransferenciaDAO;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
- * @author karim
+ * Esta clase representa una interfaz gráfica de usuario para realizar transferencias bancarias.
+ * Permite al usuario ingresar los detalles de la transferencia, como la cuenta de destino, el monto y el motivo.
+ * Una vez que se ingresan los detalles y se valida la información, se puede realizar la transferencia.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaTransferir extends javax.swing.JPanel {
+    private Ventana ventana;
     Cuenta cuenta;
+    Transferencia transferenciaActual;
+    boolean cuentaDestinoValidada;
+    boolean camposValidados;
+    
     /**
-     * Creates new form VistaCliente
-     */
-    private  Ventana ventana;
-    /**
-     * Creates new form VistaCliente
+     * Constructor de la clase VistaTransferir.
+     * @param ventana La ventana principal de la aplicación.
      */
     public VistaTransferir(Ventana ventana ) {
         this.ventana = ventana;
         cuenta = ventana.getCuenta();
+        transferenciaActual = ventana.getTransferencia();
         initComponents();
     }
 
@@ -138,7 +155,6 @@ public class VistaTransferir extends javax.swing.JPanel {
         btnBuscarCuenta.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscarCuenta.setText("Buscar cuenta");
         btnBuscarCuenta.setBorderPainted(false);
-        btnBuscarCuenta.setEnabled(false);
         btnBuscarCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarCuentaActionPerformed(evt);
@@ -146,9 +162,9 @@ public class VistaTransferir extends javax.swing.JPanel {
         });
         add(btnBuscarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 217, 160, 30));
 
-        btnTransferir.setBackground(new java.awt.Color(180, 154, 102));
+        btnTransferir.setBackground(new java.awt.Color(149, 120, 64));
         btnTransferir.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        btnTransferir.setForeground(new java.awt.Color(255, 255, 255));
+        btnTransferir.setForeground(new java.awt.Color(34, 33, 33));
         btnTransferir.setText("Transferir");
         btnTransferir.setBorderPainted(false);
         btnTransferir.setEnabled(false);
@@ -238,11 +254,24 @@ public class VistaTransferir extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCuentaActionPerformed
+        validarCuentaDestino();
+        if(cuentaDestinoValidada){
+            btnBuscarCuenta.setEnabled(false);
+            txtCuentaDestino.setEditable(false);
+            txtMotivo.setEditable(true);
+            txtMonto.setEditable(true);
+        }
         
     }//GEN-LAST:event_btnBuscarCuentaActionPerformed
 
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
         // TODO add your handling code here:
+        
+        validarCampos();
+        if(camposValidados){
+            realizarTransferencia();
+            ventana.cambiarVistaTransferenciaExitosa();
+        }
     }//GEN-LAST:event_btnTransferirActionPerformed
 
     /**
@@ -252,6 +281,7 @@ public class VistaTransferir extends javax.swing.JPanel {
     */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
         if(ventana.mostrarConfirmacion("¿Cancelaras la transferencia?", "¿Desea continuar?")){
+            ventana.setCuenta(null);
             ventana.cambiarVistaHistorial();
         }
     }//GEN-LAST:event_btnInicioActionPerformed
@@ -263,7 +293,7 @@ public class VistaTransferir extends javax.swing.JPanel {
     */
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         if(ventana.mostrarConfirmacion("¿Cancelaras la transferencia?", "¿Desea continuar?")){
-            //            ventana.cambiarVistaHistorial();
+            ventana.cambiarVistaEditarPerfil();
         }
     }//GEN-LAST:event_btnPerfilActionPerformed
 
@@ -291,7 +321,65 @@ public class VistaTransferir extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
-
+    /**
+    * Valida la cuenta de destino ingresada por el usuario.
+    * Comprueba si la cuenta existe y si es válida para realizar la transferencia.
+    */
+    private void validarCuentaDestino(){
+        ValidadorCampos valida = new ValidadorCampos();
+        IValidacion validador = new Validacion(ventana.getConexion());
+           try {
+               
+               
+               valida.validaNumeroCuenta(txtCuentaDestino.getText());
+               validador.existeCuenta(txtCuentaDestino.getText());
+               if(cuenta.getNumeroCuenta().equals(txtCuentaDestino.getText())){
+                   throw new ValidacionDTOException("No es posible transferirse a la misma cuenta");
+               }else if(cuenta.getEstadoCuenta().equals("Inactiva")){
+                   throw new ValidacionDTOException("No es posible transferirle a una cuenta inactiva");
+               }
+               cuentaDestinoValidada = true;
+           } catch (ValidacionDTOException ex) {
+               cuentaDestinoValidada = false;
+               ventana.mostrarAviso(ex.getMessage());
+           }
+    }
+    
+    /**
+    * Valida los campos de monto y motivo antes de realizar la transferencia.
+    * Comprueba si el monto es válido y si la cuenta tiene saldo suficiente.
+    */
+    private void validarCampos(){
+        TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
+        transferenciaNueva.setMontoCadena(txtMonto.getText());
+        transferenciaNueva.setMotivo(txtMotivo.getText());
+        
+        try {
+            transferenciaNueva.esValido();
+            double monto = Double.parseDouble(txtMonto.getText());
+            if(cuenta.getSaldo() - monto < 0){
+                throw new ValidacionDTOException("El monto es superior al saldo de la cuenta");
+            }
+        } catch (ValidacionDTOException ex) {
+            ventana.mostrarAviso(ex.getMessage());
+        }
+    }
+    
+    /**
+    * Realiza la transferencia bancaria una vez que se han validado los campos y la cuenta de destino.
+    * Crea un objeto TransferenciaNuevaDTO con los detalles de la transferencia y lo guarda en la base de datos.
+    */
+    private void realizarTransferencia(){
+        TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
+        transferenciaNueva.setCuentaDestino(txtCuentaDestino.getText());
+        transferenciaNueva.setMotivo(txtMotivo.getText());
+        transferenciaNueva.setMonto(Double.parseDouble(txtMonto.getText()));
+        transferenciaNueva.setIdCuenta(cuenta.getIdCuenta());
+        
+        ITransferenciaDAO transferenciaDAO = new TransferenciaDAO(ventana.getConexion());
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCuenta;
     private javax.swing.JButton btnCerrarSesion;

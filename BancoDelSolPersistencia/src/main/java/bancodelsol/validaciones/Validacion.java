@@ -1,6 +1,7 @@
 package bancodelsol.validaciones;
 
 import bancodelsoldominio.Cliente;
+import bancodelsoldominio.Cuenta;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
@@ -119,6 +120,41 @@ public class Validacion implements IValidacion {
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al validar el cliente.", e);
             throw new ValidacionDTOException("Error al validar el cliente.", e);
+        }
+    }
+
+    @Override
+    public Cuenta existeCuenta(String numeroCuenta) throws ValidacionDTOException {
+        String sentenciaSQL = """
+                             SELECT * FROM cuentas 
+                              WHERE numero_cuenta = ?;
+                              """;
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
+
+            comando.setString(1, numeroCuenta);
+
+            try (ResultSet datosCuenta = comando.executeQuery()) {
+                if (!datosCuenta.next()) {
+                    logger.log(Level.INFO, "No se halló la cuenta con número de cuenta: {0}",numeroCuenta);
+                    throw new ValidacionDTOException("No se pudo encontrar la cuenta.");
+                }
+
+                logger.log(Level.INFO, "Se encontró al cliente");
+                Cuenta cuenta = new Cuenta(
+                    datosCuenta.getLong("id_cuenta"),
+                    datosCuenta.getDate("fecha_apertura").toString(),
+                    datosCuenta.getString("nombre_cuenta"),
+                    datosCuenta.getString("numero_cuenta"),
+                    datosCuenta.getDouble("saldo"),
+                        datosCuenta.getLong("id_cliente")
+                );
+                cuenta.setEstadoCuenta(datosCuenta.getString("estado"));
+                return cuenta;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudo encontrar la cuenta.", e);
+            throw new ValidacionDTOException("No se pudo encontrar la cuenta.");
         }
     }
 

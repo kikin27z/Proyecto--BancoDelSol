@@ -201,5 +201,26 @@ public class ValidadorCampos {
         return "^[a-zA-Z\\s]{1," + longitud + "}$";
     }
     
+    /**
+     * Valida los número de cuenta.
+     * 
+     * @param numeroCuenta  Número de cuenta de una cuenta.
+     * @throws ValidacionDTOException Si los datos del número de cuenta no cumplen con los criterios de validación.
+     */
+    public void validaNumeroCuenta(String numeroCuenta) throws ValidacionDTOException{
+        if(numeroCuenta.length() != 9){
+            throw new ValidacionDTOException("El número de cuenta debe ser 9 números iniciando con el prefijo \"2710\"");
+        }
+        
+        String cadenaNumeroCuenta = "^2710[\\d]{5}$";
+        
+        Pattern patronNumeroCuenta = Pattern.compile(cadenaNumeroCuenta);
+
+        // Verifica el campo calle
+        Matcher matcher = patronNumeroCuenta.matcher(numeroCuenta);
+        if (!matcher.matches()) {
+            throw new ValidacionDTOException("Número de cuenta inválido debe iniciar con el prefijo \"2710\" y luego 5 digitos");
+        }
+    }
     
 }
