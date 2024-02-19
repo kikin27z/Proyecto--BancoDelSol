@@ -1,10 +1,8 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
 package bancodelsol;
-
-import bancodelsol.validaciones.IValidacion;
-import bancodelsolpersistencia.daos.IRetiroDAO;
-import bancodelsolpersistencia.daos.RetiroDAO;
-import bancodelsolpersistencia.excepciones.PersistenciaException;
-import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 
 /**
  *
@@ -12,16 +10,10 @@ import bancodelsolpersistencia.excepciones.ValidacionDTOException;
  */
 public class VistaGenerarRetiro extends javax.swing.JPanel {
 
-    private final IRetiroDAO retiroDAO;
-    private final Ventana ventana;
-    double saldoARetirar;
-
     /**
      * Creates new form VistaGenerarRetiro
      */
-    public VistaGenerarRetiro(Ventana ventana) {
-        this.ventana = ventana;
-        this.retiroDAO = new RetiroDAO(ventana.getConexion());
+    public VistaGenerarRetiro() {
         initComponents();
     }
 
@@ -36,7 +28,7 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
 
         lblTitulo = new javax.swing.JLabel();
         txtMonto = new javax.swing.JTextField();
-        jpsContrasena = new javax.swing.JPasswordField();
+        txtContraseña = new javax.swing.JTextField();
         lblMonto = new javax.swing.JLabel();
         lblContrasena = new javax.swing.JLabel();
         btnSiguiente = new javax.swing.JButton();
@@ -53,23 +45,17 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         txtMonto.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtMonto.setForeground(new java.awt.Color(143, 143, 143));
         txtMonto.setBorder(null);
-        txtMonto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMontoActionPerformed(evt);
-            }
-        });
-        add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(128, 150, 400, 36));
+        add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 400, 36));
 
-        jpsContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
-        jpsContrasena.setForeground(new java.awt.Color(143, 143, 143));
-        jpsContrasena.setMinimumSize(new java.awt.Dimension(64, 25));
-        jpsContrasena.setPreferredSize(new java.awt.Dimension(64, 25));
-        jpsContrasena.addActionListener(new java.awt.event.ActionListener() {
+        txtContraseña.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        txtContraseña.setForeground(new java.awt.Color(143, 143, 143));
+        txtContraseña.setBorder(null);
+        txtContraseña.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jpsContrasenaActionPerformed(evt);
+                txtContraseñaActionPerformed(evt);
             }
         });
-        add(jpsContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 400, 37));
+        add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(128, 150, 400, 36));
 
         lblMonto.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         lblMonto.setForeground(new java.awt.Color(157, 134, 90));
@@ -107,12 +93,11 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
+    private void txtContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseñaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtMontoActionPerformed
+    }//GEN-LAST:event_txtContraseñaActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-       validarRetiro();
 
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -120,36 +105,15 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_lblInformacionMouseClicked
 
-    private void jpsContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpsContrasenaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jpsContrasenaActionPerformed
 
-    public void validarRetiro() {
-        saldoARetirar = Double.parseDouble(txtMonto.getText());
-        try {
-            verificaCampos();
-            saldoARetirar = retiroDAO.consultarSaldo(ventana.getCuenta(), saldoARetirar);
-        } catch (ValidacionDTOException e) {
-            ventana.mostrarAviso(e.getMessage());
-        } catch (PersistenciaException ex) {
-            ventana.mostrarAviso(ex.getMessage());
-        }
-
-    }
-
-    private void verificaCampos() throws ValidacionDTOException {
-        if (txtMonto.getText().isBlank() || jpsContrasena.getPassword() == null) {
-            throw new ValidacionDTOException("Llene todos los campos");
-        }
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JLabel fondo;
-    private javax.swing.JPasswordField jpsContrasena;
     private javax.swing.JLabel lblContrasena;
     private javax.swing.JLabel lblInformacion;
     private javax.swing.JLabel lblMonto;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JTextField txtContraseña;
     private javax.swing.JTextField txtMonto;
     // End of variables declaration//GEN-END:variables
 }
