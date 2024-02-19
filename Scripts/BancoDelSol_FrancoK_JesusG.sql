@@ -34,6 +34,7 @@ CREATE TABLE `cuentas` (
     `fecha_apertura` DATE  NULL,
     `nombre_cuenta` VARCHAR(15) NOT NULL,
     `numero_cuenta` VARCHAR(16) NOT NULL UNIQUE,
+    `estado` VARCHAR(10) DEFAULT 'Activa' CHECK (estado IN ('Activa', 'Cancelada')),
     `saldo` DOUBLE NOT NULL DEFAULT 0,
     `id_cliente` BIGINT NOT NULL,
     PRIMARY KEY (`id_cuenta`),
@@ -44,6 +45,7 @@ DROP TABLE IF EXISTS `transacciones`;
 CREATE TABLE `transacciones` (
     `id_transaccion` BIGINT NOT NULL AUTO_INCREMENT,
     `fecha` DATETIME NULL DEFAULT NOW(),
+    `tipo` VARCHAR(14)  CHECK (tipo IN ('Transferencia', 'Retiro')),
     `monto` DOUBLE NOT NULL,
     `id_cuenta` BIGINT NOT NULL,
     PRIMARY KEY (`id_transaccion`),

@@ -148,17 +148,6 @@ public class ValidadorCampos {
 
     }
     
-    /**
-     * Valida los campos relacionados con una nueva cuenta recibidos en un
-     * objeto CuentaNuevaDTO.
-     * 
-     * @param cuentaDTO Objeto CuentaNuevaDTO que contiene los datos de la nueva cuenta a validar.
-     * @throws ValidacionDTOException Si los datos de la nueva cuenta no cumplen con los criterios de validación.
-     */
-    public void validaCuenta(CuentaNuevaDTO cuentaDTO) throws ValidacionDTOException {
-        String cadenaNombreCuenta = "^[a-zA-Z0-9\\s]{1,15}$";
-        String cadenaSaldoCuenta = "^[\\d]{1,5}([.][\\d]{1,2})?$";
-
     public Date obtenerFecha(String fecha) {
         String format = "yyyy-MM-dd";
         SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -169,7 +158,19 @@ public class ValidadorCampos {
             Logger.getLogger(ValidadorCampos.class.getName()).log(Level.SEVERE, null, ex);
         }
         return date;
-    }
+}
+
+    /**
+     * Valida los campos relacionados con una nueva cuenta recibidos en un
+     * objeto CuentaNuevaDTO.
+     * 
+     * @param cuentaDTO Objeto CuentaNuevaDTO que contiene los datos de la nueva cuenta a validar.
+     * @throws ValidacionDTOException Si los datos de la nueva cuenta no cumplen con los criterios de validación.
+     */
+    public void validaCuenta(CuentaNuevaDTO cuentaDTO) throws ValidacionDTOException {
+        String cadenaNombreCuenta = "^[a-zA-Z0-9\\s]{1,15}$";
+        String cadenaSaldoCuenta = "^[\\d]{1,5}([.][\\d]{1,2})?$";
+        
         Pattern patronCalle = Pattern.compile(cadenaNombreCuenta);
         Pattern patronSaldo = Pattern.compile(cadenaSaldoCuenta);
 

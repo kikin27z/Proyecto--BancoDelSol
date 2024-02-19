@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 
 /**
  * Clase que representa la vista de un cliente en el sistema bancario.
@@ -125,7 +124,7 @@ public class VistaCliente extends javax.swing.JPanel {
         lblCuentaInfo.setFont(new java.awt.Font("Amazon Ember", 1, 24)); // NOI18N
         lblCuentaInfo.setForeground(new java.awt.Color(143, 143, 143));
         lblCuentaInfo.setText("Cuentas");
-        add(lblCuentaInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 115, 284, 43));
+        add(lblCuentaInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 115, 284, 30));
 
         lblNombreCuenta.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
         lblNombreCuenta.setForeground(new java.awt.Color(255, 255, 255));
@@ -216,16 +215,25 @@ public class VistaCliente extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que cambia la vista actual a la vista de creación de cuenta.
+     * 
+     * @param evt El evento de acción que desencadena este método (clic en el botón agregar cuenta).
+     */
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
         ventana.cambiarVistaCrearCuenta();
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
-
+    /**
+     * Método que obtiene la cuenta seleccionada del combo box y cambia la vista a la vista de detalles de la cuenta.
+     * 
+     * @param evt El evento de acción que desencadena este método (clic en el botón de cuenta seleccionada).
+     */
     private void btnCuentaSeleccionadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaSeleccionadaActionPerformed
         // TODO add your handling code here:
             if(cbxCuentas.isEnabled()){
              Cuenta cuentaSeleccionada = listaCuentas.get(cbxCuentas.getSelectedIndex());
              ventana.setCuenta(cuentaSeleccionada);
-            ventana.cambiarVistaCuenta(cuentaSeleccionada.getIdCuenta());
+            ventana.cambiarVistaCuenta();
         }
     }//GEN-LAST:event_btnCuentaSeleccionadaActionPerformed
 
@@ -252,7 +260,7 @@ public class VistaCliente extends javax.swing.JPanel {
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaEditarPerfil();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     /**
@@ -261,7 +269,7 @@ public class VistaCliente extends javax.swing.JPanel {
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaHistorial();
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     /**
@@ -294,6 +302,10 @@ public class VistaCliente extends javax.swing.JPanel {
         
     }
     
+     /**
+     * Inserta las cuentas recuperadas del cliente en el combo box de cuentas.
+     * Si no hay cuentas disponibles, deshabilita el combo box.
+     */
     private void insertarCuentas(){
         if(listaCuentas.isEmpty()){
             cbxCuentas.setEnabled(false);

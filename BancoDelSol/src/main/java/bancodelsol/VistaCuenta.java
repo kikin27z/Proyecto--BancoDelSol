@@ -23,9 +23,9 @@ public class VistaCuenta extends javax.swing.JPanel {
      *
      * @param ventana La ventana principal de la aplicación.
      */
-    public VistaCuenta(Ventana ventana, Long idCuenta ) {
+    public VistaCuenta(Ventana ventana ) {
         this.ventana = ventana;
-        this.idCuenta = idCuenta;
+        cuenta = ventana.getCuenta();
         initComponents();
         cargarDatosCuenta();
     }
@@ -41,6 +41,9 @@ public class VistaCuenta extends javax.swing.JPanel {
 
         lblTitulo = new javax.swing.JLabel();
         lblNombreCuenta = new javax.swing.JLabel();
+        btnCancelarCuenta = new javax.swing.JButton();
+        btnRetiro = new javax.swing.JButton();
+        btnTransferencia = new javax.swing.JButton();
         lblMontoActual = new javax.swing.JLabel();
         lblSaldoInfo = new javax.swing.JLabel();
         lblNumCuentaInfo = new javax.swing.JLabel();
@@ -86,6 +89,42 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblNombreCuenta.setForeground(new java.awt.Color(255, 255, 255));
         lblNombreCuenta.setText("Cuenta");
         add(lblNombreCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(154, 95, 460, -1));
+
+        btnCancelarCuenta.setBackground(new java.awt.Color(186, 180, 168));
+        btnCancelarCuenta.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
+        btnCancelarCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelarCuenta.setText("Cancelar Cuenta");
+        btnCancelarCuenta.setBorderPainted(false);
+        btnCancelarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarCuentaActionPerformed(evt);
+            }
+        });
+        add(btnCancelarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(571, 310, 200, 45));
+
+        btnRetiro.setBackground(new java.awt.Color(180, 154, 102));
+        btnRetiro.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
+        btnRetiro.setForeground(new java.awt.Color(255, 255, 255));
+        btnRetiro.setText("Retiro sin cuenta");
+        btnRetiro.setBorderPainted(false);
+        btnRetiro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetiroActionPerformed(evt);
+            }
+        });
+        add(btnRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(347, 310, 200, 45));
+
+        btnTransferencia.setBackground(new java.awt.Color(180, 154, 102));
+        btnTransferencia.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
+        btnTransferencia.setForeground(new java.awt.Color(255, 255, 255));
+        btnTransferencia.setText("Transferencia");
+        btnTransferencia.setBorderPainted(false);
+        btnTransferencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransferenciaActionPerformed(evt);
+            }
+        });
+        add(btnTransferencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(123, 310, 200, 45));
 
         lblMontoActual.setFont(new java.awt.Font("Amazon Ember", 1, 40)); // NOI18N
         lblMontoActual.setForeground(new java.awt.Color(255, 255, 255));
@@ -133,11 +172,6 @@ public class VistaCuenta extends javax.swing.JPanel {
         lblTransferencia.setForeground(new java.awt.Color(255, 255, 255));
         lblTransferencia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTransferencia.setText("Transferencia");
-        lblTransferencia.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblTransferenciaMouseClicked(evt);
-            }
-        });
         add(lblTransferencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(123, 310, 200, 45));
 
         lblRetiro.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
@@ -284,17 +318,13 @@ public class VistaCuenta extends javax.swing.JPanel {
         add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lblTransferenciaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTransferenciaMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblTransferenciaMouseClicked
-
     /**
     * Cambia la vista actual a la vista principal del cliente.
     *
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-
+        ventana.cambiarVistaCliente();
     }//GEN-LAST:event_btnInicioActionPerformed
 
     /**
@@ -303,7 +333,7 @@ public class VistaCuenta extends javax.swing.JPanel {
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaEditarPerfil();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     /**
@@ -312,7 +342,7 @@ public class VistaCuenta extends javax.swing.JPanel {
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaHistorial();
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     /**
@@ -328,12 +358,27 @@ public class VistaCuenta extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    private void btnCancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarCuentaActionPerformed
+      
+    }//GEN-LAST:event_btnCancelarCuentaActionPerformed
+
+    private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
+        ventana.cambiarVistaTransferir();
+    }//GEN-LAST:event_btnTransferenciaActionPerformed
+
+    private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRetiroActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelarCuenta;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnHistorial;
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton btnPerfil;
+    private javax.swing.JButton btnRetiro;
+    private javax.swing.JButton btnTransferencia;
     private javax.swing.JLabel iconAjustes;
     private javax.swing.JLabel iconCerrarSesion;
     private javax.swing.JLabel iconHistorial;

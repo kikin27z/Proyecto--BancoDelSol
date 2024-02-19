@@ -201,7 +201,9 @@ public class VistaCrearCuenta extends javax.swing.JPanel {
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-        ventana.cambiarVistaCliente();
+        if(ventana.mostrarConfirmacion("¿Saldrás de crear la cuenta?", "¿Desea continuar?")){
+            ventana.cambiarVistaHistorial();
+        }
     }//GEN-LAST:event_btnInicioActionPerformed
     
     /**
@@ -210,7 +212,9 @@ public class VistaCrearCuenta extends javax.swing.JPanel {
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
-        // TODO add your handling code here:
+        if(ventana.mostrarConfirmacion("¿Saldrás de crear la cuenta?", "¿Desea continuar?")){
+//            ventana.cambiarVistaHistorial();
+        }
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     /**
@@ -219,7 +223,9 @@ public class VistaCrearCuenta extends javax.swing.JPanel {
     * @param evt El evento de acción que desencadena este método.
     */
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-        // TODO add your handling code here:
+        if(ventana.mostrarConfirmacion("¿Saldrás de crear la cuenta?", "¿Desea continuar?")){
+            ventana.cambiarVistaHistorial();
+        }
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     /**

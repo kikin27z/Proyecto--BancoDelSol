@@ -103,14 +103,11 @@ public class Ventana extends javax.swing.JFrame {
      * Método para cambiar a la vista de una cuenta en especifico del cliente.
      * Este método elimina el panel actual y muestra la vista a la pantalla de la cuenta del cliente.
      */
-    public void cambiarVistaCuenta(Long idCuenta) {
-
-        VistaCuenta vistaCuenta = new VistaCuenta(this, idCuenta);
-
-        this.add(vistaCuenta);
-        vistaCuenta.setBounds(0, 0, 1000, 580);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
+    public void cambiarVistaCuenta() {
+        this.limpiarFrame();
+        VistaCuenta vistaCuenta = new VistaCuenta(this);
+        ponerEnJFrame(vistaCuenta);
+        panelActual = vistaCuenta;
     }
 
     
@@ -118,9 +115,9 @@ public class Ventana extends javax.swing.JFrame {
      * Método para cambiar a la vista del apartado de transferencias.
      * Este método elimina el panel actual y muestra el apartado de transferencias.
      */
-    public void cambiarVistaTransferir(Long idCuenta) {
+    public void cambiarVistaTransferir() {
         this.limpiarFrame();
-        VistaTransferir vistaTransferencia = new VistaTransferir(this, idCuenta);
+        VistaTransferir vistaTransferencia = new VistaTransferir(this);
         ponerEnJFrame(vistaTransferencia);
         panelActual = vistaTransferencia;
     }
@@ -188,6 +185,26 @@ public class Ventana extends javax.swing.JFrame {
         VistaCrearCuenta vistaCrearCuenta = new VistaCrearCuenta(this);
         ponerEnJFrame(vistaCrearCuenta);
         panelActual = vistaCrearCuenta;
+    }
+    /**
+    * Método para cambiar a la ventana del historial de operaciones del cliente.
+    * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
+    */
+    public void cambiarVistaHistorial() {
+        limpiarFrame();
+        VistaHistorial vistaHistorial = new VistaHistorial(this);
+        ponerEnJFrame(vistaHistorial);
+        panelActual = vistaHistorial;
+    }
+    /**
+    * Método para cambiar a la ventana del historial de operaciones del cliente.
+    * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
+    */
+    public void cambiarVistaEditarPerfil() {
+        limpiarFrame();
+        VistaEditarPerfil vistaEditarPerfil = new VistaEditarPerfil(this);
+        ponerEnJFrame(vistaEditarPerfil);
+        panelActual = vistaEditarPerfil;
     }
 
     /**
