@@ -26,11 +26,12 @@ public class Transferencia extends Transaccion{
      * @param idTransaccion El identificador único de la transacción.
      * @param fecha La fecha de la transacción.
      * @param monto El monto de la transacción.
+     * @param tipo el tipo de transacción.
      * @param idTransferencia  El identificador único de la transferencia.
      * @param idCuenta El identificador único de la cuenta asociada a la transacción.
      */
-    public Transferencia(String motivo, String cuentaDestino, Long idTransaccion, String fecha, double monto,Long idTransferencia, Long idCuenta) {
-        super(idTransaccion, fecha, monto, idCuenta);
+    public Transferencia(String motivo, String cuentaDestino, Long idTransaccion, String fecha, double monto,String tipo,Long idTransferencia, Long idCuenta) {
+        super(idTransaccion, fecha, monto,tipo, idCuenta);
         this.motivo = motivo;
         this.cuentaDestino = cuentaDestino;
         this.idTransferencia = idTransferencia;
@@ -67,6 +68,25 @@ public class Transferencia extends Transaccion{
     public void setCuentaDestino(String cuentaDestino) {
         this.cuentaDestino = cuentaDestino;
     }
+
+     /**
+     * Obtiene el identificador de la transferencia.
+     * @return El identificador de la transferencia.
+     */
+    public Long getIdTransferencia() {
+        return idTransferencia;
+    }
+
+    /**
+     * Establece el identificador de la transferencia.
+     * @param idTransferencia  El identificador de la transferencia.
+     */
+    public void setIdTransferencia(Long idTransferencia) {
+        this.idTransferencia = idTransferencia;
+    }
+    
+    
+    
 
     /**
      * Calcula el hash code de la transferencia.

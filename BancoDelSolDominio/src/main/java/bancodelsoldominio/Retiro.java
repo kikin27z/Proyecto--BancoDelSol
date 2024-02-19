@@ -11,6 +11,7 @@ public class Retiro extends Transaccion{
     private Long idRetiro;
     private String folio;
     private String contrasena;
+    private String estado;
 
     /**
      * Constructor por defecto de la clase Retiro.
@@ -22,15 +23,18 @@ public class Retiro extends Transaccion{
      * Constructor de la clase Retiro que inicializa los campos del retiro y de la transacción.
      * @param folio El folio del retiro.
      * @param contrasena La contraseña asociada al retiro.
+     * @param estado El estado del retiro;
      * @param idTransaccion El identificador único de la transacción.
      * @param fecha La fecha de la transacción.
      * @param monto El monto de la transacción.
+     * @param tipo El tipo de transacción.
      * @param idCuenta El identificador único de la cuenta asociada a la transacción.
      */
-    public Retiro(String folio, String contrasena, Long idTransaccion, String fecha, double monto, Long idCuenta) {
-        super(idTransaccion, fecha, monto, idCuenta);
+    public Retiro(String folio, String contrasena,String estado, Long idTransaccion, String fecha, double monto,String tipo, Long idCuenta) {
+        super(idTransaccion, fecha, monto, tipo, idCuenta);
         this.folio = folio;
         this.contrasena = contrasena;
+        this.estado = estado;
     }
 
     /**
@@ -65,6 +69,22 @@ public class Retiro extends Transaccion{
         this.contrasena = contrasena;
     }
 
+    /**
+     * Obtiene el estado asociadodo al retiro.
+     * @return El estado asociado al retiro.
+     */
+    public String getEstado() {
+        return estado;
+    }
+
+    /**
+     * Establece el estado asociadodo al retiro.
+     * @param estado El estado asociadodo al retiro.
+     */
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
     /**
      * Calcula el hash code del retiro.
      * @return El hash code del retiro.
@@ -104,13 +124,11 @@ public class Retiro extends Transaccion{
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Retiro{");
-        sb.append("id=").append(idRetiro);
+        sb.append("idRetiro=").append(idRetiro);
         sb.append(", folio=").append(folio);
         sb.append(", contrasena=").append(contrasena);
+        sb.append(", estado=").append(estado);
         sb.append('}');
         return sb.toString();
-    }
-    
-    
-    
+    }    
 }

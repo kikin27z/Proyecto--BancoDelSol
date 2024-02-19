@@ -53,6 +53,7 @@ public class VistaHistorial extends javax.swing.JPanel {
         lblOperacionInfo3 = new javax.swing.JLabel();
         jdcFechaDesde = new com.toedter.calendar.JDateChooser();
         jdcFechaHasta = new com.toedter.calendar.JDateChooser();
+        pTabla = new javax.swing.JPanel();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -140,7 +141,7 @@ public class VistaHistorial extends javax.swing.JPanel {
                 btnLimpiarFiltrosActionPerformed(evt);
             }
         });
-        add(btnLimpiarFiltros, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 150, 45));
+        add(btnLimpiarFiltros, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 160, 45));
 
         btnFiltrar.setBackground(new java.awt.Color(143, 143, 143));
         btnFiltrar.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
@@ -189,6 +190,9 @@ public class VistaHistorial extends javax.swing.JPanel {
         jdcFechaHasta.setMaxSelectableDate(new java.util.Date(253370793714000L));
         jdcFechaHasta.setMinSelectableDate(new java.util.Date(-62135740686000L));
         add(jdcFechaHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 143, 166, 36));
+
+        pTabla.setBackground(new java.awt.Color(255, 255, 255));
+        add(pTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, 770, 270));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgVistaHistorial.png"))); // NOI18N
         fondo.setToolTipText("");
@@ -240,10 +244,35 @@ public class VistaHistorial extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLimpiarFiltrosActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
-        // TODO add your handling code here:
+        
+        crearTabla();
     }//GEN-LAST:event_btnFiltrarActionPerformed
     
-
+    
+    private void crearTabla() {
+        String[] columnas = {"Tipo de operación", "Fecha y hora", "Monto","Motivo","Cuenta destino","Estado","Folio"};
+        
+        
+        
+        Object[][] datos = {
+            {"Juan", 25, "Madrid"},
+            {"María", 30, "Barcelona"},
+            {"Pedro", 28, "Valencia"}
+        };
+//        JTable tabla = new JTable(datos, columnas);
+//        
+//        // Crea un JScrollPane y agrega la tabla a él
+//        JScrollPane scrollPane = new JScrollPane(tabla);
+//        
+//        // Opcionalmente, ajusta las propiedades del JScrollPane (por ejemplo, políticas de desplazamiento)
+//        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//        
+//        // Crea un panel y agrega el JScrollPane a él
+//        JPanel panel = new JPanel(new BorderLayout());
+//        panel.add(scrollPane, BorderLayout.CENTER);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnFiltrar;
@@ -266,5 +295,6 @@ public class VistaHistorial extends javax.swing.JPanel {
     private javax.swing.JLabel lblOperacionInfo2;
     private javax.swing.JLabel lblOperacionInfo3;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JPanel pTabla;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,6 +14,7 @@ public class Transaccion {
     private String fecha;
     private double monto;
     private Long idCuenta;
+    private String tipo;
 
     /**
      * Constructor por defecto de la clase Transaccion.
@@ -38,13 +39,15 @@ public class Transaccion {
      * @param idTransaccion El identificador único de la transacción.
      * @param fecha La fecha de la transacción.
      * @param monto El monto de la transacción.
+     * @param tipo Tipo de transacción.
      * @param idCuenta El ID de la cuenta asociada a la transacción.
      */
-    public Transaccion(Long idTransaccion, String fecha, double monto, Long idCuenta) {
+    public Transaccion(Long idTransaccion, String fecha, double monto, String tipo, Long idCuenta) {
         this.idTransaccion = idTransaccion;
         this.fecha = fecha;
         this.monto = monto;
         this.idCuenta = idCuenta;
+        this.tipo = tipo;
     }
 
     /**
@@ -102,6 +105,32 @@ public class Transaccion {
     public Long getIdTransaccion() {
         return idTransaccion;
     }
+
+    /**
+     * Establece el ID de la transacción.
+     * @param idTransaccion  El nuevo ID de la transacción.
+     */
+    public void setIdTransaccion(Long idTransaccion) {
+        this.idTransaccion = idTransaccion;
+    }
+
+    /**
+     * Obtiene el tipo de transacción.
+     * @return El tipo de transacción.
+     */
+    public String getTipo() {
+        return tipo;
+    }
+
+    
+    /**
+     * Establece el tipo de transacción.
+     * @param tipo El tipo de transacción.
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
     
     
     /**
@@ -140,17 +169,16 @@ public class Transaccion {
      * Devuelve una representación en formato de cadena de la transacción.
      * @return Una cadena que representa la transacción.
      */
-    @Override
+     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Transaccion{");
-        sb.append("id=").append(idTransaccion);
+        sb.append("idTransaccion=").append(idTransaccion);
         sb.append(", fecha=").append(fecha);
         sb.append(", monto=").append(monto);
         sb.append(", idCuenta=").append(idCuenta);
+        sb.append(", tipo=").append(tipo);
         sb.append('}');
         return sb.toString();
     }
-    
-    
 }

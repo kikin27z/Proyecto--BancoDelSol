@@ -5,15 +5,19 @@ import bancodelsol.dtos.CuentaNuevaDTO;
 import bancodelsol.dtos.TransferenciaNuevaDTO;
 import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Cuenta;
+import bancodelsoldominio.Transaccion;
 import bancodelsolpersistencia.conexion.Conexion;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.daos.ClienteDAO;
 import bancodelsolpersistencia.daos.CuentaDAO;
 import bancodelsolpersistencia.daos.IClienteDAO;
 import bancodelsolpersistencia.daos.ICuentaDAO;
+import bancodelsolpersistencia.daos.ITransaccionDAO;
 import bancodelsolpersistencia.daos.ITransferenciaDAO;
+import bancodelsolpersistencia.daos.TransaccionDAO;
 import bancodelsolpersistencia.daos.TransferenciaDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,27 +30,37 @@ public class Principal {
     static final Logger logger = Logger.getLogger(Principal.class.getName());
     
     public static void main(String[] args) {
-        String cadenaConexion = "jdbc:mysql://localhost/banco_del_sol";
-        String user = "root";
-        String password = "JFK_jfk27";
-
-        IConexion conexion = new Conexion(cadenaConexion, user, password);
-        IClienteDAO clientesDAO = new ClienteDAO(conexion);
-        ICuentaDAO cuentaDAO = new CuentaDAO(conexion);
-        ITransferenciaDAO transferenciaDAO = new TransferenciaDAO(conexion);
-        
-        Ventana ventana = new Ventana(conexion);
-        ventana.cambiarVistaInicio();
-        ventana.setVisible(true);
+            String cadenaConexion = "jdbc:mysql://localhost/banco_del_sol";
+            String user = "root";
+            String password = "JFK_jfk27";
+            
+            IConexion conexion = new Conexion(cadenaConexion, user, password);
+            IClienteDAO clientesDAO = new ClienteDAO(conexion);
+            ICuentaDAO cuentaDAO = new CuentaDAO(conexion);
+        try {
+            ITransaccionDAO transferenciaDAO = new TransaccionDAO(conexion);
+            
+            List<Transaccion> listaTransacciones = transferenciaDAO.consultar();
+            for (Transaccion listaTransaccione : listaTransacciones) {
+                System.out.println(listaTransaccione.toString());
+            }
+            
+            } catch (PersistenciaException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            Ventana ventana = new Ventana(conexion);
+            ventana.cambiarVistaInicio();
+            ventana.setVisible(true);
 //        VistaCliente vistaCliente = new VistaCliente(ventana);
 //        
 //        ventana.add(vistaCliente);
 //        vistaCliente.setBounds(0, 0, 1000, 580);
 //        ventana.setLocationRelativeTo(null);
 //        ventana.setVisible(true);
-        
-        
-        
+
+
+
 //        try {
 //            TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
 //            transferenciaNueva.setMonto(200);
@@ -56,6 +70,7 @@ public class Principal {
 //        } catch (PersistenciaException ex) {
 //            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
 //        }
+        
     }
     
 }
