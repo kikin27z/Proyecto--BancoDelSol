@@ -4,6 +4,7 @@ import bancodelsol.dtos.ClienteNuevoDTO;
 import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Cuenta;
+import bancodelsoldominio.Domicilio;
 import bancodelsoldominio.Transferencia;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
@@ -23,6 +24,7 @@ public class Ventana extends javax.swing.JFrame {
 
     private Cliente cliente;
     private Cuenta cuenta;
+    private Domicilio domicilio;
     private Transferencia transferencia;
     private ClienteNuevoDTO clienteDTO;
     private DomicilioNuevoDTO domicilioDTO;
@@ -340,6 +342,12 @@ public class Ventana extends javax.swing.JFrame {
     public void setTransferencia(Transferencia transferencia) {
         this.transferencia = transferencia;
     }
-    
-    
+
+    public Domicilio getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(Domicilio domicilio) {
+        this.domicilio = domicilio;
+    }
 }

@@ -21,4 +21,13 @@ public interface IDomicilioDAO {
      * @throws PersistenciaException Si ocurre un error durante la consulta a la base de datos.
      */
     Domicilio agregar(DomicilioNuevoDTO domicilioNuevo,Long idCliente)throws PersistenciaException;
+    
+    /**
+     * Método que devuelve el domicilio del cliente con su identificador de la base de datos.
+     *
+     * @param idCliente El identificador del cliente a asociar el domicilio
+     * @return El domicilio recién agregada.
+     * @throws PersistenciaException Si ocurre un error durante la consulta a la base de datos.
+     */
+    Domicilio existe(Long idCliente) throws PersistenciaException;
 }

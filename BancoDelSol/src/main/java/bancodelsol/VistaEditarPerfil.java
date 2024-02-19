@@ -1,6 +1,7 @@
 package bancodelsol;
 
 import bancodelsoldominio.Cliente;
+import bancodelsoldominio.Domicilio;
 
 
 /**
@@ -15,6 +16,7 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
 
     private Ventana ventana;
     private Cliente clienteActual;
+    private Domicilio domicilioActual;
 
     /**
      * Constructor de la clase VistaHistorial.
@@ -24,7 +26,9 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
     public VistaEditarPerfil(Ventana ventana) {
         this.ventana = ventana;
         this.clienteActual = ventana.getCliente();
+        this.domicilioActual = ventana.getDomicilio();
         initComponents();
+        cargarDatos();
     }
 
     /**
@@ -61,7 +65,7 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         txtUsuario = new javax.swing.JTextField();
         lblUsuario = new javax.swing.JLabel();
         lblContrasena = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txtContrasena = new javax.swing.JPasswordField();
         txtColonia = new javax.swing.JTextField();
         lblUsuario1 = new javax.swing.JLabel();
         txtCalle = new javax.swing.JTextField();
@@ -189,7 +193,7 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
                 btnGuardarCambiosActionPerformed(evt);
             }
         });
-        add(btnGuardarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 510, 150, 45));
+        add(btnGuardarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 510, 160, 45));
 
         lblNombres.setFont(new java.awt.Font("Amazon Ember", 1, 20)); // NOI18N
         lblNombres.setForeground(new java.awt.Color(143, 143, 143));
@@ -252,10 +256,10 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         lblContrasena.setEnabled(false);
         add(lblContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, -1, -1));
 
-        jPasswordField1.setEditable(false);
-        jPasswordField1.setForeground(new java.awt.Color(180, 154, 102));
-        jPasswordField1.setText("xCosas");
-        add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 250, 230, 36));
+        txtContrasena.setEditable(false);
+        txtContrasena.setForeground(new java.awt.Color(180, 154, 102));
+        txtContrasena.setText("xCosas");
+        add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 250, 230, 36));
 
         txtColonia.setEditable(false);
         txtColonia.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
@@ -376,21 +380,71 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         // TODO add your handling code here:
         btnGuardarCambios.setEnabled(false);
         btnCancelar.setEnabled(false);
+        cargarDatos();
+        desactivarCampos();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         btnCancelar.setEnabled(true);
         btnGuardarCambios.setEnabled(true);
+        activarCampos();
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    
+    
     private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
         // TODO add your handling code here:
         btnCancelar.setEnabled(false);
         btnGuardarCambios.setEnabled(false);
+        desactivarCampos();
+        
     }//GEN-LAST:event_btnGuardarCambiosActionPerformed
     
-
+    private void activarCampos(){
+        txtNombre.setEditable(true);
+        txtApellidoPaterno.setEditable(true);
+        txtApellidoMaterno.setEditable(true);
+        txtUsuario.setEditable(true);
+        txtContrasena.setEditable(true);
+        
+        txtCalle.setEditable(true);
+        txtColonia.setEditable(true);
+        txtCiudad.setEditable(true);
+        txtNumeroExterior.setEditable(true);
+        txtCodigoPostal.setEditable(true);
+    }
+    
+    
+    private void desactivarCampos(){
+        txtNombre.setEditable(false);
+        txtApellidoPaterno.setEditable(false);
+        txtApellidoMaterno.setEditable(false);
+        txtUsuario.setEditable(false);
+        txtContrasena.setEditable(false);
+        
+        txtCalle.setEditable(false);
+        txtColonia.setEditable(false);
+        txtCiudad.setEditable(false);
+        txtNumeroExterior.setEditable(false);
+        txtCodigoPostal.setEditable(false);
+    }
+    
+    private void cargarDatos(){
+        txtNombre.setText(clienteActual.getNombre());
+        txtApellidoPaterno.setText(clienteActual.getApellidoPaterno());
+        txtApellidoMaterno.setText(clienteActual.getApellidoMaterno());
+        txtUsuario.setText(clienteActual.getUsuario());
+        txtContrasena.setText("");
+        
+        txtCalle.setText(domicilioActual.getCalle());
+        txtColonia.setText(domicilioActual.getColonia());
+        txtCiudad.setText(domicilioActual.getCiudad());
+        txtCodigoPostal.setText(domicilioActual.getCodigoPostal());
+        txtNumeroExterior.setText(domicilioActual.getNumeroExterior());
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCerrarSesion;
@@ -406,7 +460,6 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
     private javax.swing.JLabel iconInicio;
     private javax.swing.JLabel iconLogo;
     private javax.swing.JLabel iconPerfil;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel lblApellidoMaterno;
     private javax.swing.JLabel lblApellidoMaterno1;
     private javax.swing.JLabel lblApellidoPaterno;
@@ -426,6 +479,7 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
     private javax.swing.JTextField txtCiudad;
     private javax.swing.JTextField txtCodigoPostal;
     private javax.swing.JTextField txtColonia;
+    private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtNumeroExterior;
     private javax.swing.JTextField txtUsuario;

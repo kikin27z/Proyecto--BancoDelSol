@@ -2,8 +2,10 @@ package bancodelsol;
 
 import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Cuenta;
+import bancodelsoldominio.Domicilio;
 import bancodelsolpersistencia.daos.ClienteDAO;
 import bancodelsolpersistencia.daos.CuentaDAO;
+import bancodelsolpersistencia.daos.DomicilioDAO;
 import bancodelsolpersistencia.daos.IClienteDAO;
 import bancodelsolpersistencia.daos.ICuentaDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
@@ -31,25 +33,16 @@ public class VistaCliente extends javax.swing.JPanel {
      * @param ventana La ventana principal de la aplicación.
      */
     public VistaCliente(Ventana ventana) {
-        
         this.ventana = ventana;
-        initComponents();
-        lblNombreCliente.setText(ventana.getCliente().getNombre());
-        
-//        clienteProvisional();
+        clienteActual = ventana.getCliente();
         this.listaCuentas = new LinkedList<>();
+        initComponents();
+        
+        asignarDomicilio();
         recuperarCuentas();
+        generarDatos();
+        
     }
-
-//    private void clienteProvisional(){
-//        try {
-//            IClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
-//            clienteActual = clienteDAO.existe(Long.valueOf(2));
-//            ventana.setCliente(clienteActual);
-//        } catch (PersistenciaException ex) {
-//            Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -295,7 +288,7 @@ public class VistaCliente extends javax.swing.JPanel {
         listaCuentas = new LinkedList<>();
         try {
             ICuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
-            listaCuentas = cuentaDAO.consultar(ventana.getCliente().getIdCliente());
+            listaCuentas = cuentaDAO.consultar(clienteActual.getIdCliente());
             insertarCuentas();
         } catch (PersistenciaException ex) {
             ventana.mostrarAviso(ex.getMessage());
@@ -311,6 +304,7 @@ public class VistaCliente extends javax.swing.JPanel {
     private void insertarCuentas(){
         if(listaCuentas.isEmpty()){
             cbxCuentas.setEnabled(false);
+            
             lblNombreCuenta.setText("Cree una cuenta");
             lblNumeroCuenta.setText("--------");
             lblSaldo.setText("");
@@ -321,6 +315,22 @@ public class VistaCliente extends javax.swing.JPanel {
             }
             
         }
+    }
+    
+    private void generarDatos(){
+        lblNombreCliente.setText("Hola, "+ clienteActual.getNombre() +" " + clienteActual.getApellidoPaterno());
+    }
+    
+    private void asignarDomicilio(){
+        try {
+            DomicilioDAO domicilioDAO = new DomicilioDAO(ventana.getConexion());
+            Domicilio domicilioAux = domicilioDAO.existe(clienteActual.getIdCliente());
+            ventana.setDomicilio(domicilioAux);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
