@@ -119,7 +119,6 @@ public class VistaInicio extends javax.swing.JPanel {
 
         iconFamilia.setFont(new java.awt.Font("Amazon Ember", 0, 16)); // NOI18N
         iconFamilia.setForeground(new java.awt.Color(255, 255, 255));
-        iconFamilia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/familiaIcon.png"))); // NOI18N
         add(iconFamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(562, 180, 322, 246));
 
         lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo(2).png"))); // NOI18N

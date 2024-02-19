@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class VistaCliente extends javax.swing.JPanel {
 
-    private  Ventana ventana;
+    private Ventana ventana;
     private Cliente clienteActual;
     private List<Cuenta> listaCuentas;
     
@@ -34,22 +34,22 @@ public class VistaCliente extends javax.swing.JPanel {
         
         this.ventana = ventana;
         initComponents();
-       
-        clienteProvisional();
+        lblNombreCliente.setText(ventana.getCliente().getNombre());
+        
+//        clienteProvisional();
         this.listaCuentas = new LinkedList<>();
         recuperarCuentas();
     }
 
-    private void clienteProvisional(){
-        try {
-            IClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
-            clienteActual = clienteDAO.existe(Long.valueOf(2));
-            
-            ventana.setCliente(clienteActual);
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    private void clienteProvisional(){
+//        try {
+//            IClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
+//            clienteActual = clienteDAO.existe(Long.valueOf(2));
+//            ventana.setCliente(clienteActual);
+//        } catch (PersistenciaException ex) {
+//            Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,8 +118,8 @@ public class VistaCliente extends javax.swing.JPanel {
 
         lblNombreCliente.setFont(new java.awt.Font("Amazon Ember", 1, 36)); // NOI18N
         lblNombreCliente.setForeground(new java.awt.Color(149, 120, 64));
-        lblNombreCliente.setText("Hola, Jose Karim");
-        add(lblNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 284, 43));
+        lblNombreCliente.setText("(nombre de usuario)");
+        add(lblNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 820, 43));
 
         lblCuentaInfo.setFont(new java.awt.Font("Amazon Ember", 1, 24)); // NOI18N
         lblCuentaInfo.setForeground(new java.awt.Color(143, 143, 143));
@@ -293,7 +293,7 @@ public class VistaCliente extends javax.swing.JPanel {
         listaCuentas = new LinkedList<>();
         try {
             ICuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
-            listaCuentas = cuentaDAO.consultar(clienteActual.getIdCliente());
+            listaCuentas = cuentaDAO.consultar(ventana.getCliente().getIdCliente());
             insertarCuentas();
         } catch (PersistenciaException ex) {
             ventana.mostrarAviso(ex.getMessage());

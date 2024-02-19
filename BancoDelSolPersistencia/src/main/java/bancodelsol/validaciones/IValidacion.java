@@ -14,6 +14,6 @@ public interface IValidacion {
 
     Cliente existeCliente(Long idCliente) throws PersistenciaException;
 
-    boolean clienteValido(String usuario, String contrasena) throws ValidacionDTOException;
+    Cliente clienteValido(String usuario, String contrasena) throws ValidacionDTOException;
 
 }

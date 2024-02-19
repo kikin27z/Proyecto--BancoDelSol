@@ -14,8 +14,9 @@ import java.util.logging.Logger;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
 /**
- * Esta clase proporciona métodos para validar la existencia y autenticación de clientes delbanco.
- * Implementa la interfaz IValidacion.
+ * Esta clase proporciona métodos para validar la existencia y autenticación de
+ * clientes delbanco. Implementa la interfaz IValidacion.
+ *
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
  */
@@ -88,20 +89,33 @@ public class Validacion implements IValidacion {
     }
 
     @Override
-    public boolean clienteValido(String usuario, String contrasena) throws ValidacionDTOException {
+    public Cliente clienteValido(String usuario, String contrasena) throws ValidacionDTOException {
         StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
         String sentenciaSQL = """
-                          SELECT * FROM clientes 
-                          WHERE usuario = ? AND contrasena = ?
-                          """;
+                  SELECT * FROM clientes 
+                  WHERE usuario = ?
+                  """;
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setString(1, usuario);
-            String contrasenaEncriptada = encryptor.encryptPassword(contrasena);
-            comando.setString(2, contrasenaEncriptada);
             try (ResultSet resultado = comando.executeQuery()) {
-                return resultado.next();
-            } 
+                if (resultado.next()) {
+                    String contrasenaEncriptadaAlmacenada = resultado.getString("contrasena");
+                    // Verifica si la contraseña ingresada coincide con la contraseña encriptada almacenada
+                    if (encryptor.checkPassword(contrasena, contrasenaEncriptadaAlmacenada)) {
+                        // Si la contraseña es válida, crea un objeto Cliente con los datos obtenidos
+                        Long idCliente = resultado.getLong("id_cliente");
+                        String nombre = resultado.getString("nombres");
+                        String apellidoPaterno = resultado.getString("apellido_paterno");
+                        String apellidoMaterno = resultado.getString("apellido_materno");
+                        String fechaNacimiento = resultado.getString("fecha_nacimiento");
+                        // Crear y devolver un objeto Cliente
+                        return new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, usuario, contrasena, fechaNacimiento);
+                    }
+                }
+            }
+            // Si no se encontró ningún cliente con el usuario dado o la contraseña no coincide, devuelve null
+            return null;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al validar el cliente.", e);
             throw new ValidacionDTOException("Error al validar el cliente.", e);

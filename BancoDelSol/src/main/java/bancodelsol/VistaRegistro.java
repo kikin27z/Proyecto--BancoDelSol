@@ -153,12 +153,9 @@ public class VistaRegistro extends javax.swing.JPanel {
         add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(509, 288, 302, 34));
 
         lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo(2).png"))); // NOI18N
-        lblIcon.setMaximumSize(new java.awt.Dimension(60, 60));
-        lblIcon.setMinimumSize(new java.awt.Dimension(60, 60));
-        lblIcon.setPreferredSize(new java.awt.Dimension(60, 60));
         add(lblIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mgRegistrarse1(2).png"))); // NOI18N
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgRegistrarse1(2).png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 

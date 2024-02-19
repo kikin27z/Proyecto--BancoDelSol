@@ -6,9 +6,8 @@ package bancodelsol;
 
 import bancodelsol.validaciones.IValidacion;
 import bancodelsol.validaciones.Validacion;
+import bancodelsoldominio.Cliente;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +21,7 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     private Ventana ventana;
     private IValidacion validacion;
     private boolean loginValido;
+    private Cliente cliente;
 
     /**
      * Creates new form VistaCliente
@@ -134,7 +134,10 @@ public class VistaInicioSesion extends javax.swing.JPanel {
 
     private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
         validarInicioSesion();
-        if (loginValido) {
+        if (cliente == null) {
+            ventana.mostrarAviso("Usuario inválido");
+        }else{
+            ventana.setCliente(cliente);
             ventana.cambiarVistaCliente();
         }
     }//GEN-LAST:event_btnInicioSesionActionPerformed
@@ -151,7 +154,7 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     private void validarInicioSesion() {
         try {
             verificaCampos();
-            loginValido = validacion.clienteValido(txtUsuario.getText(), txtContrasena.getText());
+            cliente = validacion.clienteValido(txtUsuario.getText(), txtContrasena.getText());
         } catch (ValidacionDTOException e) {
             ventana.mostrarAviso(e.getMessage());
         }
