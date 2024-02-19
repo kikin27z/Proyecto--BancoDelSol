@@ -11,10 +11,7 @@ import java.util.List;
  * @author Jesús Roberto García Armenta - 244913
  */
 public interface ITransferenciaDAO {
-    Transferencia agregar(TransferenciaNuevaDTO transferenciaNueva,Long id_cuenta)throws PersistenciaException;
+    Transferencia agregar(TransferenciaNuevaDTO transferenciaNueva)throws PersistenciaException;
     List<Transferencia> consultar() throws PersistenciaException;
-//    Transferencia actualizar(TransferenciaActualizadadaDTO transferenciaActualizada) throws PersistenciaException;
-    Transferencia eliminar(Integer id)throws PersistenciaException;
     
-    List<Transferencia> ultimas3() throws PersistenciaException;
 }

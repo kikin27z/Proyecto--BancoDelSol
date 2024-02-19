@@ -33,8 +33,8 @@ CREATE TABLE `cuentas` (
     `id_cuenta` BIGINT NOT NULL AUTO_INCREMENT,
     `fecha_apertura` DATE  NULL,
     `nombre_cuenta` VARCHAR(15) NOT NULL,
-    `numero_cuenta` VARCHAR(16) NOT NULL UNIQUE,
-    `estado` VARCHAR(10) DEFAULT 'Activa' CHECK (estado IN ('Activa', 'Cancelada')),
+    `numero_cuenta` VARCHAR(9) NOT NULL UNIQUE,
+    `estado` VARCHAR(10) DEFAULT 'Activa' CHECK (estado IN ('Activa', 'Inactiva')),
     `saldo` DOUBLE NOT NULL DEFAULT 0,
     `id_cliente` BIGINT NOT NULL,
     PRIMARY KEY (`id_cuenta`),
@@ -67,8 +67,8 @@ DROP TABLE IF EXISTS `transferencias`;
 CREATE TABLE `transferencias` (
     `id_transferencia` BIGINT NOT NULL AUTO_INCREMENT,
     `id_transaccion` BIGINT NOT NULL,
-    `motivo` VARCHAR(30) NULL DEFAULT "Sin motivo",
-    `cuenta_destino` VARCHAR(16) NOT NULL,
+    `motivo` VARCHAR(50) NULL DEFAULT "Sin motivo",
+    `cuenta_destino` VARCHAR(9) NOT NULL,
     PRIMARY KEY (`id_transferencia`),
     FOREIGN KEY (`id_transaccion`) REFERENCES `transacciones`(`id_transaccion`),
     FOREIGN KEY (`cuenta_destino`) REFERENCES `cuentas`(`numero_cuenta`)

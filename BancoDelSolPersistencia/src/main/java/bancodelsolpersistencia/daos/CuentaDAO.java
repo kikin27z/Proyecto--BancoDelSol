@@ -211,8 +211,12 @@ public class CuentaDAO implements ICuentaDAO{
                     String numCuenta = resultados.getString("numero_cuenta");
                     String nombreCuenta = resultados.getString("nombre_cuenta");
                     double saldo = resultados.getDouble("saldo");
-                    Cuenta cuenta = new Cuenta(id, fechaApertura,nombreCuenta, numCuenta, saldo,idCliente);
-                    listaCuentas.add(cuenta);
+                    String estadoCuenta = resultados.getString("estado");
+                    
+                    if(estadoCuenta.equals("Activa")){
+                        Cuenta cuenta = new Cuenta(id, fechaApertura,nombreCuenta, numCuenta, saldo,idCliente);
+                        listaCuentas.add(cuenta);
+                    }
                 }
              }
             logger.log(Level.INFO,"Se consultaron {0} cuentas", listaCuentas.size());
@@ -220,6 +224,37 @@ public class CuentaDAO implements ICuentaDAO{
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "No se pudieron consultar las cuentas", ex);
             throw new PersistenciaException("No se pudieron consultar las cuentas",ex);
+        }
+    }
+
+    /**
+     * Método que inhabilita una cuenta.
+     * @param cuenta Cuenta a inhabilitar
+     * @return Cuenta inhabilitada
+     * @throws PersistenciaException Si ocurre un error durante la consulta.
+     */
+    @Override
+    public Cuenta desactivarCuenta(Cuenta cuenta) throws PersistenciaException {
+        String sentenciaSQL = """
+                                   UPDATE cuentas SET estado = 'Inactiva' 
+                              WHERE (id_cuenta = ?);
+                              """;
+
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL,Statement.RETURN_GENERATED_KEYS);
+        ) {
+    
+            
+            comando.setLong(1, cuenta.getIdCuenta());
+            
+            int cuentasActualizadas = comando.executeUpdate();
+            logger.log(Level.INFO, "Se actualizaron {0} cuentas", cuentasActualizadas);
+            ResultSet idsGenerados = comando.getGeneratedKeys();
+            return cuenta;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudo cancelar la cuenta.", e);
+            throw new PersistenciaException("No se pudo cancelar la cuenta.", e);
         }
     }
     

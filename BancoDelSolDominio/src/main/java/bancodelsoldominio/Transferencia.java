@@ -26,12 +26,14 @@ public class Transferencia extends Transaccion{
      * @param idTransaccion El identificador único de la transacción.
      * @param fecha La fecha de la transacción.
      * @param monto El monto de la transacción.
+     * @param idTransferencia  El identificador único de la transferencia.
      * @param idCuenta El identificador único de la cuenta asociada a la transacción.
      */
-    public Transferencia(String motivo, String cuentaDestino, Long idTransaccion, String fecha, double monto, Long idCuenta) {
+    public Transferencia(String motivo, String cuentaDestino, Long idTransaccion, String fecha, double monto,Long idTransferencia, Long idCuenta) {
         super(idTransaccion, fecha, monto, idCuenta);
         this.motivo = motivo;
         this.cuentaDestino = cuentaDestino;
+        this.idTransferencia = idTransferencia;
     }
 
     /**

@@ -4,6 +4,7 @@ import bancodelsol.dtos.ClienteNuevoDTO;
 import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Cuenta;
+import bancodelsoldominio.Transferencia;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import javax.swing.JOptionPane;
@@ -22,6 +23,7 @@ public class Ventana extends javax.swing.JFrame {
 
     private Cliente cliente;
     private Cuenta cuenta;
+    private Transferencia transferencia;
     private ClienteNuevoDTO clienteDTO;
     private DomicilioNuevoDTO domicilioDTO;
     private JPanel panelActual;
@@ -206,6 +208,16 @@ public class Ventana extends javax.swing.JFrame {
         ponerEnJFrame(vistaEditarPerfil);
         panelActual = vistaEditarPerfil;
     }
+    /**
+    * Método para cambiar a la ventana del historial de operaciones del cliente.
+    * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
+    */
+    public void cambiarVistaTransferenciaExitosa() {
+        limpiarFrame();
+        VistaTransferenciaExitosa vistaTransferenciaExitosa = new VistaTransferenciaExitosa(this);
+        ponerEnJFrame(vistaTransferenciaExitosa);
+        panelActual = vistaTransferenciaExitosa;
+    }
 
     /**
     * Método para agregar un panel a la ventana.
@@ -320,6 +332,14 @@ public class Ventana extends javax.swing.JFrame {
     public void setDomicilioDTO(DomicilioNuevoDTO domicilioDTO) {
         this.domicilioDTO = domicilioDTO;
     } 
+
+    public Transferencia getTransferencia() {
+        return transferencia;
+    }
+
+    public void setTransferencia(Transferencia transferencia) {
+        this.transferencia = transferencia;
+    }
     
     
 }

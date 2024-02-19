@@ -48,4 +48,12 @@ public interface ICuentaDAO {
      * @throws PersistenciaException Si ocurre un error durante la consulta.
      */
     List<Cuenta> consultar(Long idCliente) throws PersistenciaException;
+    
+    /**
+     * Método que inhabilita una cuenta.
+     * @param cuenta Cuenta a inhabilitar
+     * @return Cuenta inhabilitada
+     * @throws PersistenciaException Si ocurre un error durante la consulta.
+     */
+    Cuenta desactivarCuenta(Cuenta cuenta) throws PersistenciaException;
 }

@@ -1,6 +1,7 @@
 package bancodelsol.validaciones;
 
 import bancodelsoldominio.Cliente;
+import bancodelsoldominio.Cuenta;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
@@ -91,20 +92,59 @@ public class Validacion implements IValidacion {
     public boolean clienteValido(String usuario, String contrasena) throws ValidacionDTOException {
         StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
         String sentenciaSQL = """
-                          SELECT * FROM clientes 
-                          WHERE usuario = ? AND contrasena = ?
-                          """;
+                      SELECT * FROM clientes 
+                      WHERE usuario = ?
+                      """;
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setString(1, usuario);
-            String contrasenaEncriptada = encryptor.encryptPassword(contrasena);
-            comando.setString(2, contrasenaEncriptada);
             try (ResultSet resultado = comando.executeQuery()) {
-                return resultado.next();
-            } 
+                if (resultado.next()) {
+                    String contrasenaEncriptadaAlmacenada = resultado.getString("contrasena");
+                    // Verifica si la contraseña ingresada coincide con la contraseña encriptada almacenada
+                    return encryptor.checkPassword(contrasena, contrasenaEncriptadaAlmacenada);
+                } else {
+                    return false; // No se encontró ningún cliente con el usuario dado
+                }
+            }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al validar el cliente.", e);
             throw new ValidacionDTOException("Error al validar el cliente.", e);
+        }
+    }
+
+    @Override
+    public Cuenta existeCuenta(String numeroCuenta) throws ValidacionDTOException {
+        String sentenciaSQL = """
+                             SELECT * FROM cuentas 
+                              WHERE numero_cuenta = ?;
+                              """;
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
+
+            comando.setString(1, numeroCuenta);
+
+            try (ResultSet datosCuenta = comando.executeQuery()) {
+                if (!datosCuenta.next()) {
+                    logger.log(Level.INFO, "No se halló la cuenta con número de cuenta: {0}",numeroCuenta);
+                    throw new ValidacionDTOException("No se pudo encontrar la cuenta.");
+                }
+
+                logger.log(Level.INFO, "Se encontró al cliente");
+                Cuenta cuenta = new Cuenta(
+                    datosCuenta.getLong("id_cuenta"),
+                    datosCuenta.getDate("fecha_apertura").toString(),
+                    datosCuenta.getString("nombre_cuenta"),
+                    datosCuenta.getString("numero_cuenta"),
+                    datosCuenta.getDouble("saldo"),
+                        datosCuenta.getLong("id_cliente")
+                );
+                cuenta.setEstadoCuenta(datosCuenta.getString("estado"));
+                return cuenta;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudo encontrar la cuenta.", e);
+            throw new ValidacionDTOException("No se pudo encontrar la cuenta.");
         }
     }
 

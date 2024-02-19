@@ -298,7 +298,7 @@ public class VistaCrearCuenta extends javax.swing.JPanel {
                ventana.mostrarAviso(ex.getMessage());
    //            Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
            }
-       }
+    }
     
     /**
     * Registra la nueva cuenta en la base de datos.
@@ -322,15 +322,14 @@ public class VistaCrearCuenta extends javax.swing.JPanel {
      * en la base datos .
      * @return La cadena que representa el número de cuenta generado.
      */
-    private String generaNumeroCuenta(){
-           Random random = new Random();
-           int numeroAleatorio = random.nextInt(10000); // Genera un número entre 0 y 9999
-           String numeroAleatorioStr = String.format("%04d", numeroAleatorio); // Asegura que tenga cuatro dígitos
-
-           // Construir el número con el prefijo "2710"
-           String numeroCuenta = "2710" + numeroAleatorioStr;
-
-        return numeroCuenta;
+    private String generaNumeroCuenta() throws ValidacionDTOException{
+            Random random = new Random();
+            int numeroAleatorio = random.nextInt(100000); // Genera un número entre 0 y 99999
+            String numeroAleatorioStr = String.format("%05d", numeroAleatorio); // Asegura que tenga cuatro dígitos
+            // Construir el número con el prefijo "2710"
+            String numeroCuenta = "2710" + numeroAleatorioStr;
+            
+            return numeroCuenta;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,6 +1,7 @@
 package bancodelsol.validaciones;
 
 import bancodelsoldominio.Cliente;
+import bancodelsoldominio.Cuenta;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 
@@ -15,5 +16,7 @@ public interface IValidacion {
     Cliente existeCliente(Long idCliente) throws PersistenciaException;
 
     boolean clienteValido(String usuario, String contrasena) throws ValidacionDTOException;
+    
+    Cuenta existeCuenta(String numeroCuenta) throws ValidacionDTOException;
 
 }

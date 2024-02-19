@@ -242,7 +242,9 @@ public class VistaCliente extends javax.swing.JPanel {
         
         lblNombreCuenta.setText(cuentaSeleccionada.getNombreCuenta());
         lblNumeroCuenta.setText(cuentaSeleccionada.getNumeroCuenta());
-        lblSaldo.setText("$"+String.valueOf(cuentaSeleccionada.getSaldo())+" MXN");
+        String numeroFormateado = String.format("%.2f", cuentaSeleccionada.getSaldo());
+        
+        lblSaldo.setText("$"+numeroFormateado+" MXN");
     }//GEN-LAST:event_cbxCuentasActionPerformed
 
     /**

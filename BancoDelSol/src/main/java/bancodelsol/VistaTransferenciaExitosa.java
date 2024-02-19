@@ -1,20 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package bancodelsol;
 
+import bancodelsoldominio.Transferencia;
+
 /**
- *
- * @author karim
+ * La clase VistaTransferenciaExitosa es un panel de interfaz de usuario que representa
+ * la vista a la información de la transferencia.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaTransferenciaExitosa extends javax.swing.JPanel {
 
+    private  Ventana ventana;
+    private Transferencia transferenciaActual;
+    
     /**
-     * Creates new form VistaTransferenciaExitosa
+     * Constructor de la clase VistaCuenta.
+     *
+     * @param ventana La ventana principal de la aplicación.
      */
-    public VistaTransferenciaExitosa() {
+    public VistaTransferenciaExitosa(Ventana ventana ) {
+        this.ventana = ventana;
+        this.transferenciaActual = ventana.getTransferencia();
         initComponents();
+        cargarDatos();
     }
 
     /**
@@ -31,7 +40,7 @@ public class VistaTransferenciaExitosa extends javax.swing.JPanel {
         lblFechaHora = new javax.swing.JLabel();
         lblSaldo = new javax.swing.JLabel();
         lblMotivo = new javax.swing.JLabel();
-        lblMensaje1 = new javax.swing.JLabel();
+        lblComision = new javax.swing.JLabel();
         lblCuentaInfo = new javax.swing.JLabel();
         lblNumeroCuenta = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
@@ -68,11 +77,11 @@ public class VistaTransferenciaExitosa extends javax.swing.JPanel {
         lblMotivo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         add(lblMotivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 350, 477, 50));
 
-        lblMensaje1.setFont(new java.awt.Font("Amazon Ember Light", 0, 12)); // NOI18N
-        lblMensaje1.setForeground(new java.awt.Color(34, 33, 33));
-        lblMensaje1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMensaje1.setText("Esta transferencia no genera comisión");
-        add(lblMensaje1, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 324, 477, 23));
+        lblComision.setFont(new java.awt.Font("Amazon Ember Light", 0, 12)); // NOI18N
+        lblComision.setForeground(new java.awt.Color(34, 33, 33));
+        lblComision.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblComision.setText("Esta transferencia no genera comisión");
+        add(lblComision, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 324, 477, 23));
 
         lblCuentaInfo.setFont(new java.awt.Font("Amazon Ember", 1, 22)); // NOI18N
         lblCuentaInfo.setForeground(new java.awt.Color(143, 143, 143));
@@ -95,14 +104,24 @@ public class VistaTransferenciaExitosa extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
-
+    /**
+     * Método que inserta los datos de la transferencia. 
+     */
+    private void cargarDatos(){
+        lblFechaHora.setText(transferenciaActual.getFecha());
+        lblMotivo.setText(transferenciaActual.getMotivo());
+        String numeroFormateado = String.format("%.2f", transferenciaActual.getMonto());
+        lblSaldo.setText("$" + numeroFormateado + " MXN");
+        lblNumeroCuenta.setText(transferenciaActual.getCuentaDestino());
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JLabel fondo;
+    private javax.swing.JLabel lblComision;
     private javax.swing.JLabel lblCuentaInfo;
     private javax.swing.JLabel lblFechaHora;
     private javax.swing.JLabel lblLogo;
-    private javax.swing.JLabel lblMensaje1;
     private javax.swing.JLabel lblMotivo;
     private javax.swing.JLabel lblNumeroCuenta;
     private javax.swing.JLabel lblSaldo;
