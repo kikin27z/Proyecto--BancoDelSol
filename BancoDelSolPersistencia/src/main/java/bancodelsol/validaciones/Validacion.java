@@ -25,9 +25,17 @@ public class Validacion implements IValidacion {
 
     static final Logger logger = Logger.getLogger(Validacion.class.getName());
     final IConexion conexionBD;
+    private StrongPasswordEncryptor encryptor;
 
+
+    /**
+     * Constructor de la clase Validacion.
+     * 
+     * @param conexionBD Objeto que representa la conexión a la base de datos.
+     */
     public Validacion(IConexion conexionBD) {
         this.conexionBD = conexionBD;
+        encryptor = new StrongPasswordEncryptor();
     }
 
     @Override
@@ -91,13 +99,11 @@ public class Validacion implements IValidacion {
 
     @Override
     public Cliente clienteValido(String usuario, String contrasena) throws ValidacionDTOException {
-        StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
         String sentenciaSQL = """
                   SELECT * FROM clientes 
-                  WHERE usuario = ?
+                  WHERE usuario = ?;
                   """;
-        try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+        try (Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setString(1, usuario);
             try (ResultSet resultado = comando.executeQuery()) {
                 if (resultado.next()) {
@@ -136,17 +142,17 @@ public class Validacion implements IValidacion {
 
             try (ResultSet datosCuenta = comando.executeQuery()) {
                 if (!datosCuenta.next()) {
-                    logger.log(Level.INFO, "No se halló la cuenta con número de cuenta: {0}",numeroCuenta);
+                    logger.log(Level.INFO, "No se halló la cuenta con número de cuenta: {0}", numeroCuenta);
                     throw new ValidacionDTOException("No se pudo encontrar la cuenta.");
                 }
 
                 logger.log(Level.INFO, "Se encontró al cliente");
                 Cuenta cuenta = new Cuenta(
-                    datosCuenta.getLong("id_cuenta"),
-                    datosCuenta.getDate("fecha_apertura").toString(),
-                    datosCuenta.getString("nombre_cuenta"),
-                    datosCuenta.getString("numero_cuenta"),
-                    datosCuenta.getDouble("saldo"),
+                        datosCuenta.getLong("id_cuenta"),
+                        datosCuenta.getDate("fecha_apertura").toString(),
+                        datosCuenta.getString("nombre_cuenta"),
+                        datosCuenta.getString("numero_cuenta"),
+                        datosCuenta.getDouble("saldo"),
                         datosCuenta.getLong("id_cliente")
                 );
                 cuenta.setEstadoCuenta(datosCuenta.getString("estado"));
@@ -157,5 +163,5 @@ public class Validacion implements IValidacion {
             throw new ValidacionDTOException("No se pudo encontrar la cuenta.");
         }
     }
-
+   
 }

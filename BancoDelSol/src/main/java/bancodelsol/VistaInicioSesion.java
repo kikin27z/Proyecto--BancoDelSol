@@ -18,10 +18,10 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     /**
      * Creates new form VistaInicioSesion
      */
-    private Ventana ventana;
-    private IValidacion validacion;
-    private boolean loginValido;
+    private final Ventana ventana;
+    private final IValidacion validacion;
     private Cliente cliente;
+    String contraseña;
 
     /**
      * Creates new form VistaCliente
@@ -42,7 +42,7 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     private void initComponents() {
 
         txtUsuario = new javax.swing.JTextField();
-        txtContrasena = new javax.swing.JTextField();
+        jpsContrasena = new javax.swing.JPasswordField();
         lblBanco = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
@@ -52,6 +52,7 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         lblHazteCliente = new javax.swing.JLabel();
         lblIcon = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
+        txtContrasena = new javax.swing.JTextField();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -60,13 +61,16 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         txtUsuario.setBorder(null);
         add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 240, 447, 37));
 
-        txtContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
-        txtContrasena.setForeground(new java.awt.Color(143, 143, 143));
-        txtContrasena.setBorder(null);
-        txtContrasena.setInheritsPopupMenu(true);
-        add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 327, 447, 37));
-        txtContrasena.getAccessibleContext().setAccessibleName("");
-        txtContrasena.getAccessibleContext().setAccessibleDescription("");
+        jpsContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        jpsContrasena.setForeground(new java.awt.Color(143, 143, 143));
+        jpsContrasena.setMinimumSize(new java.awt.Dimension(64, 25));
+        jpsContrasena.setPreferredSize(new java.awt.Dimension(64, 25));
+        jpsContrasena.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jpsContrasenaActionPerformed(evt);
+            }
+        });
+        add(jpsContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 327, 447, 37));
 
         lblBanco.setFont(new java.awt.Font("TrajanusBricks", 0, 36)); // NOI18N
         lblBanco.setForeground(new java.awt.Color(149, 120, 64));
@@ -130,9 +134,18 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         fondo.setMinimumSize(new java.awt.Dimension(1000, 580));
         fondo.setPreferredSize(new java.awt.Dimension(1000, 580));
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
+
+        txtContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        txtContrasena.setForeground(new java.awt.Color(143, 143, 143));
+        txtContrasena.setBorder(null);
+        txtContrasena.setInheritsPopupMenu(true);
+        add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 327, 447, 37));
+        txtContrasena.getAccessibleContext().setAccessibleName("");
+        txtContrasena.getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
+        contraseña = new String(jpsContrasena.getPassword());
         validarInicioSesion();
         if (cliente == null) {
             ventana.mostrarAviso("Usuario inválido");
@@ -151,19 +164,23 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         ventana.cambiarVistaRegistro();
     }//GEN-LAST:event_lblHazteClienteMouseDragged
 
+    private void jpsContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpsContrasenaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jpsContrasenaActionPerformed
+
     private void validarInicioSesion() {
         try {
             verificaCampos();
-            cliente = validacion.clienteValido(txtUsuario.getText(), txtContrasena.getText());
+            cliente = validacion.clienteValido(txtUsuario.getText(), contraseña);
         } catch (ValidacionDTOException e) {
             ventana.mostrarAviso(e.getMessage());
         }
     }
 
     private void verificaCampos() throws ValidacionDTOException {
-        if (txtUsuario.getText().isBlank() || txtContrasena.getText().isBlank()) {
-            throw new ValidacionDTOException("Llene todos los campos");
-        }
+//        if (txtUsuario.getText().isBlank() || jpsContrasena.getPassword().length == 0) {
+//            throw new ValidacionDTOException("Llene todos los campos");
+//        }
 
         // Verifica la longitud del usuario
         if (txtUsuario.getText().length() > 30) {
@@ -171,7 +188,7 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         }
 
         // Verifica la longitud de la contraseña
-        if (txtContrasena.getText().length() > 20) {
+        if (jpsContrasena.getPassword().length > 20) {
             throw new ValidacionDTOException("La contraseña debe tener como máximo 20 caracteres");
         }
     }
@@ -180,6 +197,7 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton btnInicioSesion;
     private javax.swing.JLabel fondo;
+    private javax.swing.JPasswordField jpsContrasena;
     private javax.swing.JLabel lblBanco;
     private javax.swing.JLabel lblContrasena;
     private javax.swing.JLabel lblHazteCliente;

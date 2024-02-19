@@ -27,6 +27,8 @@ public class ClienteDAO implements IClienteDAO {
 
     final IConexion conexionBD;
     static final Logger logger = Logger.getLogger(ClienteDAO.class.getName());
+    StrongPasswordEncryptor encryptor;
+
 
     /**
     * Constructor de la clase ClienteDAO.
@@ -35,6 +37,7 @@ public class ClienteDAO implements IClienteDAO {
     */
     public ClienteDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
+        encryptor = new StrongPasswordEncryptor();
     }
 
     /**
@@ -56,7 +59,6 @@ public class ClienteDAO implements IClienteDAO {
             logger.log(Level.SEVERE, "El usuario ya existe en la base de datos.", e);
         }
 
-        StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
         String contrasenaEnctriptada = encryptor.encryptPassword(clienteNuevo.getContrasena());
 
         String sentenciaSQL = """

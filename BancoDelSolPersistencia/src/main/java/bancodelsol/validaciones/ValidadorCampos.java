@@ -110,7 +110,7 @@ public class ValidadorCampos {
     public void validaSeccionDatosDomicilio(DomicilioNuevoDTO domicilioDTO) throws ValidacionDTOException {
         String cadenaCalle = extensionCadena(50);
         String cadenaCiudad = extensionCadena(20);
-        String cadenaNumExterior = "^[a-zA-Z0-9]{1,10}$";
+        String cadenaNumExterior = "^[0-9]{1,10}$";
         String cadenaCodigoPostal = "^[0-9]{5}$";
 
         Pattern patronCalle = Pattern.compile(cadenaCalle);
@@ -198,7 +198,7 @@ public class ValidadorCampos {
      * @return Un patrón de expresión regular para validar la longitud de una cadena.
      */
     private String extensionCadena(int longitud) {
-        return "^[a-zA-Z\\s]{1," + longitud + "}$";
+        return "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]{1," + longitud + "}$";
     }
     
     /**

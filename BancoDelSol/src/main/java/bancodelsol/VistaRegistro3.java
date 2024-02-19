@@ -6,6 +6,7 @@ import bancodelsolpersistencia.daos.ClienteDAO;
 import bancodelsolpersistencia.daos.DomicilioDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,9 +41,9 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     private void initComponents() {
 
         lblBanco = new javax.swing.JLabel();
-        txtConfirmarContrasena = new javax.swing.JTextField();
         txtUsuario = new javax.swing.JTextField();
-        txtContrasena = new javax.swing.JTextField();
+        jpsConfirmarContrasena = new javax.swing.JPasswordField();
+        jpsContrasena = new javax.swing.JPasswordField();
         lblContrasena = new javax.swing.JLabel();
         lblIndicador1 = new javax.swing.JLabel();
         lblIndicador2 = new javax.swing.JLabel();
@@ -54,6 +55,8 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         btnRegistrar = new javax.swing.JButton();
         lblIcon = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
+        txtContrasena = new javax.swing.JTextField();
+        txtConfirmarContrasena = new javax.swing.JTextField();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -62,22 +65,22 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         lblBanco.setText("banco del sol");
         add(lblBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 14, -1, -1));
 
-        txtConfirmarContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
-        txtConfirmarContrasena.setForeground(new java.awt.Color(143, 143, 143));
-        txtConfirmarContrasena.setBorder(null);
-        txtConfirmarContrasena.setName(""); // NOI18N
-        txtConfirmarContrasena.setOpaque(true);
-        add(txtConfirmarContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 375, 296, 36));
-
         txtUsuario.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtUsuario.setForeground(new java.awt.Color(143, 143, 143));
         txtUsuario.setBorder(null);
         add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 287, 300, 36));
 
-        txtContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
-        txtContrasena.setForeground(new java.awt.Color(143, 143, 143));
-        txtContrasena.setBorder(null);
-        add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 287, 300, 36));
+        jpsConfirmarContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        jpsConfirmarContrasena.setForeground(new java.awt.Color(143, 143, 143));
+        jpsConfirmarContrasena.setMinimumSize(new java.awt.Dimension(64, 25));
+        jpsConfirmarContrasena.setPreferredSize(new java.awt.Dimension(64, 25));
+        add(jpsConfirmarContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 375, 300, 36));
+
+        jpsContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        jpsContrasena.setForeground(new java.awt.Color(143, 143, 143));
+        jpsContrasena.setMinimumSize(new java.awt.Dimension(64, 25));
+        jpsContrasena.setPreferredSize(new java.awt.Dimension(64, 25));
+        add(jpsContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 287, 300, 36));
 
         lblContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         lblContrasena.setForeground(new java.awt.Color(157, 134, 90));
@@ -143,6 +146,18 @@ public class VistaRegistro3 extends javax.swing.JPanel {
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgRegistrarse3.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
+
+        txtContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        txtContrasena.setForeground(new java.awt.Color(143, 143, 143));
+        txtContrasena.setBorder(null);
+        add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, 300, 36));
+
+        txtConfirmarContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        txtConfirmarContrasena.setForeground(new java.awt.Color(143, 143, 143));
+        txtConfirmarContrasena.setBorder(null);
+        txtConfirmarContrasena.setName(""); // NOI18N
+        txtConfirmarContrasena.setOpaque(true);
+        add(txtConfirmarContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, 296, 36));
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -164,7 +179,7 @@ public class VistaRegistro3 extends javax.swing.JPanel {
      * @param evt Evento de un clic en un botón.
      */
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        ventana.getClienteDTO().setContrasena(txtContrasena.getText());
+        ventana.getClienteDTO().setContrasena(new String(jpsContrasena.getPassword()));
         ventana.getClienteDTO().setUsuario(txtUsuario.getText());
         validarDatos();
         if (camposValidos) {
@@ -217,12 +232,11 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     }
 
     private void verificaCampos() throws ValidacionDTOException {
-        if (txtConfirmarContrasena.getText() == null || txtConfirmarContrasena.getText().isBlank()
-                || txtContrasena.getText() == null || txtContrasena.getText().isBlank()
+        if (jpsConfirmarContrasena.getPassword() == null || jpsConfirmarContrasena.getPassword().length == 0 || jpsContrasena.getPassword() == null || jpsContrasena.getPassword().length == 0
                 || txtUsuario.getText() == null || txtUsuario.getText().isBlank()) {
             throw new ValidacionDTOException("Llene todos los campos");
         }
-        if (!txtContrasena.getText().equals(txtConfirmarContrasena.getText())) {
+        if (!Arrays.equals(jpsContrasena.getPassword(), jpsConfirmarContrasena.getPassword())) {
             throw new ValidacionDTOException("Las contraseñas no coinciden");
         }
     }
@@ -231,6 +245,8 @@ public class VistaRegistro3 extends javax.swing.JPanel {
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel fondo;
+    private javax.swing.JPasswordField jpsConfirmarContrasena;
+    private javax.swing.JPasswordField jpsContrasena;
     private javax.swing.JLabel lblBanco;
     private javax.swing.JLabel lblConfirmar;
     private javax.swing.JLabel lblContrasena;
