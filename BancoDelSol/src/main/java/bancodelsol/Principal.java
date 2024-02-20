@@ -37,17 +37,7 @@ public class Principal {
             IConexion conexion = new Conexion(cadenaConexion, user, password);
             IClienteDAO clientesDAO = new ClienteDAO(conexion);
             ICuentaDAO cuentaDAO = new CuentaDAO(conexion);
-        try {
-            ITransaccionDAO transferenciaDAO = new TransaccionDAO(conexion);
-            
-            List<Transaccion> listaTransacciones = transferenciaDAO.consultar();
-            for (Transaccion listaTransaccione : listaTransacciones) {
-                System.out.println(listaTransaccione.toString());
-            }
-            
-            } catch (PersistenciaException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
             
             Ventana ventana = new Ventana(conexion);
             ventana.cambiarVistaInicio();

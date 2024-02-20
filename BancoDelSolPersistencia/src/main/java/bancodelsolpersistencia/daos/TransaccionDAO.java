@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -86,6 +87,54 @@ public class TransaccionDAO implements ITransaccionDAO{
              }
             logger.log(Level.INFO,"Se consultaron {0} transacciones", listaTransacciones.size());
             return listaTransacciones;
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se pudieron consultar las cuentas", ex);
+            throw new PersistenciaException("No se pudieron consultar las cuentas",ex);
+        }
+    }
+
+    @Override
+    public void crearTabla(DefaultTableModel  modelo) throws PersistenciaException {
+        String sentenciaSQL = """
+                              SELECT 
+                              	t.id_transaccion,
+                                  t.tipo,
+                                  t.fecha,
+                                  t.monto,
+                                  tr.motivo,
+                                  tr.cuenta_destino,
+                                  r.estado,
+                                  r.folio
+                              FROM transacciones AS t LEFT JOIN transferencias AS tr ON t.id_transaccion = tr.id_transaccion 
+                              LEFT JOIN retiros AS r ON t.id_transaccion  = r.id_transaccion 
+                              ORDER BY t.fecha DESC;
+                              """;
+        
+        
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+                ResultSet resultados = comando.executeQuery();
+                ) {
+            
+            
+                while (resultados.next()) {
+                    String numeroFormateado = String.format("%.2f", resultados.getDouble("t.monto"));
+                    String moneda = "$"+numeroFormateado+" MXN";
+                    Object[] fila = {
+                        resultados.getString("t.tipo"),
+                        resultados.getString("t.fecha"),
+                        moneda,
+                        resultados.getString("tr.motivo"),
+                        resultados.getString("tr.cuenta_destino"),
+                        resultados.getString("r.estado"),
+                        resultados.getString("r.folio")
+                    };
+                modelo.addRow(fila);
+                }
+        
+            logger.log(Level.INFO,"Se consultaron {0} transacciones", modelo.getRowCount());
+//            return modelo;
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "No se pudieron consultar las cuentas", ex);
             throw new PersistenciaException("No se pudieron consultar las cuentas",ex);

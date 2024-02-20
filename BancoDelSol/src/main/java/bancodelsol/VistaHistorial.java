@@ -1,6 +1,13 @@
 package bancodelsol;
 
 import bancodelsoldominio.Cliente;
+import bancodelsoldominio.Transaccion;
+import bancodelsolpersistencia.daos.TransaccionDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -12,6 +19,8 @@ public class VistaHistorial extends javax.swing.JPanel {
 
     private Ventana ventana;
     private Cliente clienteActual;
+    private DefaultTableModel modeloTabla;
+    private List<Transaccion> listaTransacciones;
 
     /**
      * Constructor de la clase VistaHistorial.
@@ -22,6 +31,7 @@ public class VistaHistorial extends javax.swing.JPanel {
         this.ventana = ventana;
         this.clienteActual = ventana.getCliente();
         initComponents();
+        limpiarTabla();
     }
 
     /**
@@ -53,7 +63,8 @@ public class VistaHistorial extends javax.swing.JPanel {
         lblOperacionInfo3 = new javax.swing.JLabel();
         jdcFechaDesde = new com.toedter.calendar.JDateChooser();
         jdcFechaHasta = new com.toedter.calendar.JDateChooser();
-        pTabla = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTransacciones = new javax.swing.JTable();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -180,6 +191,7 @@ public class VistaHistorial extends javax.swing.JPanel {
         add(lblOperacionInfo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(636, 147, -1, -1));
 
         jdcFechaDesde.setForeground(new java.awt.Color(149, 120, 64));
+        jdcFechaDesde.setToolTipText("");
         jdcFechaDesde.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         jdcFechaDesde.setMaxSelectableDate(new java.util.Date(253370793714000L));
         jdcFechaDesde.setMinSelectableDate(new java.util.Date(-62135740686000L));
@@ -191,8 +203,44 @@ public class VistaHistorial extends javax.swing.JPanel {
         jdcFechaHasta.setMinSelectableDate(new java.util.Date(-62135740686000L));
         add(jdcFechaHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 143, 166, 36));
 
-        pTabla.setBackground(new java.awt.Color(255, 255, 255));
-        add(pTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, 770, 270));
+        jTransacciones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Tipo operación", "Fecha y hora", "Monto", "Motivo", "Cuenta destino", "Estado retiro", "Folio"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTransacciones);
+        if (jTransacciones.getColumnModel().getColumnCount() > 0) {
+            jTransacciones.getColumnModel().getColumn(0).setResizable(false);
+            jTransacciones.getColumnModel().getColumn(1).setResizable(false);
+            jTransacciones.getColumnModel().getColumn(2).setResizable(false);
+            jTransacciones.getColumnModel().getColumn(3).setResizable(false);
+            jTransacciones.getColumnModel().getColumn(4).setResizable(false);
+            jTransacciones.getColumnModel().getColumn(5).setResizable(false);
+            jTransacciones.getColumnModel().getColumn(6).setResizable(false);
+        }
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, 810, 300));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgVistaHistorial.png"))); // NOI18N
         fondo.setToolTipText("");
@@ -241,6 +289,8 @@ public class VistaHistorial extends javax.swing.JPanel {
 
     private void btnLimpiarFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFiltrosActionPerformed
         // TODO add your handling code here:
+        cbxTipoOperaciones.setSelectedIndex(0);
+        
     }//GEN-LAST:event_btnLimpiarFiltrosActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
@@ -250,27 +300,28 @@ public class VistaHistorial extends javax.swing.JPanel {
     
     
     private void crearTabla() {
-        String[] columnas = {"Tipo de operación", "Fecha y hora", "Monto","Motivo","Cuenta destino","Estado","Folio"};
-        
-        
-        
-        Object[][] datos = {
-            {"Juan", 25, "Madrid"},
-            {"María", 30, "Barcelona"},
-            {"Pedro", 28, "Valencia"}
-        };
-//        JTable tabla = new JTable(datos, columnas);
-//        
-//        // Crea un JScrollPane y agrega la tabla a él
-//        JScrollPane scrollPane = new JScrollPane(tabla);
-//        
-//        // Opcionalmente, ajusta las propiedades del JScrollPane (por ejemplo, políticas de desplazamiento)
-//        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//        
-//        // Crea un panel y agrega el JScrollPane a él
-//        JPanel panel = new JPanel(new BorderLayout());
-//        panel.add(scrollPane, BorderLayout.CENTER);
+             modeloTabla = (DefaultTableModel) jTransacciones.getModel();
+            if (modeloTabla.getRowCount() > 0) {
+                for (int i = modeloTabla.getRowCount() - 1; i > -1; i--) {
+                    modeloTabla.removeRow(i);
+                }
+            }
+            TransaccionDAO transaccionDAO = new TransaccionDAO(ventana.getConexion());
+            try {
+                transaccionDAO.crearTabla(modeloTabla);
+            } catch (PersistenciaException ex) {
+                Logger.getLogger(VistaHistorial.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+    }
+    
+    private void limpiarTabla(){
+         modeloTabla = (DefaultTableModel) jTransacciones.getModel();
+            if (modeloTabla.getRowCount() > 0) {
+                for (int i = modeloTabla.getRowCount() - 1; i > -1; i--) {
+                    modeloTabla.removeRow(i);
+                }
+            }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -288,6 +339,8 @@ public class VistaHistorial extends javax.swing.JPanel {
     private javax.swing.JLabel iconInicio;
     private javax.swing.JLabel iconLogo;
     private javax.swing.JLabel iconPerfil;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTransacciones;
     private com.toedter.calendar.JDateChooser jdcFechaDesde;
     private com.toedter.calendar.JDateChooser jdcFechaHasta;
     private javax.swing.JLabel lblFiltroPeriodo;
@@ -295,6 +348,5 @@ public class VistaHistorial extends javax.swing.JPanel {
     private javax.swing.JLabel lblOperacionInfo2;
     private javax.swing.JLabel lblOperacionInfo3;
     private javax.swing.JLabel lblTitulo;
-    private javax.swing.JPanel pTabla;
     // End of variables declaration//GEN-END:variables
 }
