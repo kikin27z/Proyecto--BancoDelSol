@@ -4,16 +4,40 @@
  */
 package bancodelsol;
 
+import bancodelsol.validaciones.ValidadorCampos;
+import bancodelsoldominio.Cuenta;
+import bancodelsolpersistencia.daos.IRetiroDAO;
+import bancodelsolpersistencia.daos.RetiroDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import bancodelsolpersistencia.excepciones.TransaccionException;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+
 /**
+ * Panel de la interfaz de usuario para generar un retiro sin cuenta
  *
- * @author rover
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaGenerarRetiro extends javax.swing.JPanel {
 
+    Cuenta cuenta;
+    private final IRetiroDAO retiroDAO;
+    private final Ventana ventana;
+    double saldoARetirar;
+    private ValidadorCampos validador;
+    private boolean retiroValido;
+
     /**
-     * Creates new form VistaGenerarRetiro
+     * Crea un nuevo panel de VistaGenerarRetiro.
+     *
+     * @param ventana la ventana de enlace
      */
-    public VistaGenerarRetiro() {
+    public VistaGenerarRetiro(Ventana ventana) {
+        this.ventana = ventana;
+        cuenta = ventana.getCuenta();
+        this.retiroDAO = new RetiroDAO(ventana.getConexion());
+        validador = new ValidadorCampos();
+        retiroValido = false;
         initComponents();
     }
 
@@ -33,6 +57,10 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         lblContrasena = new javax.swing.JLabel();
         btnSiguiente = new javax.swing.JButton();
         lblInformacion = new javax.swing.JLabel();
+        btnInicio = new javax.swing.JButton();
+        btnPerfil = new javax.swing.JButton();
+        btnHistorial = new javax.swing.JButton();
+        btnCerrarSesion = new javax.swing.JButton();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -89,6 +117,50 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         });
         add(lblInformacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, -1, -1));
 
+        btnInicio.setBorderPainted(false);
+        btnInicio.setContentAreaFilled(false);
+        btnInicio.setFocusPainted(false);
+        btnInicio.setFocusable(false);
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
+        add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 58, 35, 35));
+
+        btnPerfil.setBorderPainted(false);
+        btnPerfil.setContentAreaFilled(false);
+        btnPerfil.setFocusPainted(false);
+        btnPerfil.setFocusable(false);
+        btnPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPerfilActionPerformed(evt);
+            }
+        });
+        add(btnPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 111, 35, 35));
+
+        btnHistorial.setBorderPainted(false);
+        btnHistorial.setContentAreaFilled(false);
+        btnHistorial.setFocusPainted(false);
+        btnHistorial.setFocusable(false);
+        btnHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistorialActionPerformed(evt);
+            }
+        });
+        add(btnHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 164, 35, 35));
+
+        btnCerrarSesion.setBorderPainted(false);
+        btnCerrarSesion.setContentAreaFilled(false);
+        btnCerrarSesion.setFocusPainted(false);
+        btnCerrarSesion.setFocusable(false);
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+        add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 213, 35, 35));
+
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgRetiroSinCuenta.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
@@ -99,14 +171,77 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
 
+        validarRetiro();
+        if (retiroValido) {
+            ventana.cambiarVistaConfirmarRetiro();
+        }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void lblInformacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblInformacionMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_lblInformacionMouseClicked
 
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+
+        ventana.cambiarVistaHistorial();
+    }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
+        ventana.cambiarVistaEditarPerfil();
+    }//GEN-LAST:event_btnPerfilActionPerformed
+
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+        ventana.cambiarVistaHistorial();
+    }//GEN-LAST:event_btnHistorialActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        if (ventana.mostrarConfirmacion("¿Seguro que querer cerrar sesión?", "Cerrar sesión")) {
+            ventana.setCliente(null);
+            ventana.setCuenta(null);
+            ventana.cambiarVistaInicio();
+        }
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    /**
+     * Valida el retiro de fondos ingresado por el usuario antes de procesar la
+     * transacción. Verifica que se hayan completado todos los campos requeridos
+     * y que el monto del retiro sea válido. Si se detectan problemas durante la
+     * validación, se lanzan excepciones específicas para informar al usuario
+     * sobre los errores encontrados.
+     */
+    public void validarRetiro() {
+        try {
+            verificaCampos();
+            validador.validaGenerarRetiro(txtMonto.getText());
+            saldoARetirar = Double.parseDouble(txtMonto.getText());
+            saldoARetirar = retiroDAO.consultarSaldo(ventana.getCuenta(), saldoARetirar);
+            retiroValido = true;
+        } catch (ValidacionDTOException | PersistenciaException | TransaccionException e) {
+            ventana.mostrarAviso(e.getMessage());
+        }
+
+    }
+
+    /**
+     * Verifica si los campos de monto y contraseña están completos antes de
+     * proceder con la validación del retiro. Si alguno de los campos está en
+     * blanco, lanza una excepción de ValidacionDTOException con un mensaje
+     * indicando al usuario que todos los campos deben ser completados.
+     *
+     * @throws ValidacionDTOException si alguno de los campos está en blanco
+     */
+    private void verificaCampos() throws ValidacionDTOException {
+        if (txtMonto.getText().isBlank() || txtContraseña.getText().isBlank()) {
+            throw new ValidacionDTOException("Llene todos los campos");
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnHistorial;
+    private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnPerfil;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel lblContrasena;

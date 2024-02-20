@@ -4,17 +4,44 @@
  */
 package bancodelsol;
 
+import bancodelsol.validaciones.ValidadorCampos;
+import bancodelsoldominio.Cuenta;
+import bancodelsolpersistencia.daos.IRetiroDAO;
+import bancodelsolpersistencia.daos.RetiroDAO;
+import javax.swing.JButton;
+
 /**
  *
  * @author rover
  */
 public class VistaCofirmarRetiro extends javax.swing.JPanel {
 
+    
+    Cuenta cuenta;
+    private final IRetiroDAO retiroDAO;
+    private final Ventana ventana;
+    double saldoARetirar;
+    private ValidadorCampos validador;
+
+    /**
+     * Crea un nuevo panel de VistaGenerarRetiro.
+     *
+     * @param ventana la ventana de enlace
+     */
+        
     /**
      * Creates new form VistaCofirmarRetiro
      */
-    public VistaCofirmarRetiro() {
+    public VistaCofirmarRetiro(Ventana ventana) {
+        this.ventana = ventana;
+        cuenta = ventana.getCuenta();
+        this.retiroDAO = new RetiroDAO(ventana.getConexion());
+        validador = new ValidadorCampos();
         initComponents();
+        lblInfo.setText("""
+                        <html><p>El folio y contrase\u00f1a necesarios para retirar<br>
+                        el dinero se mostrar\u00e1n a continuaci\u00f3n y<br>
+                        tienen un vencimiento de 10 minutos</p></html>""");
     }
 
     /**
@@ -27,6 +54,9 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
     private void initComponents() {
 
         lblConfirmar = new javax.swing.JLabel();
+        lblInfo = new javax.swing.JLabel();
+        lblMonto = new javax.swing.JLabel();
+        btnAceptar = new javax.swing.JButton();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -34,15 +64,47 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
         lblConfirmar.setFont(new java.awt.Font("Amazon Ember", 1, 40)); // NOI18N
         lblConfirmar.setForeground(new java.awt.Color(143, 143, 143));
         lblConfirmar.setText("Confirmar");
-        add(lblConfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, -1, -1));
+        add(lblConfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 140, -1, -1));
+
+        lblInfo.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        lblInfo.setForeground(new java.awt.Color(33, 33, 33));
+        lblInfo.setText("jLabel1");
+        add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 190, -1, -1));
+
+        lblMonto.setFont(new java.awt.Font("Amazon Ember", 1, 40)); // NOI18N
+        lblMonto.setForeground(new java.awt.Color(180, 154, 102));
+        lblMonto.setText("(Monto)");
+        add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 280, -1, -1));
+
+        btnAceptar.setBackground(new java.awt.Color(180, 154, 102));
+        btnAceptar.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
+        btnAceptar.setForeground(new java.awt.Color(253, 253, 253));
+        btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
+        add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 370, 140, 50));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgConfirmarRetiroSinCuenta.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, -1));
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+    
+    
+    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAceptar;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel lblConfirmar;
+    private javax.swing.JLabel lblInfo;
+    private javax.swing.JLabel lblMonto;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,9 +5,9 @@ import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Cuenta;
 import bancodelsoldominio.Domicilio;
+import bancodelsoldominio.Retiro;
 import bancodelsoldominio.Transferencia;
 import bancodelsolpersistencia.conexion.IConexion;
-import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -26,6 +26,7 @@ public class Ventana extends javax.swing.JFrame {
     private Cuenta cuenta;
     private Domicilio domicilio;
     private Transferencia transferencia;
+    private Retiro retiro;
     private ClienteNuevoDTO clienteDTO;
     private DomicilioNuevoDTO domicilioDTO;
     private JPanel panelActual;
@@ -220,6 +221,28 @@ public class Ventana extends javax.swing.JFrame {
         ponerEnJFrame(vistaTransferenciaExitosa);
         panelActual = vistaTransferenciaExitosa;
     }
+    
+    /**
+    * Método para cambiar a la ventana de generar un retiro sin cuenta
+    * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
+    */
+    public void cambiarVistaGenerarRetiro(){
+        limpiarFrame();
+        VistaGenerarRetiro vistaGenerarRetiro = new  VistaGenerarRetiro(this);
+        ponerEnJFrame(vistaGenerarRetiro);
+        panelActual = vistaGenerarRetiro;
+    }
+    
+    /**
+    * Método para cambiar a la ventana de generar un retiro sin cuenta
+    * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
+    */
+    public void cambiarVistaConfirmarRetiro(){
+        limpiarFrame();
+        VistaCofirmarRetiro vistaConfirmarRetiro = new  VistaCofirmarRetiro(this);
+        ponerEnJFrame(vistaConfirmarRetiro);
+        panelActual = vistaConfirmarRetiro;
+    }
 
     /**
     * Método para agregar un panel a la ventana.
@@ -350,4 +373,14 @@ public class Ventana extends javax.swing.JFrame {
     public void setDomicilio(Domicilio domicilio) {
         this.domicilio = domicilio;
     }
+    
+    public void setRetiro(Retiro retiro){
+        this.retiro = retiro;
+    }
+
+    public Retiro getRetiro() {
+        return retiro;
+    }
+    
+    
 }

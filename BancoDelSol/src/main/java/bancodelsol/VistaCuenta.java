@@ -297,7 +297,7 @@ public class VistaCuenta extends javax.swing.JPanel {
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaGenerarRetiro();
     }//GEN-LAST:event_btnRetiroActionPerformed
 
 
