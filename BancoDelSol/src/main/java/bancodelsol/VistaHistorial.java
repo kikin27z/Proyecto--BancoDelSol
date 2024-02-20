@@ -4,9 +4,11 @@ import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Transaccion;
 import bancodelsolpersistencia.daos.TransaccionDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.awt.Color;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFormattedTextField;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -21,6 +23,7 @@ public class VistaHistorial extends javax.swing.JPanel {
     private Cliente clienteActual;
     private DefaultTableModel modeloTabla;
     private List<Transaccion> listaTransacciones;
+    private boolean fechaValida;
 
     /**
      * Constructor de la clase VistaHistorial.
@@ -32,6 +35,7 @@ public class VistaHistorial extends javax.swing.JPanel {
         this.clienteActual = ventana.getCliente();
         initComponents();
         limpiarTabla();
+        desactivarTextoFechas();
     }
 
     /**
@@ -289,26 +293,45 @@ public class VistaHistorial extends javax.swing.JPanel {
 
     private void btnLimpiarFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFiltrosActionPerformed
         // TODO add your handling code here:
+        System.out.println(cbxTipoOperaciones.getSelectedIndex());
         cbxTipoOperaciones.setSelectedIndex(0);
+        jdcFechaDesde.setDate(null);
+        jdcFechaHasta.setDate(null);
+        
         
     }//GEN-LAST:event_btnLimpiarFiltrosActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        if (jdcFechaDesde.getDate() != null && jdcFechaHasta.getDate() != null) {
+            if(validaPeriodo()){
+                System.out.println("\n\n\n\nTabla por periodo");
+                crearTablaPeriodo();
+            }else{
+                ventana.mostrarAviso("La fecha desde debe ser antes o el mismo dia que hasta");
+            }
+        }else{
+            crearTabla();
+        }
         
-        crearTabla();
     }//GEN-LAST:event_btnFiltrarActionPerformed
     
     
     private void crearTabla() {
-             modeloTabla = (DefaultTableModel) jTransacciones.getModel();
-            if (modeloTabla.getRowCount() > 0) {
-                for (int i = modeloTabla.getRowCount() - 1; i > -1; i--) {
-                    modeloTabla.removeRow(i);
-                }
-            }
+            limpiarTabla();
             TransaccionDAO transaccionDAO = new TransaccionDAO(ventana.getConexion());
             try {
-                transaccionDAO.crearTabla(modeloTabla);
+                transaccionDAO.crearTabla(modeloTabla,clienteActual.getIdCliente(),cbxTipoOperaciones.getSelectedIndex());
+            } catch (PersistenciaException ex) {
+                Logger.getLogger(VistaHistorial.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+    }
+    private void crearTablaPeriodo() {
+            limpiarTabla();
+            
+            TransaccionDAO transaccionDAO = new TransaccionDAO(ventana.getConexion());
+            try {
+                transaccionDAO.creaTablaConPeriodo(modeloTabla,jdcFechaDesde.getDate().toString(),jdcFechaHasta.getDate().toString(),clienteActual.getIdCliente(),cbxTipoOperaciones.getSelectedIndex());
             } catch (PersistenciaException ex) {
                 Logger.getLogger(VistaHistorial.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -322,6 +345,48 @@ public class VistaHistorial extends javax.swing.JPanel {
                     modeloTabla.removeRow(i);
                 }
             }
+    }
+    
+    
+    
+    private boolean validaPeriodo(){
+        java.sql.Date fechaDesdeJ = new java.sql.Date(jdcFechaDesde.getDate().getTime());
+        java.sql.Date fechaHastaJ = new java.sql.Date(jdcFechaHasta.getDate().getTime());
+        
+        String [] fechaDesdeCadena = fechaDesdeJ.toString().split("-");
+        String [] fechaHastaCadena = fechaHastaJ.toString().split("-");
+        
+        int[] fechaDesde = new int[3];
+        int[] fechaHasta = new int[3];
+        
+        for (int i = 0; i < 3; i++) {
+            fechaDesde[i] = Integer.parseInt(fechaDesdeCadena[i]);
+            fechaHasta[i] = Integer.parseInt(fechaHastaCadena[i]);
+            
+            System.out.println(fechaHasta[i]);
+        }
+       
+        if(fechaDesde[0] <= fechaHasta[0]){
+            if(fechaDesde[1] <= fechaHasta[1]){
+                if(fechaDesde[2] <= fechaHasta[2]){
+                    return true;
+                }
+            }
+        }
+        return false;         
+    }
+    
+    
+    private void desactivarTextoFechas(){
+        JFormattedTextField textField = ((JFormattedTextField) jdcFechaDesde.getDateEditor().getUiComponent());
+        JFormattedTextField textField2 = ((JFormattedTextField) jdcFechaHasta.getDateEditor().getUiComponent());
+        textField.setBackground(new Color(253, 253, 253));
+        textField.setForeground(new Color(0,0,0));
+        textField2.setBackground(new Color(253, 253, 253));
+        textField2.setForeground(new Color(0,0,0));
+        // Deshabilitar la edición del campo de texto
+        textField.setEditable(false);
+        textField2.setEditable(false);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

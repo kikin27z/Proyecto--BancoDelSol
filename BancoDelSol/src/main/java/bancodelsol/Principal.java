@@ -22,8 +22,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author karim
+ * Clase principal del programa.
+ * Inicia la aplicación y establece la conexión con la base de datos.
+ * Crea instancias de las clases DAO necesarias para interactuar con la base de datos.
+ * Muestra la ventana principal de la aplicación.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class Principal {
 
@@ -42,46 +47,5 @@ public class Principal {
             Ventana ventana = new Ventana(conexion);
             ventana.cambiarVistaInicio();
             ventana.setVisible(true);
-//        VistaCliente vistaCliente = new VistaCliente(ventana);
-//        
-//        ventana.add(vistaCliente);
-//        vistaCliente.setBounds(0, 0, 1000, 580);
-//        ventana.setLocationRelativeTo(null);
-//        ventana.setVisible(true);
-
-
-
-//        try {
-//            TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
-//            transferenciaNueva.setMonto(200);
-//            transferenciaNueva.setCuentaDestino("1234567899123456");
-//            
-//            transferenciaDAO.agregar(transferenciaNueva, Long.valueOf(2));
-//        } catch (PersistenciaException ex) {
-//            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        
     }
-    
 }
-
-
-/*
-CuentaNuevaDTO cuentaDTO = new CuentaNuevaDTO();
-            cuentaDTO.setNumeroCuenta("0364577099123456");
-            cuentaDTO.setIdCliente(Long.valueOf(4));
-            cuentaDTO.setSaldo(300);
-            
-            cuentaDAO.agregar(cuentaDTO);
-
-ClienteNuevoDTO prueba = new ClienteNuevoDTO();
-            prueba.setNombres("Luis Miguel");
-            prueba.setApellidoPaterno("Basteri");
-            prueba.setApellidoMaterno("Gallego");
-            prueba.setFecha("2004-03-27");
-            prueba.setUsuario("kikin27z");
-            prueba.setContrasena("1234qwerty");
-            
-            
-            clientesDAO.agregar(prueba);
-*/

@@ -105,55 +105,144 @@ public class TransaccionDAO implements ITransaccionDAO{
      * Crea un modelo de tabla con la información de todas las transacciones (transferencias y retiros) almacenadas en la base de datos.
      * 
      * @param modelo El modelo de tabla donde se agregarán los datos de las transacciones.
+     * @param idCliente El ID del cliente del que se quieren obtener las transacciones.
+     * @param opcion La opción que indica si se quieren consultar todas las transacciones o solo las del último mes.
      * @throws PersistenciaException Si hay un error al acceder a la base de datos.
      */
     @Override
-    public void crearTabla(DefaultTableModel  modelo) throws PersistenciaException {
+    public void crearTabla(DefaultTableModel  modelo, Long idCliente,int opcion) throws PersistenciaException {
         String sentenciaSQL = """
                               SELECT 
                               	t.id_transaccion,
                                   t.tipo,
                                   t.fecha,
                                   t.monto,
+                                  t.id_cuenta,
                                   tr.motivo,
                                   tr.cuenta_destino,
                                   r.estado,
-                                  r.folio
+                                  r.folio,
+                                  c.id_cliente
                               FROM transacciones AS t LEFT JOIN transferencias AS tr ON t.id_transaccion = tr.id_transaccion 
                               LEFT JOIN retiros AS r ON t.id_transaccion  = r.id_transaccion 
+                              INNER JOIN cuentas AS c ON t.id_cuenta = c.id_cuenta 
+                              WHERE c.id_cliente = ?
                               ORDER BY t.fecha DESC;
                               """;
+        
         
         
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); 
                 PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
-                ResultSet resultados = comando.executeQuery();
                 ) {
             
-            
-                while (resultados.next()) {
+                comando.setLong(1, idCliente);
+    
+            try (ResultSet resultados = comando.executeQuery()) {
+                if (resultados.next()) {
+                    logger.log(Level.INFO, "Se encontraron ");
                     String numeroFormateado = String.format("%.2f", resultados.getDouble("t.monto"));
                     String moneda = "$"+numeroFormateado+" MXN";
-                    Object[] fila = {
-                        resultados.getString("t.tipo"),
-                        resultados.getString("t.fecha"),
-                        moneda,
-                        resultados.getString("tr.motivo"),
-                        resultados.getString("tr.cuenta_destino"),
-                        resultados.getString("r.estado"),
-                        resultados.getString("r.folio")
-                    };
-                modelo.addRow(fila);
+                    
+                    if(opcion == 0){
+                        Object[] fila = {
+                                resultados.getString("t.tipo"),
+                                resultados.getString("t.fecha"),
+                                moneda,
+                                resultados.getString("tr.motivo"),
+                                resultados.getString("tr.cuenta_destino"),
+                                resultados.getString("r.estado"),
+                                resultados.getString("r.folio")
+                            };
+                        modelo.addRow(fila);
+                    }else if(opcion == 1){
+                        if(resultados.getString("t.tipo").equals("Transferencia")){
+                            Object[] fila = {
+                                resultados.getString("t.tipo"),
+                                resultados.getString("t.fecha"),
+                                moneda,
+                                resultados.getString("tr.motivo"),
+                                resultados.getString("tr.cuenta_destino"),
+                                resultados.getString("r.estado"),
+                                resultados.getString("r.folio")
+                            };
+                            modelo.addRow(fila);
+                        }
+                    }else{
+                        if(resultados.getString("t.tipo").equals("Retiro")){
+                            Object[] fila = {
+                                resultados.getString("t.tipo"),
+                                resultados.getString("t.fecha"),
+                                moneda,
+                                resultados.getString("tr.motivo"),
+                                resultados.getString("tr.cuenta_destino"),
+                                resultados.getString("r.estado"),
+                                resultados.getString("r.folio")
+                            };
+                            modelo.addRow(fila);
+                        }
+                    } 
+                    
+                        
+                    while (resultados.next()) {
+                         numeroFormateado = String.format("%.2f", resultados.getDouble("t.monto"));
+                         moneda = "$"+numeroFormateado+" MXN";
+                         if(opcion == 0){
+                            Object[] fila = {
+                                    resultados.getString("t.tipo"),
+                                    resultados.getString("t.fecha"),
+                                    moneda,
+                                    resultados.getString("tr.motivo"),
+                                    resultados.getString("tr.cuenta_destino"),
+                                    resultados.getString("r.estado"),
+                                    resultados.getString("r.folio")
+                                };
+                            modelo.addRow(fila);
+                        }else if(opcion == 1){
+                            if(resultados.getString("t.tipo").equals("Transferencia")){
+                                Object[] fila = {
+                                    resultados.getString("t.tipo"),
+                                    resultados.getString("t.fecha"),
+                                    moneda,
+                                    resultados.getString("tr.motivo"),
+                                    resultados.getString("tr.cuenta_destino"),
+                                    resultados.getString("r.estado"),
+                                    resultados.getString("r.folio")
+                                };
+                                modelo.addRow(fila);
+                            }
+                        }else{
+                            if(resultados.getString("t.tipo").equals("Retiro")){
+                                Object[] fila = {
+                                    resultados.getString("t.tipo"),
+                                    resultados.getString("t.fecha"),
+                                    moneda,
+                                    resultados.getString("tr.motivo"),
+                                    resultados.getString("tr.cuenta_destino"),
+                                    resultados.getString("r.estado"),
+                                    resultados.getString("r.folio")
+                                };
+                                modelo.addRow(fila);
+                            }
+                        } 
+                    }
+                }else{
+                    logger.log(Level.INFO, "No se hallo transferencias al cliente {0}", idCliente);
+                    
                 }
+
+                
+            }
+            
+            
+                
         
             logger.log(Level.INFO,"Se consultaron {0} transacciones", modelo.getRowCount());
 //            return modelo;
         } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "No se pudieron consultar las cuentas", ex);
-            throw new PersistenciaException
-        
-        ("No se pudieron consultar las cuentas",ex);
+            logger.log(Level.SEVERE, "No se pudieron consultar las operaciones", ex);
+            throw new PersistenciaException("No se pudieron consultar las operaciones",ex);
         }
     }
 
@@ -208,6 +297,140 @@ public class TransaccionDAO implements ITransaccionDAO{
             throw new PersistenciaException("No se pudo realizar la transferencia", e);
         }
         
+    }
+
+    /**
+     * Crea un modelo de tabla con la información de todas las transacciones (transferencias y retiros) almacenadas en la base de datos en un período específico.
+     * 
+     * @param modelo El modelo de tabla donde se agregarán los datos de las transacciones.
+     * @param fechaDesde La fecha de inicio del período.
+     * @param fechaHasta La fecha de fin del período.
+     * @param idCliente El ID del cliente del que se quieren obtener las transacciones.
+     * @param opcion La opción que indica si se quieren consultar todas las transacciones o solo las del período especificado.
+     * @throws PersistenciaException Si hay un error al acceder a la base de datos.
+     */
+    @Override
+    public void creaTablaConPeriodo(DefaultTableModel modelo, String fechaDesde, String fechaHasta, Long idCliente,int opcion) throws PersistenciaException {
+         String sentenciaSQL = """
+                              CALL filtroPeriodo(?,?,?);
+                              """;
+        
+        
+        
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+                ) {
+            
+                comando.setString(1, fechaDesde);
+                comando.setString(2, fechaHasta);
+                comando.setLong(3, idCliente);
+    
+            try (ResultSet resultados = comando.executeQuery()) {
+                if (resultados.next()) {
+                    logger.log(Level.INFO, "Se encontraron ");
+                    String numeroFormateado = String.format("%.2f", resultados.getDouble("t.monto"));
+                    String moneda = "$"+numeroFormateado+" MXN";
+                    
+                    if(opcion == 0){
+                        Object[] fila = {
+                                resultados.getString("t.tipo"),
+                                resultados.getString("t.fecha"),
+                                moneda,
+                                resultados.getString("tr.motivo"),
+                                resultados.getString("tr.cuenta_destino"),
+                                resultados.getString("r.estado"),
+                                resultados.getString("r.folio")
+                            };
+                        modelo.addRow(fila);
+                    }else if(opcion == 1){
+                        if(resultados.getString("t.tipo").equals("Transferencia")){
+                            Object[] fila = {
+                                resultados.getString("t.tipo"),
+                                resultados.getString("t.fecha"),
+                                moneda,
+                                resultados.getString("tr.motivo"),
+                                resultados.getString("tr.cuenta_destino"),
+                                resultados.getString("r.estado"),
+                                resultados.getString("r.folio")
+                            };
+                            modelo.addRow(fila);
+                        }
+                    }else{
+                        if(resultados.getString("t.tipo").equals("Retiro")){
+                            Object[] fila = {
+                                resultados.getString("t.tipo"),
+                                resultados.getString("t.fecha"),
+                                moneda,
+                                resultados.getString("tr.motivo"),
+                                resultados.getString("tr.cuenta_destino"),
+                                resultados.getString("r.estado"),
+                                resultados.getString("r.folio")
+                            };
+                            modelo.addRow(fila);
+                        }
+                    } 
+                    
+                        
+                    while (resultados.next()) {
+                         numeroFormateado = String.format("%.2f", resultados.getDouble("t.monto"));
+                         moneda = "$"+numeroFormateado+" MXN";
+                         if(opcion == 0){
+                            Object[] fila = {
+                                    resultados.getString("t.tipo"),
+                                    resultados.getString("t.fecha"),
+                                    moneda,
+                                    resultados.getString("tr.motivo"),
+                                    resultados.getString("tr.cuenta_destino"),
+                                    resultados.getString("r.estado"),
+                                    resultados.getString("r.folio")
+                                };
+                            modelo.addRow(fila);
+                        }else if(opcion == 1){
+                            if(resultados.getString("t.tipo").equals("Transferencia")){
+                                Object[] fila = {
+                                    resultados.getString("t.tipo"),
+                                    resultados.getString("t.fecha"),
+                                    moneda,
+                                    resultados.getString("tr.motivo"),
+                                    resultados.getString("tr.cuenta_destino"),
+                                    resultados.getString("r.estado"),
+                                    resultados.getString("r.folio")
+                                };
+                                modelo.addRow(fila);
+                            }
+                        }else{
+                            if(resultados.getString("t.tipo").equals("Retiro")){
+                                Object[] fila = {
+                                    resultados.getString("t.tipo"),
+                                    resultados.getString("t.fecha"),
+                                    moneda,
+                                    resultados.getString("tr.motivo"),
+                                    resultados.getString("tr.cuenta_destino"),
+                                    resultados.getString("r.estado"),
+                                    resultados.getString("r.folio")
+                                };
+                                modelo.addRow(fila);
+                            }
+                        } 
+                    }
+                }else{
+                    logger.log(Level.INFO, "No se hallo transferencias al cliente {0}", idCliente);
+                    
+                }
+
+                
+            }
+            
+            
+                
+        
+            logger.log(Level.INFO,"Se consultaron {0} transacciones", modelo.getRowCount());
+//            return modelo;
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se pudieron consultar las operaciones", ex);
+            throw new PersistenciaException("No se pudieron consultar las operaciones",ex);
+        }
     }
 
     

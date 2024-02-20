@@ -1,6 +1,11 @@
 package bancodelsol;
 
 import bancodelsoldominio.Transferencia;
+import bancodelsolpersistencia.daos.CuentaDAO;
+import bancodelsolpersistencia.daos.ICuentaDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * La clase VistaTransferenciaExitosa es un panel de interfaz de usuario que representa
@@ -98,11 +103,28 @@ public class VistaTransferenciaExitosa extends javax.swing.JPanel {
         btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
         btnAceptar.setText("Aceptar");
         btnAceptar.setBorderPainted(false);
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
         add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 440, 142, 45));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgVistaTransfenciaExitosa.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        try {
+            ventana.setTransferencia(null);
+            ICuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
+            
+            ventana.setCuenta(cuentaDAO.existe(ventana.getCuenta().getIdCuenta()));
+            ventana.cambiarVistaCuenta();
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(VistaTransferenciaExitosa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**
      * Método que inserta los datos de la transferencia. 

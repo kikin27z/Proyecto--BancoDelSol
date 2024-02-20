@@ -41,7 +41,21 @@ public interface ITransaccionDAO {
      * Crea un modelo de tabla con la información de todas las transacciones (transferencias y retiros) almacenadas en la base de datos.
      * 
      * @param modelo El modelo de tabla donde se agregarán los datos de las transacciones.
+     * @param idCliente El ID del cliente del que se quieren obtener las transacciones.
+     * @param opcion La opción que indica si se quieren consultar todas las transacciones o solo las del último mes.
      * @throws PersistenciaException Si hay un error al acceder a la base de datos.
      */
-    void crearTabla(DefaultTableModel  modelo) throws PersistenciaException;
+    void crearTabla(DefaultTableModel  modelo, Long idCliente, int opcion) throws PersistenciaException;
+    
+    /**
+     * Crea un modelo de tabla con la información de todas las transacciones (transferencias y retiros) almacenadas en la base de datos en un período específico.
+     * 
+     * @param modelo El modelo de tabla donde se agregarán los datos de las transacciones.
+     * @param fechaDesde La fecha de inicio del período.
+     * @param fechaHasta La fecha de fin del período.
+     * @param idCliente El ID del cliente del que se quieren obtener las transacciones.
+     * @param opcion La opción que indica si se quieren consultar todas las transacciones o solo las del período especificado.
+     * @throws PersistenciaException Si hay un error al acceder a la base de datos.
+     */
+    void creaTablaConPeriodo(DefaultTableModel modelo, String fechaDesde, String fechaHasta,Long idCliente, int opcion) throws PersistenciaException;
 }
