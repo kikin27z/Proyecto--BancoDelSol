@@ -20,7 +20,7 @@ public class VistaTransferenciaExitosa extends javax.swing.JPanel {
     private Transferencia transferenciaActual;
     
     /**
-     * Constructor de la clase VistaCuenta.
+     * Constructor de la clase VistaTransferenciaExitosa.
      *
      * @param ventana La ventana principal de la aplicación.
      */

@@ -13,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
+ * Clase que representa la vista del historial de operaciones.
+ * Permite al usuario ver el historial de sus operaciones bancarias.
  * 
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
@@ -291,6 +293,11 @@ public class VistaHistorial extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    /**
+     * Método que maneja el evento de limpieza de los filtros de búsqueda.
+     *
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnLimpiarFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFiltrosActionPerformed
         // TODO add your handling code here:
         System.out.println(cbxTipoOperaciones.getSelectedIndex());
@@ -301,6 +308,11 @@ public class VistaHistorial extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnLimpiarFiltrosActionPerformed
 
+     /**
+     * Método que maneja el evento de aplicación de filtros de búsqueda.
+     *
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         if (jdcFechaDesde.getDate() != null && jdcFechaHasta.getDate() != null) {
             if(validaPeriodo()){
@@ -315,7 +327,9 @@ public class VistaHistorial extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnFiltrarActionPerformed
     
-    
+    /**
+     * Método que crea la tabla de transacciones sin periodo de fechas.
+     */
     private void crearTabla() {
             limpiarTabla();
             TransaccionDAO transaccionDAO = new TransaccionDAO(ventana.getConexion());
@@ -326,18 +340,32 @@ public class VistaHistorial extends javax.swing.JPanel {
             }
 
     }
+    
+    /**
+     * Método que crea la tabla de transacciones filtradas por periodo.
+     */
     private void crearTablaPeriodo() {
             limpiarTabla();
             
+            java.sql.Date fechaDesdeJ = new java.sql.Date(jdcFechaDesde.getDate().getTime());
+            java.sql.Date fechaHastaJ = new java.sql.Date(jdcFechaHasta.getDate().getTime());
+            
+            String  fechaDesdeCadena = fechaDesdeJ.toString();
+            String  fechaHastaCadena = fechaHastaJ.toString();
+            
+            
             TransaccionDAO transaccionDAO = new TransaccionDAO(ventana.getConexion());
             try {
-                transaccionDAO.creaTablaConPeriodo(modeloTabla,jdcFechaDesde.getDate().toString(),jdcFechaHasta.getDate().toString(),clienteActual.getIdCliente(),cbxTipoOperaciones.getSelectedIndex());
+                transaccionDAO.creaTablaConPeriodo(modeloTabla,fechaDesdeCadena,fechaHastaCadena,clienteActual.getIdCliente(),cbxTipoOperaciones.getSelectedIndex());
             } catch (PersistenciaException ex) {
                 Logger.getLogger(VistaHistorial.class.getName()).log(Level.SEVERE, null, ex);
             }
 
     }
     
+    /**
+     * Método que limpia la tabla de transacciones.
+     */
     private void limpiarTabla(){
          modeloTabla = (DefaultTableModel) jTransacciones.getModel();
             if (modeloTabla.getRowCount() > 0) {
@@ -347,8 +375,10 @@ public class VistaHistorial extends javax.swing.JPanel {
             }
     }
     
-    
-    
+    /**
+     * Método que valida el periodo de fechas seleccionado.
+     * @return true si el periodo es válido, false en caso contrario.
+     */
     private boolean validaPeriodo(){
         java.sql.Date fechaDesdeJ = new java.sql.Date(jdcFechaDesde.getDate().getTime());
         java.sql.Date fechaHastaJ = new java.sql.Date(jdcFechaHasta.getDate().getTime());
@@ -362,8 +392,6 @@ public class VistaHistorial extends javax.swing.JPanel {
         for (int i = 0; i < 3; i++) {
             fechaDesde[i] = Integer.parseInt(fechaDesdeCadena[i]);
             fechaHasta[i] = Integer.parseInt(fechaHastaCadena[i]);
-            
-            System.out.println(fechaHasta[i]);
         }
        
         if(fechaDesde[0] <= fechaHasta[0]){
@@ -376,7 +404,9 @@ public class VistaHistorial extends javax.swing.JPanel {
         return false;         
     }
     
-    
+    /**
+     * Método que desactiva los campos de texto de las fechas hasta que se seleccionen.
+     */
     private void desactivarTextoFechas(){
         JFormattedTextField textField = ((JFormattedTextField) jdcFechaDesde.getDateEditor().getUiComponent());
         JFormattedTextField textField2 = ((JFormattedTextField) jdcFechaHasta.getDateEditor().getUiComponent());
