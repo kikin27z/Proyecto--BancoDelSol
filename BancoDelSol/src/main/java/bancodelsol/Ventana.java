@@ -258,6 +258,30 @@ public class Ventana extends javax.swing.JFrame {
         ponerEnJFrame(vistaNosotros);
         panelActual = vistaNosotros;
     }
+    
+    /**
+     * Método para cambiar a la ventana de generar un retiro sin cuenta Este
+     * método elimina el panel actual y muestra la pestaña de historial de
+     * operaciones.
+     */
+    public void cambiarVistaMostrarDatosRegistro() {
+        limpiarFrame();
+        vistaMostrarDatosRetiro vistaMostrarDatosRetiro = new vistaMostrarDatosRetiro(this);
+        ponerEnJFrame(vistaMostrarDatosRetiro);
+        panelActual = vistaMostrarDatosRetiro;
+    }
+    
+    /**
+     * Método para cambiar a la ventana de generar un retiro sin cuenta Este
+     * método elimina el panel actual y muestra la pestaña de historial de
+     * operaciones.
+     */
+    public void cambiarVistaEfectuarRetiro() {
+        limpiarFrame();
+        VistaEfectuarRetiro vistaEfectuarRetiro = new VistaEfectuarRetiro(this);
+        ponerEnJFrame(vistaEfectuarRetiro);
+        panelActual = vistaEfectuarRetiro;
+    }
 
     /**
      * Método para agregar un panel a la ventana. Este método agrega el panel

@@ -1,5 +1,6 @@
 package bancodelsolpersistencia.daos;
 
+import bancodelsoldominio.Retiro;
 import bancodelsoldominio.Transaccion;
 import bancodelsoldominio.Transferencia;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
@@ -58,4 +59,8 @@ public interface ITransaccionDAO {
      * @throws PersistenciaException Si hay un error al acceder a la base de datos.
      */
     void creaTablaConPeriodo(DefaultTableModel modelo, String fechaDesde, String fechaHasta,Long idCliente, int opcion) throws PersistenciaException;
+    
+    boolean generarRetiroSinCuenta(long idCuenta, String folio, String contrasena) throws PersistenciaException;
+    
+    Retiro buscarRetiro(String folio, String contrasena) throws PersistenciaException;
 }

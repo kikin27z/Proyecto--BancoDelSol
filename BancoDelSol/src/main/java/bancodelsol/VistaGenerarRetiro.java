@@ -6,6 +6,7 @@ package bancodelsol;
 
 import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsoldominio.Cuenta;
+import bancodelsoldominio.Retiro;
 import bancodelsolpersistencia.daos.IRetiroDAO;
 import bancodelsolpersistencia.daos.RetiroDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
@@ -24,7 +25,9 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
     Cuenta cuenta;
     private final IRetiroDAO retiroDAO;
     private final Ventana ventana;
+    private Retiro retiro;
     double saldoARetirar;
+    double saldoRestante;
     private ValidadorCampos validador;
     private boolean retiroValido;
 
@@ -36,6 +39,8 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
     public VistaGenerarRetiro(Ventana ventana) {
         this.ventana = ventana;
         cuenta = ventana.getCuenta();
+        retiro = new Retiro();
+
         this.retiroDAO = new RetiroDAO(ventana.getConexion());
         validador = new ValidadorCampos();
         retiroValido = false;
@@ -74,21 +79,21 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         txtMonto.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtMonto.setForeground(new java.awt.Color(143, 143, 143));
         txtMonto.setBorder(null);
-        add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 400, 36));
+        txtMonto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMontoActionPerformed(evt);
+            }
+        });
+        add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, 400, 36));
 
         txtContraseña.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtContraseña.setForeground(new java.awt.Color(143, 143, 143));
         txtContraseña.setBorder(null);
-        txtContraseña.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtContraseñaActionPerformed(evt);
-            }
-        });
-        add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(128, 150, 400, 36));
+        add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 400, 36));
 
         lblMonto.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         lblMonto.setForeground(new java.awt.Color(157, 134, 90));
-        lblMonto.setText("Ingrese su contraseña:");
+        lblMonto.setText("Contraseña para retirar:");
         add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 208, -1, 24));
 
         lblContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
@@ -166,10 +171,6 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseñaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtContraseñaActionPerformed
-
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
 
         validarRetiro();
@@ -204,6 +205,10 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMontoActionPerformed
+
     /**
      * Genera un nuevo retiro asignando un folio aleatorio único y la contraseña
      * especificada. Si el folio generado ya existe en la base de datos, se
@@ -219,8 +224,10 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         } catch (PersistenciaException e) {
             ventana.mostrarAviso(e.getMessage());
         }
-        ventana.getRetiro().setFolio(folio);
-        ventana.getRetiro().setContrasena(txtContraseña.getText());
+        retiro.setFolio(folio);
+        retiro.setContrasena(txtContraseña.getText());
+        retiro.setMonto(saldoARetirar);
+        ventana.setRetiro(retiro);
     }
 
     /**
@@ -235,7 +242,7 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
             verificaCampos();
             validador.validaGenerarRetiro(txtMonto.getText());
             saldoARetirar = Double.parseDouble(txtMonto.getText());
-            saldoARetirar = retiroDAO.consultarSaldo(ventana.getCuenta(), saldoARetirar);
+            saldoRestante = retiroDAO.consultarSaldo(ventana.getCuenta(), saldoARetirar);
             retiroValido = true;
         } catch (ValidacionDTOException | PersistenciaException | TransaccionException e) {
             ventana.mostrarAviso(e.getMessage());

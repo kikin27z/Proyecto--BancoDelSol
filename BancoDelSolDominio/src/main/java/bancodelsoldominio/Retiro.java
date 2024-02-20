@@ -37,6 +37,8 @@ public class Retiro extends Transaccion{
         this.estado = estado;
     }
 
+    
+    
     /**
      * Obtiene el folio del retiro.
      * @return El folio del retiro.

@@ -1,6 +1,7 @@
 package bancodelsolpersistencia.daos;
 
 import bancodelsoldominio.Cuenta;
+import bancodelsoldominio.Retiro;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 
 /**
@@ -13,4 +14,6 @@ public interface IRetiroDAO {
     double consultarSaldo(Cuenta cuenta, double saldo) throws PersistenciaException;
 
     boolean existeFolio(String folio) throws PersistenciaException;
+    
+    boolean generarRegistroRetiro(Retiro retiro) throws PersistenciaException;
 }

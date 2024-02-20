@@ -148,7 +148,8 @@ public class VistaInicio extends javax.swing.JPanel {
      * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el botón "Retiro sin cuenta").
      */
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
-        // TODO add your handling code here:
+        ventana.cambiarVistaEfectuarRetiro();
+                // TODO add your handling code here:
     }//GEN-LAST:event_btnRetiroActionPerformed
 
     /**

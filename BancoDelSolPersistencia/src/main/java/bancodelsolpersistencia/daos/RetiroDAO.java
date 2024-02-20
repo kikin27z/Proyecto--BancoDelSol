@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author rover
  */
-public class RetiroDAO implements IRetiroDAO{
+public class RetiroDAO implements IRetiroDAO {
 
     final IConexion conexionBD;
     static final Logger logger = Logger.getLogger(Retiro.class.getName());
@@ -22,6 +22,7 @@ public class RetiroDAO implements IRetiroDAO{
     public RetiroDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
     }
+
     @Override
     public double consultarSaldo(Cuenta cuenta, double saldo) throws PersistenciaException {
         String numeroCuenta = cuenta.getNumeroCuenta();
@@ -50,12 +51,11 @@ public class RetiroDAO implements IRetiroDAO{
             throw new PersistenciaException("Error de conexión a la base de datos", ex);
         }
     }
-    
+
     @Override
     public boolean existeFolio(String folio) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(*) AS count FROM retiros WHERE folio = ?";
-        try (Connection conexion = this.conexionBD.obtenerConexion();
-             PreparedStatement comando = conexion.prepareStatement(sentenciaSQL)) {
+        try (Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL)) {
             comando.setString(1, folio);
             try (ResultSet resultado = comando.executeQuery()) {
                 if (resultado.next()) {
@@ -69,4 +69,18 @@ public class RetiroDAO implements IRetiroDAO{
             throw new PersistenciaException("Error al verificar folios", ex);
         }
     }
+
+    @Override
+    public boolean generarRegistroRetiro(Retiro retiro) throws PersistenciaException {
+        String sentenciaSQL = "INSERT INTO retiros (contrasena, folio) VALUES (?, ?)";
+        try (Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL)) {
+            comando.setString(1, retiro.getContrasena());
+            comando.setString(2, retiro.getFolio());
+            int filasAfectadas = comando.executeUpdate();
+            return filasAfectadas > 0; // Devuelve true si se insertó al menos una fila
+        } catch (SQLException ex) {
+            throw new PersistenciaException("Error al generar el registro de retiro", ex);
+        }
+    }
+
 }

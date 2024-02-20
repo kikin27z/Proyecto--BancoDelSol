@@ -4,46 +4,29 @@
  */
 package bancodelsol;
 
+import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsoldominio.Cuenta;
 import bancodelsolpersistencia.daos.IRetiroDAO;
-import bancodelsolpersistencia.daos.ITransaccionDAO;
 import bancodelsolpersistencia.daos.RetiroDAO;
-import bancodelsolpersistencia.daos.TransaccionDAO;
-import bancodelsolpersistencia.excepciones.PersistenciaException;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author rover
  */
-public class VistaCofirmarRetiro extends javax.swing.JPanel {
+public class vistaMostrarDatosRetiro extends javax.swing.JPanel {
 
-    Cuenta cuenta;
     private final IRetiroDAO retiroDAO;
-    private final ITransaccionDAO transaccionDAO;
     private final Ventana ventana;
-    boolean valido;
-
+    
     /**
-     * Crea un nuevo panel de VistaGenerarRetiro.
-     *
-     * @param ventana la ventana de enlace
+     * Creates new form vistaMostrarDatosRetiro
      */
-    /**
-     * Creates new form VistaCofirmarRetiro
-     */
-    public VistaCofirmarRetiro(Ventana ventana) {
+    public vistaMostrarDatosRetiro(Ventana ventana) {
         this.ventana = ventana;
-        cuenta = ventana.getCuenta();
         this.retiroDAO = new RetiroDAO(ventana.getConexion());
-        this.transaccionDAO = new TransaccionDAO(ventana.getConexion());
         initComponents();
-        lblInfo.setText("""
-                        <html><p>El folio y contrase\u00f1a necesarios para retirar<br>
-                        el dinero se mostrar\u00e1n a continuaci\u00f3n y<br>
-                        tienen un vencimiento de 10 minutos</p></html>""");
-        String numeroFormateado = String.format("%.2f", ventana.getRetiro().getMonto());
-        lblMonto.setText("$" + numeroFormateado + " MXN");
-        valido = false;
+        setTextos();
     }
 
     /**
@@ -57,32 +40,28 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
 
         lblConfirmar = new javax.swing.JLabel();
         lblInfo = new javax.swing.JLabel();
-        lblMonto = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
+        lblFolio = new javax.swing.JLabel();
+        lblContrasena = new javax.swing.JLabel();
+        lblInfo3 = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
-        lblInfo1 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblConfirmar.setFont(new java.awt.Font("Amazon Ember", 1, 40)); // NOI18N
         lblConfirmar.setForeground(new java.awt.Color(143, 143, 143));
-        lblConfirmar.setText("Confirmar");
-        add(lblConfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 140, -1, -1));
+        lblConfirmar.setText("Datos del retiro:");
+        add(lblConfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 160, -1, -1));
 
         lblInfo.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         lblInfo.setForeground(new java.awt.Color(33, 33, 33));
-        lblInfo.setText("jLabel1");
-        add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 190, -1, -1));
-
-        lblMonto.setFont(new java.awt.Font("Amazon Ember", 1, 40)); // NOI18N
-        lblMonto.setForeground(new java.awt.Color(180, 154, 102));
-        lblMonto.setText("(Monto)");
-        add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 280, -1, -1));
+        lblInfo.setText("Folio:");
+        add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, -1, -1));
 
         btnAceptar.setBackground(new java.awt.Color(180, 154, 102));
         btnAceptar.setFont(new java.awt.Font("Amazon Ember", 0, 20)); // NOI18N
         btnAceptar.setForeground(new java.awt.Color(253, 253, 253));
-        btnAceptar.setText("Aceptar");
+        btnAceptar.setText("Continuar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarActionPerformed(evt);
@@ -90,38 +69,45 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
         });
         add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 370, 140, 50));
 
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgConfirmarRetiroSinCuenta.png"))); // NOI18N
-        add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, -1));
+        lblFolio.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        lblFolio.setForeground(new java.awt.Color(33, 33, 33));
+        lblFolio.setText("(folio)");
+        add(lblFolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 240, -1, -1));
 
-        lblInfo1.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
-        lblInfo1.setForeground(new java.awt.Color(33, 33, 33));
-        lblInfo1.setText("jLabel1");
-        add(lblInfo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 190, -1, -1));
+        lblContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        lblContrasena.setForeground(new java.awt.Color(33, 33, 33));
+        lblContrasena.setText("(contraseña)");
+        add(lblContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 290, -1, -1));
+
+        lblInfo3.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
+        lblInfo3.setForeground(new java.awt.Color(33, 33, 33));
+        lblInfo3.setText("Contraseña:");
+        add(lblInfo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 290, -1, -1));
+
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgConfirmarRetiroSinCuenta.png"))); // NOI18N
+        fondo.setText("jLabel1");
+        add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-
-        ejecutarRetiro();
-        if (valido) {
-            ventana.cambiarVistaMostrarDatosRegistro();
-        }
+        if(ventana.mostrarConfirmacion("Asegurese de guardar el folio y contraseña", "Ir a inicio")){
+                ventana.cambiarVistaCuenta();
+            }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    public void ejecutarRetiro() {
-        try {
-            transaccionDAO.generarRetiroSinCuenta(ventana.getCuenta().getIdCuenta(),ventana.getRetiro().getFolio(), ventana.getRetiro().getContrasena());
-            valido = true;
-        } catch (PersistenciaException ex) {
-            ventana.mostrarAviso(ex.getMessage());
-        }
+    public void setTextos(){
+        lblFolio.setText(ventana.getRetiro().getFolio());
+        lblContrasena.setText(ventana.getRetiro().getContrasena());
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel lblConfirmar;
+    private javax.swing.JLabel lblContrasena;
+    private javax.swing.JLabel lblFolio;
     private javax.swing.JLabel lblInfo;
-    private javax.swing.JLabel lblInfo1;
-    private javax.swing.JLabel lblMonto;
+    private javax.swing.JLabel lblInfo3;
     // End of variables declaration//GEN-END:variables
 }
