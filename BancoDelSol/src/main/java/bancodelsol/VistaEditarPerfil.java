@@ -5,7 +5,14 @@ import bancodelsol.dtos.DomicilioNuevoDTO;
 import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Domicilio;
+import bancodelsolpersistencia.daos.ClienteDAO;
+import bancodelsolpersistencia.daos.DomicilioDAO;
+import bancodelsolpersistencia.daos.IClienteDAO;
+import bancodelsolpersistencia.daos.IDomicilioDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -420,6 +427,23 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         guardarDatos();
         validarDatos();
         if(camposValidados){
+            try {
+                IClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
+                IDomicilioDAO domicilioDAO = new DomicilioDAO(ventana.getConexion());
+                domicilioDAO.actualizar(domicilioDTO, clienteActual.getIdCliente());
+                
+                domicilioActual = domicilioDAO.existe(clienteActual.getIdCliente());
+                
+                clienteDAO.actualizar(clienteDTO, clienteActual.getIdCliente());
+                clienteActual  = clienteDAO.existe(clienteActual.getIdCliente());
+                ventana.setDomicilio(domicilioActual);
+                ventana.setCliente(clienteActual);
+                
+                
+            } catch (PersistenciaException ex) {
+                Logger.getLogger(VistaEditarPerfil.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            cargarDatos();
             btnCancelar.setEnabled(false);
             btnGuardarCambios.setEnabled(false);
             desactivarCampos();
@@ -490,6 +514,7 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         clienteDTO.setApellidoMaterno(txtApellidoMaterno.getText());
         clienteDTO.setContrasena(new String(txtContrasena.getPassword()));
         clienteDTO.setUsuario(txtUsuario.getText());
+        
         
         domicilioDTO.setCalle(txtCalle.getText());
         domicilioDTO.setCiudad(txtCiudad.getText());

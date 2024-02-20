@@ -168,4 +168,46 @@ public class ClienteDAO implements IClienteDAO {
     
     }
 
+    /**
+     * Actualiza la información de un cliente existente en la base de datos.
+     *
+     * @param clienteNuevo La información actualizada del cliente.
+     * @param idCliente El identificador único del cliente a actualizar.
+     * @return El cliente actualizado.
+     * @throws PersistenciaException Si ocurre un error durante la actualización en la base de datos.
+     */
+    @Override
+    public Cliente actualizar(ClienteNuevoDTO clienteNuevo,Long idCliente) throws PersistenciaException {
+        StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
+        String contrasenaEncriptada = encryptor.encryptPassword(clienteNuevo.getContrasena());
+        
+        String sentenciaSQL = """
+                                UPDATE clientes SET nombres = ?, apellido_paterno = ?,
+                              apellido_materno = ?, usuario = ?,
+                              `contrasena` = ? WHERE (id_cliente = ?);
+                              """;
+        try (
+        Connection conexion = this.conexionBD.obtenerConexion(); 
+        PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
+            comando.setString(1, clienteNuevo.getNombres());
+            comando.setString(2, clienteNuevo.getApellidoPaterno());
+            comando.setString(3, clienteNuevo.getApellidoMaterno());
+            comando.setString(4, clienteNuevo.getUsuario());
+            comando.setString(5, contrasenaEncriptada);
+            comando.setLong(6, idCliente);
+
+            int registrosActualizados = comando.executeUpdate();
+            logger.log(Level.INFO, "Se actualizaron {0} clientes", registrosActualizados);
+
+            // Devuelve el cliente actualizado utilizando la información proporcionada en el DTO
+            return new Cliente(idCliente, clienteNuevo.getNombres(), clienteNuevo.getApellidoPaterno(), 
+                               clienteNuevo.getApellidoMaterno(), clienteNuevo.getUsuario(), 
+                               clienteNuevo.getContrasena(), clienteNuevo.getFecha());
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudo actualizar el cliente.", e);
+            throw new PersistenciaException("No se pudo actualizar el cliente.", e);
+        }
+    }
+
 }

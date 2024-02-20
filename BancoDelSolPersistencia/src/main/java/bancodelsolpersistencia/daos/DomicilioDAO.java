@@ -116,5 +116,43 @@ public class DomicilioDAO implements IDomicilioDAO{
             throw new PersistenciaException("No se pudo encontrar el domicilio.", e);
         }
     }
+
+    /**
+     * Actualiza la información de un domicilio existente en la base de datos.
+     *
+     * @param domicilioNuevo  La información actualizada del cliente.
+     * @param idCliente El identificador del cliente a asociar el domicilio.
+     * @return El domicilio actualizado.
+     * @throws PersistenciaException Si ocurre un error durante la actualización en la base de datos.
+     */
+    @Override
+    public Domicilio actualizar(DomicilioNuevoDTO domicilioNuevo, Long idCliente) throws PersistenciaException {
+        
+        String sentenciaSQL = """
+                                UPDATE domicilios SET calle = ?, colonia = ?,
+                              codigo_postal = ?, numero_exterior = ?,
+                              ciudad = ? WHERE (id_cliente = ?);
+                              """;
+        try (
+        Connection conexion = this.conexionBD.obtenerConexion(); 
+        PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
+            comando.setString(1, domicilioNuevo.getCalle());
+            comando.setString(2, domicilioNuevo.getColonia());
+            comando.setString(3, domicilioNuevo.getCodigoPostal());
+            comando.setString(4, domicilioNuevo.getNumeroExterior());
+            comando.setString(5, domicilioNuevo.getCiudad());
+            comando.setLong(6, idCliente);
+
+            int registrosActualizados = comando.executeUpdate();
+            logger.log(Level.INFO, "Se actualizaron {0} domicilio", registrosActualizados);
+
+            // Devuelve el domicilio actualizado utilizando la información proporcionada en el DTO
+            return null;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudo actualizar el domicilio.", e);
+            throw new PersistenciaException("No se pudo actualizar el domicilio.", e);
+        }
+    }
     
 }

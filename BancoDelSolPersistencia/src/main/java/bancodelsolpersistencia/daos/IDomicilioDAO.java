@@ -30,4 +30,14 @@ public interface IDomicilioDAO {
      * @throws PersistenciaException Si ocurre un error durante la consulta a la base de datos.
      */
     Domicilio existe(Long idCliente) throws PersistenciaException;
+    
+    /**
+     * Actualiza la información de un domicilio existente en la base de datos.
+     *
+     * @param domicilioNuevo  La información actualizada del cliente.
+     * @param idCliente El identificador del cliente a asociar el domicilio.
+     * @return El domicilio actualizado.
+     * @throws PersistenciaException Si ocurre un error durante la actualización en la base de datos.
+     */
+    Domicilio actualizar(DomicilioNuevoDTO domicilioNuevo,Long idCliente) throws PersistenciaException;
 }

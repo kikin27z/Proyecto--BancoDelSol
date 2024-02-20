@@ -135,8 +135,8 @@ public class CuentaDAO implements ICuentaDAO{
 //            cuenta.setSaldo(idsGenerados.getDouble("saldo"));
             return cuenta;
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "No se pudo actualizar el socio.", e);
-            throw new PersistenciaException("No se pudo actualizar el socio.", e);
+            logger.log(Level.SEVERE, "No se pudo actualizar la cuenta.", e);
+            throw new PersistenciaException("No se pudo actualizar la cuenta.", e);
         }
     }
 

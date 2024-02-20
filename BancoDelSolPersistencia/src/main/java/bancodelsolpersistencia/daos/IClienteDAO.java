@@ -38,4 +38,14 @@ public interface IClienteDAO {
      * @throws PersistenciaException Si ocurre un error durante la verificación.
      */
     Cliente existe(Long idCliente) throws PersistenciaException;
+    
+    /**
+     * Actualiza la información de un cliente existente en la base de datos.
+     *
+     * @param clienteNuevo La información actualizada del cliente.
+     * @param idCliente El identificador único del cliente a actualizar.
+     * @return El cliente actualizado.
+     * @throws PersistenciaException Si ocurre un error durante la actualización en la base de datos.
+     */
+    Cliente actualizar(ClienteNuevoDTO clienteNuevo,Long idCliente) throws PersistenciaException;
 }
