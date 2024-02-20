@@ -11,6 +11,7 @@ import bancodelsolpersistencia.daos.RetiroDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import bancodelsolpersistencia.excepciones.TransaccionException;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  * Panel de la interfaz de usuario para generar un retiro sin cuenta
@@ -173,6 +174,7 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
 
         validarRetiro();
         if (retiroValido) {
+            generarRetiro();
             ventana.cambiarVistaConfirmarRetiro();
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed
@@ -201,6 +203,25 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
             ventana.cambiarVistaInicio();
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    /**
+     * Genera un nuevo retiro asignando un folio aleatorio único y la contraseña
+     * especificada. Si el folio generado ya existe en la base de datos, se
+     * genera otro folio único hasta que se encuentre uno no existente.
+     *
+     */
+    public void generarRetiro() {
+        String folio = RandomStringUtils.randomNumeric(8);
+        try {
+            while (retiroDAO.existeFolio(folio)) {
+                folio = RandomStringUtils.randomNumeric(8);
+            }
+        } catch (PersistenciaException e) {
+            ventana.mostrarAviso(e.getMessage());
+        }
+        ventana.getRetiro().setFolio(folio);
+        ventana.getRetiro().setContrasena(txtContraseña.getText());
+    }
 
     /**
      * Valida el retiro de fondos ingresado por el usuario antes de procesar la

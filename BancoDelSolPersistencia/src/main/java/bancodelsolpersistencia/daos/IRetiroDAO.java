@@ -12,4 +12,5 @@ public interface IRetiroDAO {
 
     double consultarSaldo(Cuenta cuenta, double saldo) throws PersistenciaException;
 
+    boolean existeFolio(String folio) throws PersistenciaException;
 }

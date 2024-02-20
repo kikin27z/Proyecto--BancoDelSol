@@ -94,10 +94,6 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         
     }//GEN-LAST:event_btnAceptarActionPerformed
-
-    
-    
-    
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
