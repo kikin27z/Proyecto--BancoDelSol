@@ -16,6 +16,7 @@ import javax.swing.JFormattedTextField;
  * sección de datos personales.
  *
  * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaRegistro extends javax.swing.JPanel {
 

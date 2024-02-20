@@ -142,4 +142,15 @@ public class ClienteNuevoDTO {
         
         return true;
     }
+    
+    public boolean esValido3() throws ValidacionDTOException{
+        if (this.nombres == null || this.nombres.isBlank()
+                || this.apellidoPaterno == null || this.apellidoPaterno.isBlank()
+                || this.apellidoMaterno == null || this.apellidoMaterno.isBlank()
+                || this.usuario == null || this.usuario.isBlank()
+                || this.contrasena == null || this.contrasena.isBlank()) {
+            throw new ValidacionDTOException("Llene todos los campos");
+        }
+        return true;
+    }
 }

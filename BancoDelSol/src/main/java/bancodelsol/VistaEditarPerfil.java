@@ -1,7 +1,11 @@
 package bancodelsol;
 
+import bancodelsol.dtos.ClienteNuevoDTO;
+import bancodelsol.dtos.DomicilioNuevoDTO;
+import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsoldominio.Cliente;
 import bancodelsoldominio.Domicilio;
+import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 
 
 /**
@@ -17,9 +21,12 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
     private Ventana ventana;
     private Cliente clienteActual;
     private Domicilio domicilioActual;
+    private ClienteNuevoDTO clienteDTO;
+    private DomicilioNuevoDTO domicilioDTO;
+    private boolean camposValidados;
 
     /**
-     * Constructor de la clase VistaHistorial.
+     * Constructor de la clase VistaEditarPerfil.
      *
      * @param ventana La ventana principal de la aplicación.
      */
@@ -376,14 +383,24 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    /**
+    * Carga los datos originales del cliente y su domicilio, luego desactiva los botones de guardar y cancelar
+    * y desactiva los campos de edición.
+    * @param evt Evento de acción generado por el botón.
+    */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        cargarDatos();
+        
         btnGuardarCambios.setEnabled(false);
         btnCancelar.setEnabled(false);
-        cargarDatos();
         desactivarCampos();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    /**
+    * Método que se ejecuta cuando se presiona el botón de editar.
+    * Activa los botones de guardar y cancelar y activa los campos de edición.
+    * @param evt Evento de acción generado por el botón.
+    */
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         btnCancelar.setEnabled(true);
@@ -392,15 +409,27 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     
-    
+    /**
+    * Método que se ejecuta cuando se presiona el botón de guardar cambios.
+    * Guarda los datos editados del cliente y su domicilio, luego valida los datos y, si son válidos,
+    * desactiva los botones de guardar y cancelar y desactiva los campos de edición.
+    * @param evt Evento de acción generado por el botón.
+    */
     private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
         // TODO add your handling code here:
-        btnCancelar.setEnabled(false);
-        btnGuardarCambios.setEnabled(false);
-        desactivarCampos();
+        guardarDatos();
+        validarDatos();
+        if(camposValidados){
+            btnCancelar.setEnabled(false);
+            btnGuardarCambios.setEnabled(false);
+            desactivarCampos();
+        }
         
     }//GEN-LAST:event_btnGuardarCambiosActionPerformed
     
+    /**
+    * Activa los campos de edición.
+    */
     private void activarCampos(){
         txtNombre.setEditable(true);
         txtApellidoPaterno.setEditable(true);
@@ -415,7 +444,9 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         txtCodigoPostal.setEditable(true);
     }
     
-    
+    /**
+     * Desactiva los campos de edición.
+     */
     private void desactivarCampos(){
         txtNombre.setEditable(false);
         txtApellidoPaterno.setEditable(false);
@@ -430,6 +461,9 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         txtCodigoPostal.setEditable(false);
     }
     
+    /**
+    * Carga los datos del cliente y su domicilio en los campos correspondientes.
+    */
     private void cargarDatos(){
         txtNombre.setText(clienteActual.getNombre());
         txtApellidoPaterno.setText(clienteActual.getApellidoPaterno());
@@ -442,7 +476,47 @@ public class VistaEditarPerfil extends javax.swing.JPanel {
         txtCiudad.setText(domicilioActual.getCiudad());
         txtCodigoPostal.setText(domicilioActual.getCodigoPostal());
         txtNumeroExterior.setText(domicilioActual.getNumeroExterior());
+    }
+
+    /**
+    * Guarda los datos editados del cliente y su domicilio en objetos DTO.
+    */
+    private void guardarDatos(){
+        clienteDTO = new ClienteNuevoDTO();
+        domicilioDTO = new DomicilioNuevoDTO();
         
+        clienteDTO.setNombres(txtNombre.getText());
+        clienteDTO.setApellidoPaterno(txtApellidoPaterno.getText());
+        clienteDTO.setApellidoMaterno(txtApellidoMaterno.getText());
+        clienteDTO.setContrasena(new String(txtContrasena.getPassword()));
+        clienteDTO.setUsuario(txtUsuario.getText());
+        
+        domicilioDTO.setCalle(txtCalle.getText());
+        domicilioDTO.setCiudad(txtCiudad.getText());
+        domicilioDTO.setCodigoPostal(txtCodigoPostal.getText());
+        domicilioDTO.setColonia(txtColonia.getText());
+        domicilioDTO.setNumeroExterior(txtNumeroExterior.getText());
+    }
+    
+    /**
+    * Valida los datos ingresados por el usuario.
+    */
+    private void validarDatos(){
+        ValidadorCampos valida = new ValidadorCampos();
+        try {
+            clienteDTO.esValido3();
+            valida.validaSeccionDatosPersonales(clienteDTO);
+            valida.validaSeccionDatosCuenta(clienteDTO.getUsuario(), clienteDTO.getContrasena());
+            
+            
+            domicilioDTO.esValido();
+            valida.validaSeccionDatosDomicilio(domicilioDTO);
+            camposValidados = true;
+        } catch (ValidacionDTOException ex) {
+            camposValidados = false;
+            ventana.mostrarAviso(ex.getMessage());
+//            Logger.getLogger(VistaRegistro.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
