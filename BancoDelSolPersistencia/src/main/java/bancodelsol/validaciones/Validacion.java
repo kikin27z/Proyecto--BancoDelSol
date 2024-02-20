@@ -26,10 +26,22 @@ public class Validacion implements IValidacion {
     static final Logger logger = Logger.getLogger(Validacion.class.getName());
     final IConexion conexionBD;
 
+    /**
+     * Constructor de la clase Validacion.
+     *
+     * @param conexionBD Objeto que representa la conexión a la base de datos.
+     */
     public Validacion(IConexion conexionBD) {
         this.conexionBD = conexionBD;
     }
 
+    /**
+     * Verifica si un usuario existe en la base de datos.
+     *
+     * @param usuario Nombre de usuario a verificar.
+     * @return true si el usuario existe, false en caso contrario.
+     * @throws ValidacionDTOException Si hay un error en la validación.
+     */
     @Override
     public boolean existeUsuario(String usuario) throws ValidacionDTOException {
         String sentenciaSQL = """
@@ -54,6 +66,13 @@ public class Validacion implements IValidacion {
         }
     }
 
+    /**
+     * Verifica si un cliente existe en la base de datos.
+     *
+     * @param idCliente Identificador del cliente a verificar.
+     * @return Objeto Cliente si existe, null si no se encuentra.
+     * @throws PersistenciaException Si hay un error en la persistencia de datos.
+     */
     @Override
     public Cliente existeCliente(Long idCliente) throws PersistenciaException {
         String sentenciaSQL = """
@@ -89,6 +108,14 @@ public class Validacion implements IValidacion {
         }
     }
 
+    /**
+     * Verifica si un cliente y contraseña son válidos.
+     *
+     * @param usuario Nombre de usuario del cliente.
+     * @param contrasena Contraseña del cliente.
+     * @return Objeto Cliente si es válido, null si no coincide o no existe.
+     * @throws ValidacionDTOException Si hay un error en la validación de datos.
+     */
     @Override
     public Cliente clienteValido(String usuario, String contrasena) throws ValidacionDTOException {
         StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
@@ -123,6 +150,13 @@ public class Validacion implements IValidacion {
         }
     }
 
+    /**
+     * Verifica si una cuenta existe en la base de datos.
+     *
+     * @param numeroCuenta Número de cuenta a verificar.
+     * @return Objeto Cuenta si existe, null si no se encuentra.
+     * @throws ValidacionDTOException Si hay un error en la validación de datos.
+     */
     @Override
     public Cuenta existeCuenta(String numeroCuenta) throws ValidacionDTOException {
         String sentenciaSQL = """

@@ -12,8 +12,17 @@ import bancodelsolpersistencia.daos.TransaccionDAO;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 
 /**
+ * Panel que muestra la confirmación de un retiro. Permite al usuario confirmar
+ * el retiro de dinero asociado a una cuenta. Muestra información sobre el
+ * retiro, incluyendo el monto, el folio y la contraseña necesarios. Permite al
+ * usuario aceptar el retiro, lo cual ejecuta la transacción en la base de
+ * datos. Si la transacción se ejecuta correctamente, cambia la vista para
+ * mostrar los datos del registro del retiro. Si ocurre un error durante la
+ * ejecución de la transacción, muestra un mensaje de advertencia en la ventana.
+ * La validez del retiro se controla mediante la variable de instancia "valido".
  *
- * @author rover
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaCofirmarRetiro extends javax.swing.JPanel {
 
@@ -27,9 +36,6 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
      * Crea un nuevo panel de VistaGenerarRetiro.
      *
      * @param ventana la ventana de enlace
-     */
-    /**
-     * Creates new form VistaCofirmarRetiro
      */
     public VistaCofirmarRetiro(Ventana ventana) {
         this.ventana = ventana;
@@ -99,6 +105,16 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
         add(lblInfo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 190, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Ejecuta la transacción de retiro y cambia la vista si la operación es
+     * válida. Si la transacción se realiza correctamente (indicado por la
+     * variable "valido" que se establece en el método ejecutarRetiro()), cambia
+     * la vista de la ventana para mostrar los datos del registro del retiro. Si
+     * la transacción no es válida, la vista no cambia y no se realiza ninguna
+     * acción adicional.
+     *
+     * @param evt El evento de acción del botón "Aceptar".
+     */
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
 
         ejecutarRetiro();
@@ -107,9 +123,15 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    /**
+     * Ejecuta la transacción de retiro en la base de datos utilizando el ID de
+     * cuenta, el folio y la contraseña. Si la transacción se realiza
+     * correctamente, establece "valido" como true. Si ocurre un error durante
+     * la transacción, muestra un mensaje de advertencia en la ventana.
+     */
     public void ejecutarRetiro() {
         try {
-            transaccionDAO.generarRetiroSinCuenta(ventana.getCuenta().getIdCuenta(),ventana.getRetiro().getFolio(), ventana.getRetiro().getContrasena());
+            transaccionDAO.generarRetiroSinCuenta(ventana.getCuenta().getIdCuenta(), ventana.getRetiro().getFolio(), ventana.getRetiro().getContrasena());
             valido = true;
         } catch (PersistenciaException ex) {
             ventana.mostrarAviso(ex.getMessage());

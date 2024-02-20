@@ -427,6 +427,15 @@ public class TransaccionDAO implements ITransaccionDAO {
         }
     }
 
+    /**
+     * Genera un retiro sin cuenta y devuleve true si se generó el retiro, false en caso contrario.
+     * 
+     * @param idCuenta El ID de la cuenta asociada al retiro (puede ser null o 0 si no hay cuenta asociada).
+     * @param folio El folio del retiro.
+     * @param contrasena La contraseña asociada al retiro.
+     * @return true si se realizó el retiro exitosamente, false en caso contrario.
+     * @throws PersistenciaException Si ocurre algún error durante la operación.
+     */
     @Override
     public boolean generarRetiroSinCuenta(long idCuenta, String folio, String contrasena) throws PersistenciaException {
         String sentenciaSQL = "CALL generar_retiro_sin_cuenta(?, ?, ?)";
@@ -453,6 +462,14 @@ public class TransaccionDAO implements ITransaccionDAO {
         return retiroRealizado;
     }
 
+    /**
+     * Busca un retiro en la base de datos por su folio y contraseña asociada.
+     * 
+     * @param folio El folio del retiro a buscar.
+     * @param contrasena La contraseña asociada al retiro.
+     * @return El objeto Retiro si se encontró, o null si no se encontró.
+     * @throws PersistenciaException Si ocurre algún error durante la búsqueda.
+     */
     @Override
     public Retiro buscarRetiro(String folio, String contrasena) throws PersistenciaException {
         String sentenciaSQL = "SELECT * FROM retiros WHERE folio = ? AND contrasena = ?";
@@ -469,6 +486,7 @@ public class TransaccionDAO implements ITransaccionDAO {
                     retiro.setFolio(resultado.getString("folio"));
                     retiro.setContrasena(resultado.getString("contrasena"));
                     retiro.setEstado(resultado.getString("estado"));
+                    
                 }
             }
         } catch (SQLException e) {

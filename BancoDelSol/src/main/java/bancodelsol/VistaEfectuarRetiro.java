@@ -16,8 +16,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author rover
+ * Panel para realizar un retiro sin cuenta asociada.
+ * Permite al usuario ingresar el folio y contraseña para realizar un retiro sin cuenta.
+  * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaEfectuarRetiro extends javax.swing.JPanel {
 
@@ -79,11 +82,6 @@ public class VistaEfectuarRetiro extends javax.swing.JPanel {
         txtFolio.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtFolio.setForeground(new java.awt.Color(143, 143, 143));
         txtFolio.setBorder(null);
-        txtFolio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFolioActionPerformed(evt);
-            }
-        });
         add(txtFolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, 400, 36));
 
         lblMonto.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
@@ -124,14 +122,13 @@ public class VistaEfectuarRetiro extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtFolioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFolioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFolioActionPerformed
-
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
 
         validarRetiro();
         if (retiro != null) {
+            ventana.setRetiro(retiro);
+            ventana.getRetiro().setIdCuenta(ventana.getCuenta().getIdCuenta());
+            ventana.getRetiro().setMonto(WIDTH);
             ventana.cambiarVistaConfirmarRetiro();
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed

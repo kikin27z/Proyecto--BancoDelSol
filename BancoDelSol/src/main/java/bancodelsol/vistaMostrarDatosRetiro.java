@@ -11,16 +11,21 @@ import bancodelsolpersistencia.daos.RetiroDAO;
 import javax.swing.JOptionPane;
 
 /**
+ * Panel para mostrar los datos del retiro realizado. Permite al usuario
+ * visualizar el folio y la contraseña generados para el retiro.
  *
- * @author rover
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class vistaMostrarDatosRetiro extends javax.swing.JPanel {
 
     private final IRetiroDAO retiroDAO;
     private final Ventana ventana;
-    
+
     /**
-     * Creates new form vistaMostrarDatosRetiro
+     * Crea un nuevo panel para mostrar los datos del retiro.
+     *
+     * @param ventana la ventana de enlace
      */
     public vistaMostrarDatosRetiro(Ventana ventana) {
         this.ventana = ventana;
@@ -89,17 +94,26 @@ public class vistaMostrarDatosRetiro extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, -1));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Acción realizada al hacer clic en el botón Aceptar. Confirma la operación
+     * de retiro y cambia a la vista de cuenta si se confirma.
+     *
+     * @param evt El evento de acción del botón
+     */
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if(ventana.mostrarConfirmacion("Asegurese de guardar el folio y contraseña", "Ir a inicio")){
-                ventana.cambiarVistaCuenta();
-            }
+        if (ventana.mostrarConfirmacion("Asegurese de guardar el folio y contraseña", "Ir a inicio")) {
+            ventana.cambiarVistaCuenta();
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    public void setTextos(){
+    /**
+     * Establece los textos del folio y contraseña en la interfaz de usuario.
+     */
+    public void setTextos() {
         lblFolio.setText(ventana.getRetiro().getFolio());
         lblContrasena.setText(ventana.getRetiro().getContrasena());
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

@@ -60,7 +60,24 @@ public interface ITransaccionDAO {
      */
     void creaTablaConPeriodo(DefaultTableModel modelo, String fechaDesde, String fechaHasta,Long idCliente, int opcion) throws PersistenciaException;
     
+    /**
+     * Genera un retiro sin cuenta y devuleve true si se generó el retiro, false en caso contrario.
+     * 
+     * @param idCuenta El ID de la cuenta asociada al retiro (puede ser null o 0 si no hay cuenta asociada).
+     * @param folio El folio del retiro.
+     * @param contrasena La contraseña asociada al retiro.
+     * @return true si se realizó el retiro exitosamente, false en caso contrario.
+     * @throws PersistenciaException Si ocurre algún error durante la operación.
+     */
     boolean generarRetiroSinCuenta(long idCuenta, String folio, String contrasena) throws PersistenciaException;
     
+    /**
+     * Busca un retiro en la base de datos por su folio y contraseña asociada.
+     * 
+     * @param folio El folio del retiro a buscar.
+     * @param contrasena La contraseña asociada al retiro.
+     * @return El objeto Retiro si se encontró, o null si no se encontró.
+     * @throws PersistenciaException Si ocurre algún error durante la búsqueda.
+     */
     Retiro buscarRetiro(String folio, String contrasena) throws PersistenciaException;
 }

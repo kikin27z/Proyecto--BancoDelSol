@@ -15,10 +15,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Clase que representa la vista de un cliente en el sistema bancario.
- * Esta clase contiene componentes de interfaz de usuario para mostrar información sobre las cuentas del cliente.
- * Además, gestiona la recuperación de cuentas del cliente y la visualización de detalles de cuenta seleccionada.
- * 
+ * Clase que representa la vista de un cliente en el sistema bancario. Esta
+ * clase contiene componentes de interfaz de usuario para mostrar información
+ * sobre las cuentas del cliente. Además, gestiona la recuperación de cuentas
+ * del cliente y la visualización de detalles de cuenta seleccionada.
+ *
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
  */
@@ -27,9 +28,10 @@ public class VistaCliente extends javax.swing.JPanel {
     private Ventana ventana;
     private Cliente clienteActual;
     private List<Cuenta> listaCuentas;
-    
+
     /**
      * Constructor de la clase VistaCliente.
+     *
      * @param ventana La ventana principal de la aplicación.
      */
     public VistaCliente(Ventana ventana) {
@@ -37,13 +39,13 @@ public class VistaCliente extends javax.swing.JPanel {
         clienteActual = ventana.getCliente();
         this.listaCuentas = new LinkedList<>();
         initComponents();
-        
+
         asignarDomicilio();
         recuperarCuentas();
         generarDatos();
-        
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -210,81 +212,83 @@ public class VistaCliente extends javax.swing.JPanel {
 
     /**
      * Método que cambia la vista actual a la vista de creación de cuenta.
-     * 
-     * @param evt El evento de acción que desencadena este método (clic en el botón agregar cuenta).
+     *
+     * @param evt El evento de acción que desencadena este método (clic en el
+     * botón agregar cuenta).
      */
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
         ventana.cambiarVistaCrearCuenta();
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
     /**
-     * Método que obtiene la cuenta seleccionada del combo box y cambia la vista a la vista de detalles de la cuenta.
-     * 
-     * @param evt El evento de acción que desencadena este método (clic en el botón de cuenta seleccionada).
+     * Método que obtiene la cuenta seleccionada del combo box y cambia la vista
+     * a la vista de detalles de la cuenta.
+     *
+     * @param evt El evento de acción que desencadena este método (clic en el
+     * botón de cuenta seleccionada).
      */
     private void btnCuentaSeleccionadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaSeleccionadaActionPerformed
         // TODO add your handling code here:
-            if(cbxCuentas.isEnabled()){
-             Cuenta cuentaSeleccionada = listaCuentas.get(cbxCuentas.getSelectedIndex());
-             ventana.setCuenta(cuentaSeleccionada);
+        if (cbxCuentas.isEnabled()) {
+            Cuenta cuentaSeleccionada = listaCuentas.get(cbxCuentas.getSelectedIndex());
+            ventana.setCuenta(cuentaSeleccionada);
             ventana.cambiarVistaCuenta();
         }
     }//GEN-LAST:event_btnCuentaSeleccionadaActionPerformed
 
     private void cbxCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCuentasActionPerformed
         Cuenta cuentaSeleccionada = listaCuentas.get(cbxCuentas.getSelectedIndex());
-        
+
         lblNombreCuenta.setText(cuentaSeleccionada.getNombreCuenta());
         lblNumeroCuenta.setText(cuentaSeleccionada.getNumeroCuenta());
         String numeroFormateado = String.format("%.2f", cuentaSeleccionada.getSaldo());
-        
-        lblSaldo.setText("$"+numeroFormateado+" MXN");
+
+        lblSaldo.setText("$" + numeroFormateado + " MXN");
     }//GEN-LAST:event_cbxCuentasActionPerformed
 
     /**
-    * Cambia la vista actual a la vista principal del cliente.
-    *
-    * @param evt El evento de acción que desencadena este método.
-    */
+     * Cambia la vista actual a la vista principal del cliente.
+     *
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-        
+
     }//GEN-LAST:event_btnInicioActionPerformed
 
     /**
-    * Cambia la vista del perfil del cliente.
-    *
-    * @param evt El evento de acción que desencadena este método.
-    */
+     * Cambia la vista del perfil del cliente.
+     *
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         ventana.cambiarVistaEditarPerfil();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     /**
-    * Cambia la vista del historial de operaciones totales.
-    *
-    * @param evt El evento de acción que desencadena este método.
-    */
+     * Cambia la vista del historial de operaciones totales.
+     *
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
         ventana.cambiarVistaHistorial();
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     /**
-    * Cambia la vista actual a la pantalla de inicio del banco.
-    *
-    * @param evt El evento de acción que desencadena este método.
-    */
+     * Cambia la vista actual a la pantalla de inicio del banco.
+     *
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        if(ventana.mostrarConfirmacion("¿Seguro que querer cerrar sesión?", "Cerrar sesión")){
+        if (ventana.mostrarConfirmacion("¿Seguro que querer cerrar sesión?", "Cerrar sesión")) {
             ventana.setCliente(null);
             ventana.setCuenta(null);
             ventana.cambiarVistaInicio();
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
-
     /**
      * Método que recupera las cuentas existentes del cliente
      */
-    private void  recuperarCuentas(){
+    private void recuperarCuentas() {
         listaCuentas = new LinkedList<>();
         try {
             ICuentaDAO cuentaDAO = new CuentaDAO(ventana.getConexion());
@@ -294,34 +298,45 @@ public class VistaCliente extends javax.swing.JPanel {
             ventana.mostrarAviso(ex.getMessage());
 //            Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-     /**
+
+    /**
      * Inserta las cuentas recuperadas del cliente en el combo box de cuentas.
      * Si no hay cuentas disponibles, deshabilita el combo box.
      */
-    private void insertarCuentas(){
-        if(listaCuentas.isEmpty()){
+    private void insertarCuentas() {
+        if (listaCuentas.isEmpty()) {
             cbxCuentas.setEnabled(false);
-            
+
             lblNombreCuenta.setText("Cree una cuenta");
             lblNumeroCuenta.setText("--------");
             lblSaldo.setText("");
-        }else{
+        } else {
             cbxCuentas.setEnabled(true);
             for (Cuenta cuenta : listaCuentas) {
                 cbxCuentas.addItem(cuenta.getNombreCuenta());
             }
-            
+
         }
     }
-    
-    private void generarDatos(){
-        lblNombreCliente.setText("Hola, "+ clienteActual.getNombre() +" " + clienteActual.getApellidoPaterno());
+
+    /**
+     * Genera los datos del cliente actual y los muestra en la interfaz gráfica.
+     * Utiliza el nombre y apellido paterno del cliente actual para saludarlo en
+     * un JLabel.
+     */
+    private void generarDatos() {
+        lblNombreCliente.setText("Hola, " + clienteActual.getNombre() + " " + clienteActual.getApellidoPaterno());
     }
-    
-    private void asignarDomicilio(){
+
+    /**
+     * Asigna el domicilio del cliente actual obtenido de la base de datos a la
+     * ventana. Utiliza un objeto DomicilioDAO para obtener el domicilio del
+     * cliente actual a partir de su ID. Si se produce un error al acceder a la
+     * base de datos, registra el error en los logs.
+     */
+    private void asignarDomicilio() {
         try {
             DomicilioDAO domicilioDAO = new DomicilioDAO(ventana.getConexion());
             Domicilio domicilioAux = domicilioDAO.existe(clienteActual.getIdCliente());
@@ -329,10 +344,9 @@ public class VistaCliente extends javax.swing.JPanel {
         } catch (PersistenciaException ex) {
             Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCuenta;
     private javax.swing.JButton btnCerrarSesion;

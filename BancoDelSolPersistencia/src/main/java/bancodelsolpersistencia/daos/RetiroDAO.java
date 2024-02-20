@@ -11,18 +11,31 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 /**
- *
- * @author rover
+ * Clase que implementa la interfaz IRetiroDAO para operaciones relacionadas con retiros en la base de datos.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913r
  */
 public class RetiroDAO implements IRetiroDAO {
 
     final IConexion conexionBD;
     static final Logger logger = Logger.getLogger(Retiro.class.getName());
 
+    /**
+     * Constructor de RetiroDAO.
+     * @param conexionBD Objeto que proporciona la conexión a la base de datos.
+     */
     public RetiroDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
     }
 
+    /**
+     * Consulta el saldo de una cuenta y verifica si hay suficiente saldo para realizar un retiro.
+     * @param cuenta La cuenta de la que se consultará el saldo.
+     * @param saldo El saldo que se intentará retirar.
+     * @return El nuevo saldo después de realizar el retiro.
+     * @throws PersistenciaException Si ocurre algún error durante la consulta.
+     */
     @Override
     public double consultarSaldo(Cuenta cuenta, double saldo) throws PersistenciaException {
         String numeroCuenta = cuenta.getNumeroCuenta();
@@ -52,6 +65,12 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
 
+     /**
+     * Verifica si un folio dado ya existe en la base de datos.
+     * @param folio El folio que se verificará.
+     * @return true si el folio existe, false en caso contrario.
+     * @throws PersistenciaException Si ocurre algún error durante la verificación.
+     */
     @Override
     public boolean existeFolio(String folio) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(*) AS count FROM retiros WHERE folio = ?";
@@ -70,6 +89,12 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
 
+    /**
+     * Genera un registro de retiro en la base de datos.
+     * @param retiro El objeto Retiro que se registrará.
+     * @return true si el registro se generó exitosamente, false en caso contrario.
+     * @throws PersistenciaException Si ocurre algún error durante la inserción.
+     */
     @Override
     public boolean generarRegistroRetiro(Retiro retiro) throws PersistenciaException {
         String sentenciaSQL = "INSERT INTO retiros (contrasena, folio) VALUES (?, ?)";
