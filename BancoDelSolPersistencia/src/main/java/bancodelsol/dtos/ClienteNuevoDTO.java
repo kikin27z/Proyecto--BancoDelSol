@@ -143,6 +143,12 @@ public class ClienteNuevoDTO {
         return true;
     }
     
+    /**
+     * Verifica que todos los campos de la sección de la cuenta no estén vacíos o solo existan espacios en blanco
+     * @return Devuelve true si todos los campos son válidos y no son solo 
+     * espacios en blanco.
+     * @throws ValidacionDTOException Si algún dato del cliente es inválido o vacio.
+     */
     public boolean esValido3() throws ValidacionDTOException{
         if (this.nombres == null || this.nombres.isBlank()
                 || this.apellidoPaterno == null || this.apellidoPaterno.isBlank()

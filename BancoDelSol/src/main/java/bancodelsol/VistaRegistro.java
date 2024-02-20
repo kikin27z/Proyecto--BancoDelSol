@@ -205,6 +205,10 @@ public class VistaRegistro extends javax.swing.JPanel {
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Método que valida los datos y en caso de que un campo no sea apto
+     * muestra un mensaje en pantalla.
+     */
     public void validarDatos() {
         ValidadorCampos valida = new ValidadorCampos();
         try {
@@ -264,6 +268,10 @@ public class VistaRegistro extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Método que se asegura que el campo JDateChooser solo acepte fechas
+     * donde la gente ya es mayor de edad.
+     */
     public final void restriccionEdad() {
         Calendar calendar = Calendar.getInstance();
         Date fechaActual = calendar.getTime();

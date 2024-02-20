@@ -1,6 +1,7 @@
 package bancodelsolpersistencia.daos;
 
 import bancodelsoldominio.Cuenta;
+import bancodelsoldominio.Retiro;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.excepciones.PersistenciaException;
 import java.sql.Connection;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
 public class RetiroDAO implements IRetiroDAO{
 
     final IConexion conexionBD;
-    static final Logger logger = Logger.getLogger(TransferenciaDAO.class.getName());
+    static final Logger logger = Logger.getLogger(Retiro.class.getName());
 
     public RetiroDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;

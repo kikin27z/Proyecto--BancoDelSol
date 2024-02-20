@@ -205,6 +205,10 @@ public class VistaRegistro2 extends javax.swing.JPanel {
     private javax.swing.JTextField txtNumExterior;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Método que valida los datos y en caso de que un campo no sea apto
+     * muestra un mensaje en pantalla.
+     */
     public void validarDatos() {
         ValidadorCampos valida = new ValidadorCampos();
         try {

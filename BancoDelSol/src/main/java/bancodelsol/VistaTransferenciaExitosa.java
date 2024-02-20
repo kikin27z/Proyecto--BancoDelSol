@@ -114,6 +114,10 @@ public class VistaTransferenciaExitosa extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que dirige a la pantalla de inicio de la cuenta
+     * @param evt Evento de un clic en un botón.
+     */
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         try {
             ventana.setTransferencia(null);

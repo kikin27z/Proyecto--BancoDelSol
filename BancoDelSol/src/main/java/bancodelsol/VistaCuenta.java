@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class VistaCuenta extends javax.swing.JPanel {
     Cuenta cuenta;
     Long idCuenta;
-    private  Ventana ventana;
+    private Ventana ventana;
     
     /**
      * Constructor de la clase VistaCuenta.
@@ -276,6 +276,10 @@ public class VistaCuenta extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    /**
+     * Método que desactiva la cuenta actual en la base de datos.
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnCancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarCuentaActionPerformed
       if(ventana.mostrarConfirmacion("¿Seguro que quieres cancelar la cuenta?\nYa no se podrá recuperar y perderás el saldo de esta", "Cancelar la cuenta")){
           try {
@@ -291,11 +295,19 @@ public class VistaCuenta extends javax.swing.JPanel {
       }
     }//GEN-LAST:event_btnCancelarCuentaActionPerformed
 
+    /**
+     * Método que envia a la pantalla de transferir.
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
         ventana.cambiarVistaTransferir();
         
     }//GEN-LAST:event_btnTransferenciaActionPerformed
-
+    
+    /**
+     * Método que envia a la pantalla de retiro sin cuenta.
+     * @param evt El evento de acción que desencadena este método.
+     */
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
         ventana.cambiarVistaGenerarRetiro();
     }//GEN-LAST:event_btnRetiroActionPerformed
@@ -329,6 +341,10 @@ public class VistaCuenta extends javax.swing.JPanel {
     private javax.swing.JLabel lblTransferencia;
     // End of variables declaration//GEN-END:variables
 
+    
+    /**
+     * Método que carga los datos de la cuenta
+     */
     public void cargarDatosCuenta(){
         
         // Formatear el número usando el objeto DecimalFormat

@@ -1,23 +1,11 @@
 package bancodelsol;
 
-import bancodelsol.dtos.ClienteNuevoDTO;
-import bancodelsol.dtos.CuentaNuevaDTO;
-import bancodelsol.dtos.TransferenciaNuevaDTO;
-import bancodelsoldominio.Cliente;
-import bancodelsoldominio.Cuenta;
-import bancodelsoldominio.Transaccion;
 import bancodelsolpersistencia.conexion.Conexion;
 import bancodelsolpersistencia.conexion.IConexion;
 import bancodelsolpersistencia.daos.ClienteDAO;
 import bancodelsolpersistencia.daos.CuentaDAO;
 import bancodelsolpersistencia.daos.IClienteDAO;
 import bancodelsolpersistencia.daos.ICuentaDAO;
-import bancodelsolpersistencia.daos.ITransaccionDAO;
-import bancodelsolpersistencia.daos.ITransferenciaDAO;
-import bancodelsolpersistencia.daos.TransaccionDAO;
-import bancodelsolpersistencia.daos.TransferenciaDAO;
-import bancodelsolpersistencia.excepciones.PersistenciaException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

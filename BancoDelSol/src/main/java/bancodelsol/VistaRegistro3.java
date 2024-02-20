@@ -178,6 +178,10 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    /**
+     * Método que registra cliente a la base de datos con uso de la clase
+     * ClienteDAO
+     */
     private void registrarCliente() {
         ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
         DomicilioDAO domicilioDAO = new DomicilioDAO(ventana.getConexion());
@@ -192,6 +196,10 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Método que valida los datos y en caso de que un campo no sea apto
+     * muestra un mensaje en pantalla.
+     */
     public void validarDatos() {
         ValidadorCampos valida = new ValidadorCampos();
         try {
@@ -216,6 +224,10 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         ventana.getClienteDTO().setContrasena(txtContrasena.getText());
     }
 
+    /**
+     * Método que verifica que los campos no sean vacios o solo espacios.
+     * @throws ValidacionDTOException Error que señala que existe un campo inválido.
+     */
     private void verificaCampos() throws ValidacionDTOException {
         if (txtConfirmarContrasena.getText() == null || txtConfirmarContrasena.getText().isBlank()
                 || txtContrasena.getText() == null || txtContrasena.getText().isBlank()
