@@ -100,7 +100,15 @@ public class ValidadorCampos {
 //        }
 //
 //    }
-
+    /**
+     * Valida los campos relacionados con los datos de cuenta de un cliente
+     * recibidos en un objeto ClienteNuevoDTO.
+     *
+     * @param usuario
+     * @param contrasena
+     * @throws ValidacionDTOException Si los datos de cuenta no cumplen con los
+     * criterios de validación.
+     */
     public void validaSeccionDatosCuenta(String usuario, String contrasena) throws ValidacionDTOException {
         String cadenaUsuario = "^[a-zA-Z0-9]{1,30}$";
         String cadenaContrasena = "^[\\S]{1,20}$";
@@ -171,6 +179,12 @@ public class ValidadorCampos {
 
     }
 
+    /**
+     * Convierte una cadena con formato de fecha a un objeto Date.
+     * 
+     * @param fecha La cadena con formato de fecha.
+     * @return Un objeto Date representando la fecha.
+     */
     public Date obtenerFecha(String fecha) {
         String format = "yyyy-MM-dd";
         SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -251,6 +265,13 @@ public class ValidadorCampos {
         }
     }
 
+    /**
+     * Valida el monto para realizar un retiro.
+     *
+     * @param monto El monto del retiro a validar.
+     * @throws TransaccionException Si el monto no cumple con los criterios de
+     * validación.
+     */
     public void validaGenerarRetiro(String monto) throws TransaccionException {
         String cadenaMonto = "^[0-9]{1,6}(\\.[0-9]{1,2})?$";
         Pattern patronMonto = Pattern.compile(cadenaMonto);

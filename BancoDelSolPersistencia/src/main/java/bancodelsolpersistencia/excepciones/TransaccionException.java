@@ -1,16 +1,18 @@
-/**
- * Excepción personalizada para representar errores relacionados con transacciones en el sistema.
- * Esta excepción se puede lanzar en situaciones donde ocurren problemas durante la realización
- * de transacciones en la persistencia de datos del sistema.
- */
 package bancodelsolpersistencia.excepciones;
 
+/**
+ * Excepción personalizada para representar errores relacionados con
+ * transacciones en el sistema. Esta excepción se puede lanzar en situaciones
+ * donde ocurren problemas durante la realización de transacciones en la
+ * persistencia de datos del sistema.
+ *
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
+ */
 public class TransaccionException extends Exception {
 
     /**
      * Construye una nueva excepción TransaccionException sin mensaje detallado.
-     * @author José Karim Franco Valencia - 245138
-     * @author Jesús Roberto García Armenta - 244913
      */
     public TransaccionException() {
     }

@@ -17,6 +17,14 @@ public class ClienteNuevoDTO {
     private String usuario;
     private String contrasena;
 
+    
+    /**
+     * Constructor por defecto de la clase ClienteNuevoDTO.
+     * Se utiliza para crear una instancia de la clase sin especificar parámetros.
+     */
+    public ClienteNuevoDTO() {
+
+    }
     /**
      * Obtiene los nombres del cliente.
      * @return Los nombres del cliente.

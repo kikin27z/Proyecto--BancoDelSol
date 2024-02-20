@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"bancodelsol.dtos"},{"l":"bancodelsol.validaciones"},{"l":"bancodelsolpersistencia.conexion"},{"l":"bancodelsolpersistencia.daos"},{"l":"bancodelsolpersistencia.excepciones"}];updateSearchResults();
