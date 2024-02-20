@@ -73,11 +73,22 @@ public interface ITransaccionDAO {
     
     /**
      * Busca un retiro en la base de datos por su folio y contraseña asociada.
-     * 
+     *
      * @param folio El folio del retiro a buscar.
      * @param contrasena La contraseña asociada al retiro.
      * @return El objeto Retiro si se encontró, o null si no se encontró.
      * @throws PersistenciaException Si ocurre algún error durante la búsqueda.
      */
     Retiro buscarRetiro(String folio, String contrasena) throws PersistenciaException;
+    
+    /**
+     * Realiza un retiro en la base de datos actualizando su estado.
+     *
+     * @param folio El folio del retiro a realizar.
+     * @param contrasena La contraseña asociada al retiro.
+     * @return true si el retiro se realizó correctamente, false en caso
+     * contrario.
+     * @throws PersistenciaException Si ocurre algún error durante la operación.
+     */
+    boolean realizarRetiro(String folio, String contrasena) throws PersistenciaException;
 }

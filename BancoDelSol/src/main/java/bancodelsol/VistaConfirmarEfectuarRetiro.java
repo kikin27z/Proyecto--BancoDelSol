@@ -10,6 +10,9 @@ import bancodelsolpersistencia.daos.IRetiroDAO;
 import bancodelsolpersistencia.daos.ITransaccionDAO;
 import bancodelsolpersistencia.daos.RetiroDAO;
 import bancodelsolpersistencia.daos.TransaccionDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Panel que muestra la confirmación de un retiro sin cuenta. Permite al usuario
@@ -77,7 +80,7 @@ public class VistaConfirmarEfectuarRetiro extends javax.swing.JPanel {
         bntAtras.setBackground(new java.awt.Color(180, 154, 102));
         bntAtras.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
         bntAtras.setForeground(new java.awt.Color(255, 255, 255));
-        bntAtras.setText("Atras");
+        bntAtras.setText("Volver");
         bntAtras.setBorderPainted(false);
         bntAtras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,7 +92,7 @@ public class VistaConfirmarEfectuarRetiro extends javax.swing.JPanel {
         btnSiguiente.setBackground(new java.awt.Color(180, 154, 102));
         btnSiguiente.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
         btnSiguiente.setForeground(new java.awt.Color(255, 255, 255));
-        btnSiguiente.setText("Siguiente");
+        btnSiguiente.setText("Confirmar");
         btnSiguiente.setBorderPainted(false);
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,11 +148,20 @@ public class VistaConfirmarEfectuarRetiro extends javax.swing.JPanel {
      * @param evt El evento de acción del botón "Siguiente".
      */
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-//        if (retiro != null) {
-//        ventana.cambiarVistaConfirmarEfectuarRetiro();
-//        }
+        if (ventana.mostrarConfirmacion("Deseas efectuar el retiro?", "Confirmar retiro")) {
+            ventana.cambiarVistaCuenta();
+        }
+        ;
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
+    
+    public void retirar(){
+        try {
+            transaccionDAO.realizarRetiro(ventana.getRetiro().getFolio(), ventana.getRetiro().getContrasena());
+        } catch (PersistenciaException ex) {
+            ventana.mostrarAviso(ex.getMessage());
+        }
+    }
     /**
      * Actualiza los componentes de la interfaz con la información del retiro y
      * la cuenta.
@@ -160,7 +172,7 @@ public class VistaConfirmarEfectuarRetiro extends javax.swing.JPanel {
     public void setTexts() {
         lblFolio.setText(ventana.getRetiro().getFolio());
         lblCuenta.setText(ventana.getCuenta().getNumeroCuenta());
-//        lblFolio.setText(ventana.getM);
+//        lblFolio.setText(ventana.get);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

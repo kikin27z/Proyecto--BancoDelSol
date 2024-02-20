@@ -77,7 +77,7 @@ public class VistaEfectuarRetiro extends javax.swing.JPanel {
         lblContrasena.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         lblContrasena.setForeground(new java.awt.Color(157, 134, 90));
         lblContrasena.setText("Folio:");
-        add(lblContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 117, -1, 24));
+        add(lblContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 117, 80, 24));
 
         txtFolio.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtFolio.setForeground(new java.awt.Color(143, 143, 143));
@@ -87,7 +87,7 @@ public class VistaEfectuarRetiro extends javax.swing.JPanel {
         lblMonto.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         lblMonto.setForeground(new java.awt.Color(157, 134, 90));
         lblMonto.setText("Contraseña:");
-        add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 208, -1, 24));
+        add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 208, 150, 24));
 
         txtContraseña.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         txtContraseña.setForeground(new java.awt.Color(143, 143, 143));

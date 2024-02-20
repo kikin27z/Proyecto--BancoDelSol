@@ -130,6 +130,139 @@ END//
 
 DELIMITER ;
 
+-- SET autocommit = 1;
 
-SET autocommit = 0;
+DELIMITER //
 
+CREATE PROCEDURE transferir(
+    IN cuenta_origen_id BIGINT,
+    IN cuenta_destino_numero VARCHAR(9),
+    IN motivo_transferencia VARCHAR(50),
+    IN monto_transferencia DOUBLE
+)
+BEGIN
+    DECLARE saldo_origen DOUBLE;
+    DECLARE fecha_actual DATETIME;
+    DECLARE last_insert_id BIGINT; -- Mover la declaración de la variable fuera del bloque BEGIN ... END
+
+    -- Iniciar la transacción
+    START TRANSACTION;
+
+    -- Obtenemos el saldo de la cuenta origen
+    SELECT saldo INTO saldo_origen FROM cuentas WHERE id_cuenta = cuenta_origen_id FOR UPDATE;
+
+
+        -- Restamos el monto transferido al saldo de la cuenta origen
+        UPDATE cuentas SET saldo = saldo - monto_transferencia WHERE id_cuenta = cuenta_origen_id;
+
+        -- Sumamos el monto transferido al saldo de la cuenta destino
+        UPDATE cuentas SET saldo = saldo + monto_transferencia WHERE numero_cuenta = cuenta_destino_numero;
+
+        -- Obtenemos la fecha actual
+        SET fecha_actual = NOW();
+
+        -- Insertamos la transacción
+        INSERT INTO transacciones (fecha, tipo, monto, id_cuenta)
+        VALUES (fecha_actual, 'Transferencia', monto_transferencia, cuenta_origen_id);
+
+        -- Obtenemos el ID de la última transacción insertada
+        SET last_insert_id = LAST_INSERT_ID(); -- Corregir la asignación de la variable
+
+        -- Insertamos la información de la transferencia
+        INSERT INTO transferencias (id_transaccion, motivo, cuenta_destino)
+        VALUES (last_insert_id, motivo_transferencia, cuenta_destino_numero);
+
+        -- Confirmar la transacción
+        COMMIT;
+
+        -- Devolvemos la información de la transacción mediante un JOIN
+        SELECT 
+			transacciones.*,
+            transferencias.motivo,
+            transferencias.cuenta_destino,
+            transferencias.id_transferencia
+        FROM transacciones
+        LEFT JOIN transferencias ON transacciones.id_transaccion = transferencias.id_transaccion
+        WHERE transacciones.id_transaccion = last_insert_id;
+
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE filtroPeriodo (IN fecha_desde DATE, IN fecha_hasta DATE, IN idCliente BIGINT)
+BEGIN
+	SET @mi_fecha_desde := STR_TO_DATE(CONCAT(fecha_desde, ' 00:00:00'), '%Y-%m-%d %H:%i:%s');
+	SET @mi_fecha_hasta := STR_TO_DATE(CONCAT(fecha_hasta, ' 23:59:59'), '%Y-%m-%d %H:%i:%s');
+
+    
+    SELECT 
+	t.id_transaccion,
+    t.tipo,
+    t.fecha,
+    t.monto,
+    tr.motivo,
+    tr.cuenta_destino,
+    r.estado,
+    r.folio,
+    c.id_cliente
+FROM transacciones AS t 
+LEFT JOIN transferencias AS tr ON t.id_transaccion = tr.id_transaccion 
+LEFT JOIN retiros AS r ON t.id_transaccion  = r.id_transaccion
+INNER JOIN cuentas AS c ON t.id_cuenta = c.id_cuenta  
+WHERE 
+	 c.id_cliente = idCliente AND
+	t.fecha BETWEEN @mi_fecha_desde AND @mi_fecha_hasta
+    ORDER BY t.fecha DESC;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE actualizar_estado_retiro_sin_cuenta(
+    IN folio_retiro VARCHAR(16),
+    IN contrasena_retiro VARCHAR(8)
+)
+BEGIN
+    DECLARE id_transaccion_retiro BIGINT;
+    DECLARE cuenta_origen_id BIGINT;
+    DECLARE monto_retirado DOUBLE;
+
+    -- Buscar el ID de la transacción de retiro usando el folio y la contraseña
+    SELECT id_transaccion INTO id_transaccion_retiro
+    FROM retiros
+    WHERE folio = folio_retiro AND contrasena = contrasena_retiro AND estado = 'en espera';
+
+    -- Si no se encontró ninguna transacción con el folio y la contraseña proporcionados, emitir un mensaje de error
+    IF id_transaccion_retiro IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No se encontró un retiro pendiente con los datos proporcionados';
+    ELSE
+        -- Obtener el monto retirado a través de la tabla de transacciones
+        SELECT monto INTO monto_retirado
+        FROM transacciones
+        WHERE id_transaccion = id_transaccion_retiro;
+
+        -- Obtener el ID de la cuenta de origen del retiro
+        SELECT id_cuenta INTO cuenta_origen_id
+        FROM transacciones
+        WHERE id_transaccion = id_transaccion_retiro;
+
+        -- Actualizar el estado del retiro a 'realizado'
+        UPDATE retiros
+        SET estado = 'realizado'
+        WHERE id_transaccion = id_transaccion_retiro;
+
+        -- Restar el monto retirado del saldo de la cuenta de origen
+        UPDATE cuentas
+        SET saldo = saldo - monto_retirado
+        WHERE id_cuenta = cuenta_origen_id;
+        
+        SELECT CONCAT('Retiro realizado por un monto de $', monto_retirado, ' de la cuenta con ID ', cuenta_origen_id) AS 'Mensaje';
+    END IF;
+END//
+
+DELIMITER ;

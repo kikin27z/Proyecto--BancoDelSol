@@ -428,12 +428,15 @@ public class TransaccionDAO implements ITransaccionDAO {
     }
 
     /**
-     * Genera un retiro sin cuenta y devuleve true si se generó el retiro, false en caso contrario.
-     * 
-     * @param idCuenta El ID de la cuenta asociada al retiro (puede ser null o 0 si no hay cuenta asociada).
+     * Genera un retiro sin cuenta y devuleve true si se generó el retiro, false
+     * en caso contrario.
+     *
+     * @param idCuenta El ID de la cuenta asociada al retiro (puede ser null o 0
+     * si no hay cuenta asociada).
      * @param folio El folio del retiro.
      * @param contrasena La contraseña asociada al retiro.
-     * @return true si se realizó el retiro exitosamente, false en caso contrario.
+     * @return true si se realizó el retiro exitosamente, false en caso
+     * contrario.
      * @throws PersistenciaException Si ocurre algún error durante la operación.
      */
     @Override
@@ -464,7 +467,7 @@ public class TransaccionDAO implements ITransaccionDAO {
 
     /**
      * Busca un retiro en la base de datos por su folio y contraseña asociada.
-     * 
+     *
      * @param folio El folio del retiro a buscar.
      * @param contrasena La contraseña asociada al retiro.
      * @return El objeto Retiro si se encontró, o null si no se encontró.
@@ -486,7 +489,7 @@ public class TransaccionDAO implements ITransaccionDAO {
                     retiro.setFolio(resultado.getString("folio"));
                     retiro.setContrasena(resultado.getString("contrasena"));
                     retiro.setEstado(resultado.getString("estado"));
-                    
+
                 }
             }
         } catch (SQLException e) {
@@ -495,6 +498,35 @@ public class TransaccionDAO implements ITransaccionDAO {
         }
 
         return retiro;
+    }
+
+    /**
+     * Realiza un retiro en la base de datos actualizando su estado.
+     *
+     * @param folio El folio del retiro a realizar.
+     * @param contrasena La contraseña asociada al retiro.
+     * @return true si el retiro se realizó correctamente, false en caso
+     * contrario.
+     * @throws PersistenciaException Si ocurre algún error durante la operación.
+     */
+    @Override
+    public boolean realizarRetiro(String folio, String contrasena) throws PersistenciaException {
+        String procedimientoAlmacenado = "{CALL actualizar_estado_retiro_sin_cuenta(?, ?)}";
+        boolean retiroRelizado = false;
+
+        try (Connection conexion = this.conexionBD.obtenerConexion(); CallableStatement llamadaProcedimiento = conexion.prepareCall(procedimientoAlmacenado)) {
+
+            llamadaProcedimiento.setString(1, folio);
+            llamadaProcedimiento.setString(2, contrasena);
+            llamadaProcedimiento.execute();
+            retiroRelizado = true;
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error al realizar el retiro", e);
+            throw new PersistenciaException("No se pudo realizar el retiro", e);
+        }
+
+        return retiroRelizado;
     }
 
 }
