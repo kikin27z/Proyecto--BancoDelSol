@@ -202,7 +202,7 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaHistorial;
     }
     /**
-    * Método para cambiar a la ventana del historial de operaciones del cliente.
+    * Método para cambiar a la ventana de editar perfil del cliente.
     * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
     */
     public void cambiarVistaEditarPerfil() {
@@ -212,7 +212,7 @@ public class Ventana extends javax.swing.JFrame {
         panelActual = vistaEditarPerfil;
     }
     /**
-    * Método para cambiar a la ventana del historial de operaciones del cliente.
+    * Método para cambiar a la ventana muestra la información completa de la transfencia.
     * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
     */
     public void cambiarVistaTransferenciaExitosa() {
@@ -223,7 +223,7 @@ public class Ventana extends javax.swing.JFrame {
     }
     
     /**
-    * Método para cambiar a la ventana de generar un retiro sin cuenta
+    * Método para cambiar a la ventana de generar un retiro sin cuenta.
     * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
     */
     public void cambiarVistaGenerarRetiro(){
@@ -234,7 +234,7 @@ public class Ventana extends javax.swing.JFrame {
     }
     
     /**
-    * Método para cambiar a la ventana de generar un retiro sin cuenta
+    * Método para cambiar a la ventana de confirmación un retiro sin cuenta.
     * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
     */
     public void cambiarVistaConfirmarRetiro(){
@@ -242,6 +242,16 @@ public class Ventana extends javax.swing.JFrame {
         VistaCofirmarRetiro vistaConfirmarRetiro = new  VistaCofirmarRetiro(this);
         ponerEnJFrame(vistaConfirmarRetiro);
         panelActual = vistaConfirmarRetiro;
+    }
+    /**
+    * Método para cambiar a la ventana de nosotros del banco.
+    * Este método elimina el panel actual y muestra la pestaña de historial de operaciones.
+    */
+    public void cambiarVistaNosotros(){
+        limpiarFrame();
+        VistaNosotros vistaNosotros = new  VistaNosotros(this);
+        ponerEnJFrame(vistaNosotros);
+        panelActual = vistaNosotros;
     }
 
     /**

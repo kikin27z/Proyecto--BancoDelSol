@@ -1,4 +1,3 @@
-
 package bancodelsolpersistencia.daos;
 
 import bancodelsoldominio.Retiro;
@@ -17,8 +16,11 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author karim
+ * Esta clase proporciona métodos para realizar operaciones de acceso a datos 
+ * relacionadas con las transacciones en la base de datos.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class TransaccionDAO implements ITransaccionDAO{
 
@@ -26,7 +28,7 @@ public class TransaccionDAO implements ITransaccionDAO{
     static final Logger logger = Logger.getLogger(CuentaDAO.class.getName());
 
     /**
-    * Constructor de la clase CuentaDAO.
+    * Constructor de la clase TransaccionDAO.
     *
     * @param conexionBD La conexión a la base de datos que se utilizará para realizar operaciones de persistencia.
     */
@@ -34,6 +36,12 @@ public class TransaccionDAO implements ITransaccionDAO{
         this.conexionBD = conexionBD;
     }
     
+    /**
+     * Consulta todas las transacciones (transferencias y retiros) almacenadas en la base de datos.
+     * 
+     * @return Una lista de objetos Transaccion que representan las transacciones consultadas.
+     * @throws PersistenciaException Si hay un error al acceder a la base de datos.
+     */
     @Override
     public List<Transaccion> consultar() throws PersistenciaException {
         String sentenciaSQL = """
@@ -93,6 +101,12 @@ public class TransaccionDAO implements ITransaccionDAO{
         }
     }
 
+    /**
+     * Crea un modelo de tabla con la información de todas las transacciones (transferencias y retiros) almacenadas en la base de datos.
+     * 
+     * @param modelo El modelo de tabla donde se agregarán los datos de las transacciones.
+     * @throws PersistenciaException Si hay un error al acceder a la base de datos.
+     */
     @Override
     public void crearTabla(DefaultTableModel  modelo) throws PersistenciaException {
         String sentenciaSQL = """
@@ -137,8 +151,65 @@ public class TransaccionDAO implements ITransaccionDAO{
 //            return modelo;
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "No se pudieron consultar las cuentas", ex);
-            throw new PersistenciaException("No se pudieron consultar las cuentas",ex);
+            throw new PersistenciaException
+        
+        ("No se pudieron consultar las cuentas",ex);
         }
     }
+
+    /**
+     * Realiza una transferencia entre cuentas.
+     * 
+     * @param idCuenta El ID de la cuenta desde la que se realizará la transferencia.
+     * @param numeroCuentaDestino El número de cuenta destino.
+     * @param motivo El motivo de la transferencia.
+     * @param monto El monto de la transferencia.
+     * @return Una instancia de Transferencia representando la transferencia realizada, o null si no se pudo realizar.
+     * @throws PersistenciaException Si hay un error al acceder a la base de datos.
+     */
+    @Override
+    public Transferencia realizarTransferencia(Long idCuenta, String numeroCuentaDestino, String motivo, Double monto) throws PersistenciaException {
+        String sentenciaSQL = """
+                                CALL transferir(?,?,?,?);
+                              """;
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+            ) {
+            comando.setLong(1, idCuenta);
+            comando.setString(2, numeroCuentaDestino);
+            comando.setString(3, motivo);
+            comando.setDouble(4, monto);
+            
+    
+            try (ResultSet datosCuenta = comando.executeQuery()) {
+                if (!datosCuenta.next()) {
+                    logger.log(Level.INFO, "No se pudo hacer la transferencia");
+                    return null;
+                }
+
+                logger.log(Level.INFO, "Se realizo la transferencia");
+                Transferencia transferencia = new Transferencia(
+                        datosCuenta.getString("motivo"),
+                        datosCuenta.getString("cuenta_destino"),
+                        datosCuenta.getDate("fecha").toString(),
+                        datosCuenta.getDouble("monto"),
+                        datosCuenta.getString("tipo"),
+                        datosCuenta.getLong("id_transaccion"),
+                        datosCuenta.getLong("id_transferencia"),
+                        datosCuenta.getLong("id_cuenta")
+                        
+                );
+                
+                return transferencia;
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "No se realizar la transferencia", e);
+            throw new PersistenciaException("No se pudo realizar la transferencia", e);
+        }
+        
+    }
+
+    
     
 }

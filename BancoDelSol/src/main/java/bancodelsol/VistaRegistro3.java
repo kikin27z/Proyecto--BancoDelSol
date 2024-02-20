@@ -196,7 +196,7 @@ public class VistaRegistro3 extends javax.swing.JPanel {
         ValidadorCampos valida = new ValidadorCampos();
         try {
             verificaCampos();
-            valida.validaSeccionDatosCuenta(ventana.getClienteDTO().getUsuario(), ventana.getCliente().getContrasena());
+            valida.validaSeccionDatosCuenta(txtUsuario.getText(), txtContrasena.getText());
             ClienteDAO clienteDAO = new ClienteDAO(ventana.getConexion());
             camposValidos = true;
         } catch (ValidacionDTOException ex) {

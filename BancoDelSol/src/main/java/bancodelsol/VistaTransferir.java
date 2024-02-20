@@ -6,8 +6,9 @@ import bancodelsol.validaciones.Validacion;
 import bancodelsol.validaciones.ValidadorCampos;
 import bancodelsoldominio.Cuenta;
 import bancodelsoldominio.Transferencia;
-import bancodelsolpersistencia.daos.ITransferenciaDAO;
-import bancodelsolpersistencia.daos.TransferenciaDAO;
+import bancodelsolpersistencia.daos.ITransaccionDAO;
+import bancodelsolpersistencia.daos.TransaccionDAO;
+import bancodelsolpersistencia.excepciones.PersistenciaException;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,7 @@ public class VistaTransferir extends javax.swing.JPanel {
         cuenta = ventana.getCuenta();
         transferenciaActual = ventana.getTransferencia();
         initComponents();
+        cargarDatos();
     }
 
     /**
@@ -58,8 +60,7 @@ public class VistaTransferir extends javax.swing.JPanel {
         txtCuentaDestino = new javax.swing.JTextField();
         lblMonto = new javax.swing.JLabel();
         txtMonto = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
         btnBuscarCuenta = new javax.swing.JButton();
         btnTransferir = new javax.swing.JButton();
         iconAjustes = new javax.swing.JLabel();
@@ -138,17 +139,17 @@ public class VistaTransferir extends javax.swing.JPanel {
         txtMonto.setForeground(new java.awt.Color(143, 143, 143));
         add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 400, 407, 41));
 
-        jButton1.setBackground(new java.awt.Color(180, 154, 102));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Cancelar");
-        jButton1.setBorderPainted(false);
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 470, 142, 45));
-
-        jLabel2.setFont(new java.awt.Font("Amazon Ember Light", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(143, 143, 143));
-        jLabel2.setText("Después de la transferencia en tu cuenta quedarán: $100.00");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 440, 410, 20));
+        btnCancelar.setBackground(new java.awt.Color(180, 154, 102));
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setBorderPainted(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 470, 142, 45));
 
         btnBuscarCuenta.setBackground(new java.awt.Color(180, 154, 102));
         btnBuscarCuenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -253,10 +254,17 @@ public class VistaTransferir extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+    * Este método se ejecuta cuando el usuario hace clic en el botón "Buscar cuenta".
+    * Valida la cuenta de destino ingresada por el usuario y habilita los campos de motivo y monto
+    * si la cuenta es válida.
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnBuscarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCuentaActionPerformed
         validarCuentaDestino();
         if(cuentaDestinoValidada){
             btnBuscarCuenta.setEnabled(false);
+            btnTransferir.setEnabled(true);
             txtCuentaDestino.setEditable(false);
             txtMotivo.setEditable(true);
             txtMonto.setEditable(true);
@@ -264,13 +272,22 @@ public class VistaTransferir extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnBuscarCuentaActionPerformed
 
+    /**
+    * Este método se ejecuta cuando el usuario hace clic en el botón "Transferir".
+    * Valida los campos de motivo y monto, y si son válidos, muestra una confirmación al usuario
+    * para realizar la transferencia. Luego realiza la transferencia y cambia la vista a la vista
+    * de transferencia exitosa.
+    * @param evt El evento de acción que desencadena este método.
+    */
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
         // TODO add your handling code here:
         
         validarCampos();
         if(camposValidados){
-            realizarTransferencia();
-            ventana.cambiarVistaTransferenciaExitosa();
+            if(ventana.mostrarConfirmacion("¿Quiere realizar la transferencia?", "Ha un paso de transferir")){
+                realizarTransferencia();
+                ventana.cambiarVistaTransferenciaExitosa();
+            }
         }
     }//GEN-LAST:event_btnTransferirActionPerformed
 
@@ -322,6 +339,16 @@ public class VistaTransferir extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     /**
+     * Método que cancela la transferencia y se dirige a la pantalla de vista de la cuenta.
+     * @param evt El evento de acción que desencadena este método.
+     */
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        if(ventana.mostrarConfirmacion("¿Cancelaras la transferencia?", "¿Desea continuar?")){
+            ventana.cambiarVistaCuenta();
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    /**
     * Valida la cuenta de destino ingresada por el usuario.
     * Comprueba si la cuenta existe y si es válida para realizar la transferencia.
     */
@@ -360,7 +387,9 @@ public class VistaTransferir extends javax.swing.JPanel {
             if(cuenta.getSaldo() - monto < 0){
                 throw new ValidacionDTOException("El monto es superior al saldo de la cuenta");
             }
+            camposValidados = true;
         } catch (ValidacionDTOException ex) {
+            camposValidados = false;
             ventana.mostrarAviso(ex.getMessage());
         }
     }
@@ -370,18 +399,38 @@ public class VistaTransferir extends javax.swing.JPanel {
     * Crea un objeto TransferenciaNuevaDTO con los detalles de la transferencia y lo guarda en la base de datos.
     */
     private void realizarTransferencia(){
-        TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
-        transferenciaNueva.setCuentaDestino(txtCuentaDestino.getText());
-        transferenciaNueva.setMotivo(txtMotivo.getText());
-        transferenciaNueva.setMonto(Double.parseDouble(txtMonto.getText()));
-        transferenciaNueva.setIdCuenta(cuenta.getIdCuenta());
+        try {
+            ITransaccionDAO transaccionDAO = new TransaccionDAO(ventana.getConexion());
+            
+            transferenciaActual = transaccionDAO.realizarTransferencia(
+                    cuenta.getIdCuenta(),
+                    txtCuentaDestino.getText(),
+                    txtMotivo.getText(),
+                    Double.parseDouble(txtMonto.getText())
+            );
+            ventana.setTransferencia(transferenciaActual);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(VistaTransferir.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        ITransferenciaDAO transferenciaDAO = new TransferenciaDAO(ventana.getConexion());
+    }
+    
+    /**
+     * Este método se encarga de cargar los datos de la cuenta en la interfaz gráfica. 
+     * Establece el nombre de la cuenta, el número de cuenta y el saldo actual en los 
+     * respectivos campos de la interfaz.
+     */
+    private void cargarDatos(){
+        lblNombreCuenta.setText(cuenta.getNombreCuenta());
+        lblNumCuenta.setText(cuenta.getNumeroCuenta());
+        String numeroFormateado = String.format("%.2f", cuenta.getSaldo());
         
+        lblSaldo.setText("$"+ numeroFormateado+ " MXN");
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCuenta;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnHistorial;
     private javax.swing.JButton btnInicio;
@@ -394,8 +443,6 @@ public class VistaTransferir extends javax.swing.JPanel {
     private javax.swing.JLabel iconInicio;
     private javax.swing.JLabel iconLogo;
     private javax.swing.JLabel iconPerfil;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblCuentaDestino;
     private javax.swing.JLabel lblMonto;
     private javax.swing.JLabel lblMotivo;

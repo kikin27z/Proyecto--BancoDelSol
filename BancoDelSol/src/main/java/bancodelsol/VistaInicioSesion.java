@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package bancodelsol;
 
 import bancodelsol.validaciones.IValidacion;
@@ -11,14 +7,13 @@ import bancodelsoldominio.Cliente;
 import bancodelsolpersistencia.excepciones.ValidacionDTOException;
 
 /**
- *
- * @author karim
+ * Esta clase representa la vista de inicio de sesión en la interfaz gráfica del banco.
+ * Permite a los usuarios iniciar sesión proporcionando su nombre de usuario y contraseña.
+ * 
+ * @author José Karim Franco Valencia - 245138
+ * @author Jesús Roberto García Armenta - 244913
  */
 public class VistaInicioSesion extends javax.swing.JPanel {
-
-    /**
-     * Creates new form VistaInicioSesion
-     */
     private Ventana ventana;
     private IValidacion validacion;
     private boolean loginValido;
@@ -26,7 +21,9 @@ public class VistaInicioSesion extends javax.swing.JPanel {
     private ValidadorCampos validador;
 
     /**
-     * Creates new form VistaCliente
+     * Constructor de la clase VistaInicioSesion.
+     * 
+     * @param ventana La ventana principal de la aplicación.
      */
     public VistaInicioSesion(Ventana ventana) {
         this.ventana = ventana;
@@ -118,9 +115,9 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         lblHazteCliente.setFont(new java.awt.Font("Amazon Ember", 0, 16)); // NOI18N
         lblHazteCliente.setForeground(new java.awt.Color(143, 143, 143));
         lblHazteCliente.setText("¿No eres cliente y quieres serlo?");
-        lblHazteCliente.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                lblHazteClienteMouseDragged(evt);
+        lblHazteCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblHazteClienteMouseClicked(evt);
             }
         });
         add(lblHazteCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 370, -1, -1));
@@ -135,6 +132,13 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Iniciar Sesión".
+     * Realiza la validación de los campos de inicio de sesión y realiza el inicio de sesión si los campos son válidos.
+     * En caso contrario, muestra un mensaje de aviso.
+     * 
+     * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el botón "Iniciar Sesión").
+     */
     private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
         validarInicioSesion();
         if (cliente == null) {
@@ -145,15 +149,31 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnInicioSesionActionPerformed
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Volver".
+     * Cambia la vista actual a la vista de inicio.
+     * 
+     * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el botón "Volver").
+     */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
         ventana.cambiarVistaInicio();
     }//GEN-LAST:event_btnInicioActionPerformed
 
-    private void lblHazteClienteMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHazteClienteMouseDragged
+    /**
+     * Método que se ejecuta al hacer clic en el texto "¿No eres cliente y quieres serlo?".
+     * Cambia la vista actual a la vista de registro.
+     * 
+     * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el texto "¿No eres cliente y quieres serlo?").
+     */
+    private void lblHazteClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHazteClienteMouseClicked
         // TODO add your handling code here:
         ventana.cambiarVistaRegistro();
-    }//GEN-LAST:event_lblHazteClienteMouseDragged
+    }//GEN-LAST:event_lblHazteClienteMouseClicked
 
+    /**
+     * Valida el inicio de sesión verificando los campos de usuario y contraseña.
+     * Muestra un mensaje de aviso si los campos no son válidos.
+     */
     private void validarInicioSesion() {
         
         try {
@@ -165,6 +185,12 @@ public class VistaInicioSesion extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Verifica que los campos de usuario y contraseña no estén vacíos y cumplen con las longitudes permitidas.
+     * Muestra un mensaje de aviso si los campos no son válidos.
+     * 
+     * @throws ValidacionDTOException Si los campos no son válidos.
+     */
     private void verificaCampos() throws ValidacionDTOException {
         if (txtUsuario.getText().isBlank() || txtContrasena.getText().isBlank()) {
             throw new ValidacionDTOException("Llene todos los campos");

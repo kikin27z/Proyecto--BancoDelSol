@@ -1,26 +1,23 @@
 package bancodelsol;
 
 /**
- * Esta clase representa la vista de inicio en la interfaz gráfica del banco.
- * Proporciona opciones para iniciar sesión, realizar un retiro sin cuenta, y navegar a otras secciones del banco.
- * También muestra el eslogan del banco.
+ * Esta clase representa la vista "Nosotros" de la aplicación.
+ * Proporciona información sobre el equipo detrás del banco.
+ * Permite al usuario navegar a otras partes de la aplicación, como la página de inicio y el registro.
  * 
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
  */
-public class VistaInicio extends javax.swing.JPanel {
+public class VistaNosotros extends javax.swing.JPanel {
     private  Ventana ventana;
     
     /**
-     * Constructor de la clase VistaInicio.
-     * 
+     * Constructor de la clase VistaNosotros.
      * @param ventana La ventana principal de la aplicación.
      */
-    public VistaInicio(Ventana ventana ) {
+    public VistaNosotros(Ventana ventana ) {
         this.ventana = ventana;
         initComponents();
-        btnRetiro.setText("<html>Retiro sin<br>cuenta</html>");
-        lblEslogan.setText("<html>\"El banco que cuida de<br>ti y de tu futuro\"</html>");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,43 +28,20 @@ public class VistaInicio extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnInicioSesion = new javax.swing.JButton();
-        btnRetiro = new javax.swing.JButton();
         btnInicio = new javax.swing.JButton();
         btnRegistro = new javax.swing.JButton();
         btnNosotros = new javax.swing.JButton();
         lblBanco = new javax.swing.JLabel();
         lblEslogan = new javax.swing.JLabel();
         lblPiePagina = new javax.swing.JLabel();
-        iconFamilia = new javax.swing.JLabel();
         lblIcon = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        btnInicioSesion.setBackground(new java.awt.Color(180, 154, 102));
-        btnInicioSesion.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        btnInicioSesion.setForeground(new java.awt.Color(255, 255, 255));
-        btnInicioSesion.setText("Iniciar Sesión");
-        btnInicioSesion.setBorderPainted(false);
-        btnInicioSesion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInicioSesionActionPerformed(evt);
-            }
-        });
-        add(btnInicioSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 150, 45));
-
-        btnRetiro.setBackground(new java.awt.Color(180, 154, 102));
-        btnRetiro.setFont(new java.awt.Font("Amazon Ember", 0, 18)); // NOI18N
-        btnRetiro.setForeground(new java.awt.Color(255, 255, 255));
-        btnRetiro.setText("Retiro sin cuenta");
-        btnRetiro.setBorderPainted(false);
-        btnRetiro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRetiroActionPerformed(evt);
-            }
-        });
-        add(btnRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 350, 180, 45));
 
         btnInicio.setBackground(new java.awt.Color(143, 143, 143));
         btnInicio.setFont(new java.awt.Font("Amazon Ember Light", 0, 18)); // NOI18N
@@ -120,75 +94,73 @@ public class VistaInicio extends javax.swing.JPanel {
         lblPiePagina.setText("© Banco del Sol 2024");
         add(lblPiePagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 545, 170, 20));
 
-        iconFamilia.setFont(new java.awt.Font("Amazon Ember", 0, 16)); // NOI18N
-        iconFamilia.setForeground(new java.awt.Color(255, 255, 255));
-        add(iconFamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(562, 180, 322, 246));
-
         lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconLogo(2).png"))); // NOI18N
         add(lblIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, -1, -1));
 
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgInicio.png"))); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Nosotros");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Amazon Ember", 0, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Equipo:");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 270, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Amazon Ember", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("00000245138 - José Karim Franco Valencia");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Amazon Ember", 0, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("00000244913 - Jesús Roberto García Armenta");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 330, -1, -1));
+
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgVistaNosotros.png"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 580));
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Método que se ejecuta al hacer clic en el botón "Iniciar Sesión".
-     * Cambia la vista actual a la vista de inicio de sesión.
-     * 
-     * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el botón "Iniciar Sesión").
-     */
-    private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
-        // TODO add your handling code here:
-        ventana.cambiarVistaInicioSesion();
-    }//GEN-LAST:event_btnInicioSesionActionPerformed
-
-    /**
-     * Método que se ejecuta al hacer clic en el botón "Retiro sin cuenta".
-     * 
-     * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el botón "Retiro sin cuenta").
-     */
-    private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRetiroActionPerformed
-
-    /**
-     * Método que dirige a la pantalla de inicio.
-     * 
-     * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el botón "Inicio").
+     * Este método se ejecuta cuando el usuario hace clic en el botón "Inicio".
+     * Cambia la vista actual a la página de inicio.
+     * @param evt El evento de acción que desencadena este método.
      */
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
         // TODO add your handling code here:
+        ventana.cambiarVistaInicio();
     }//GEN-LAST:event_btnInicioActionPerformed
+
     /**
-     * Método que se ejecuta al hacer clic en el botón "Hazte cliente".
-     * Cambia la vista actual a la vista de registro.
-     * 
-     * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el botón "Hazte cliente").
+     * Este método se ejecuta cuando el usuario hace clic en el botón "Hazte cliente".
+     * Cambia la vista actual a la página de registro.
+     * @param evt El evento de acción que desencadena este método.
      */
     private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
         // TODO add your handling code here:
         ventana.cambiarVistaRegistro();
     }//GEN-LAST:event_btnRegistroActionPerformed
 
-     /**
-     * Cambia la vista actual a la vista de la sección "Nosotros".
-     * 
-     * @param evt El evento de acción que desencadena este método (en este caso, hacer clic en el botón "Nosotros").
+    /**
+     * Este método se ejecuta cuando el usuario hace clic en el botón "Nosotros".
+     * Actualmente no tiene funcionalidad asociada.
+     * @param evt El evento de acción que desencadena este método.
      */
     private void btnNosotrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNosotrosActionPerformed
         // TODO add your handling code here:
-        ventana.cambiarVistaNosotros();
+        
     }//GEN-LAST:event_btnNosotrosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicio;
-    private javax.swing.JButton btnInicioSesion;
     private javax.swing.JButton btnNosotros;
     private javax.swing.JButton btnRegistro;
-    private javax.swing.JButton btnRetiro;
     private javax.swing.JLabel fondo;
-    private javax.swing.JLabel iconFamilia;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblBanco;
     private javax.swing.JLabel lblEslogan;
     private javax.swing.JLabel lblIcon;

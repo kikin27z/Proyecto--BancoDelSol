@@ -32,7 +32,7 @@ public class Principal {
     public static void main(String[] args) {
             String cadenaConexion = "jdbc:mysql://localhost/banco_del_sol";
             String user = "root";
-            String password = "tElina.69";
+            String password = "JFK_jfk27";
             
             IConexion conexion = new Conexion(cadenaConexion, user, password);
             IClienteDAO clientesDAO = new ClienteDAO(conexion);

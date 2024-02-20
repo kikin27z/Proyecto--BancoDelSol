@@ -147,9 +147,9 @@ public class Validacion implements IValidacion {
                     datosCuenta.getString("nombre_cuenta"),
                     datosCuenta.getString("numero_cuenta"),
                     datosCuenta.getDouble("saldo"),
-                        datosCuenta.getLong("id_cliente")
+                        datosCuenta.getLong("id_cliente"),
+                        datosCuenta.getString("estado")
                 );
-                cuenta.setEstadoCuenta(datosCuenta.getString("estado"));
                 return cuenta;
             }
         } catch (SQLException e) {

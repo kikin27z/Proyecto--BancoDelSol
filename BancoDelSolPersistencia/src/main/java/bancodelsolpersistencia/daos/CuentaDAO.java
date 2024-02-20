@@ -214,7 +214,7 @@ public class CuentaDAO implements ICuentaDAO{
                     String estadoCuenta = resultados.getString("estado");
                     
                     if(estadoCuenta.equals("Activa")){
-                        Cuenta cuenta = new Cuenta(id, fechaApertura,nombreCuenta, numCuenta, saldo,idCliente);
+                        Cuenta cuenta = new Cuenta(id, fechaApertura,nombreCuenta, numCuenta, saldo,idCliente,estadoCuenta);
                         listaCuentas.add(cuenta);
                     }
                 }

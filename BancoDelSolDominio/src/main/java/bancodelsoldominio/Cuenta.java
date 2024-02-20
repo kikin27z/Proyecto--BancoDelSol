@@ -39,24 +39,7 @@ public class Cuenta {
         this.saldo = saldo;
     }
 
-    /**
-     * Constructor de la clase Cuenta que inicializa la fecha de apertura,
-     * el nombre de la cuenta, el número de cuenta, el saldo y el ID del cliente asociado.
-     * @param fechaApertura La fecha de apertura de la cuenta.
-     * @param nombreCuenta El nombre de la cuenta.
-     * @param numeroCuenta El número de la cuenta.
-     * @param saldo El saldo de la cuenta.
-     * @param idCliente El ID del cliente asociado a la cuenta.
-     */
-    public Cuenta(String fechaApertura, String nombreCuenta, String numeroCuenta, double saldo, Long idCliente,String estadoCuenta) {
-        this.fechaApertura = fechaApertura;
-        this.nombreCuenta = nombreCuenta;
-        this.numeroCuenta = numeroCuenta;
-        this.saldo = saldo;
-        this.idCliente = idCliente;
-        this.estadoCuenta = estadoCuenta;
-    }
-    
+   
     /**
      * Constructor de la clase Cuenta que inicializa todos los campos.
      * @param idCuenta El identificador único de la cuenta.
@@ -73,6 +56,27 @@ public class Cuenta {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
         this.idCliente = idCliente;
+    }
+    
+    
+    
+    /**
+     * Constructor de la clase Cuenta que inicializa todos los campos.
+     * @param idCuenta El identificador único de la cuenta.
+     * @param fechaApertura La fecha de apertura de la cuenta.
+     * @param nombreCuenta El nombre de la cuenta.
+     * @param numeroCuenta El número de la cuenta.
+     * @param saldo El saldo de la cuenta.
+     * @param idCliente El ID del cliente asociado a la cuenta.
+     */
+    public Cuenta(Long idCuenta, String fechaApertura, String nombreCuenta, String numeroCuenta, double saldo, Long idCliente, String estadoCuenta) {
+        this.idCuenta = idCuenta;
+        this.fechaApertura = fechaApertura;
+        this.nombreCuenta = nombreCuenta;
+        this.numeroCuenta = numeroCuenta;
+        this.saldo = saldo;
+        this.idCliente = idCliente;
+        this.estadoCuenta = estadoCuenta;
     }
     
     
