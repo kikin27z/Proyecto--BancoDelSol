@@ -139,11 +139,12 @@
         <Property name="text" type="java.lang.String" value="M&#xe1;s informaci&#xf3;n"/>
       </Properties>
       <Events>
+        <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="lblInformacionMouseDragged"/>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblInformacionMouseClicked"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="140" y="340" width="-1" height="-1"/>
+          <AbsoluteConstraints x="140" y="340" width="190" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

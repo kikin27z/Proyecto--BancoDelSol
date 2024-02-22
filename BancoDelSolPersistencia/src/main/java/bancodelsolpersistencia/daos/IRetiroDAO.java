@@ -38,4 +38,6 @@ public interface IRetiroDAO {
      * @throws PersistenciaException Si ocurre algún error durante la inserción.
      */
     boolean generarRegistroRetiro(Retiro retiro) throws PersistenciaException;
+    
+    Object[] consultarRetiroSinCuenta(String folio, String contrasena) throws PersistenciaException;
 }

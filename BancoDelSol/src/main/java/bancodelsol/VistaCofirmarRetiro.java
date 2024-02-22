@@ -43,12 +43,7 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
         this.retiroDAO = new RetiroDAO(ventana.getConexion());
         this.transaccionDAO = new TransaccionDAO(ventana.getConexion());
         initComponents();
-        lblInfo.setText("""
-                        <html><p>El folio y contrase\u00f1a necesarios para retirar<br>
-                        el dinero se mostrar\u00e1n a continuaci\u00f3n y<br>
-                        tienen un vencimiento de 10 minutos</p></html>""");
-        String numeroFormateado = String.format("%.2f", ventana.getRetiro().getMonto());
-        lblMonto.setText("$" + numeroFormateado + " MXN");
+        setText();
         valido = false;
     }
 
@@ -131,11 +126,21 @@ public class VistaCofirmarRetiro extends javax.swing.JPanel {
      */
     public void ejecutarRetiro() {
         try {
-            transaccionDAO.generarRetiroSinCuenta(ventana.getCuenta().getIdCuenta(), ventana.getRetiro().getFolio(), ventana.getRetiro().getContrasena());
+            transaccionDAO.generarRetiroSinCuenta(ventana.getCuenta().getIdCuenta(), ventana.getRetiro().getFolio(), ventana.getRetiro().getContrasena(), ventana.getRetiro().getMonto());
+            ventana.getCuenta().setSaldo(ventana.getCuenta().getSaldo() - ventana.getRetiro().getMonto());
             valido = true;
         } catch (PersistenciaException ex) {
             ventana.mostrarAviso(ex.getMessage());
         }
+    }
+
+    public void setText() {
+        lblInfo.setText("""
+                        <html><p>El folio y contrase\u00f1a necesarios para retirar<br>
+                        el dinero se mostrar\u00e1n a continuaci\u00f3n y<br>
+                        tienen un vencimiento de 10 minutos</p></html>""");
+        String numeroFormateado = String.format("%.2f", ventana.getRetiro().getMonto());
+        lblMonto.setText("$" + numeroFormateado + " MXN");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

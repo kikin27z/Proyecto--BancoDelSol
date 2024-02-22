@@ -60,46 +60,10 @@ public class ValidadorCampos {
         if (!matcher.matches()) {
             throw new ValidacionDTOException("Campo de apellido materno inválido (debe ser menor a 30 cáracteres y contener únicamente letras)");
         }
-//        fechaMenos18.setTime(new Date());
-//        fechaMenos18.add(Calendar.YEAR, -18);
-//        fechaMas120.setTime(new Date());
-//        fechaMas120.add(Calendar.YEAR, -120);
-//        fechaNacimiento.setTime(obtenerFecha(clienteDTO.getFecha()));
-//        if (fechaNacimiento.getTimeInMillis() > fechaMenos18.getTimeInMillis()) {
-//            throw new ValidacionDTOException("Campo de fecha inválido (debes ser mayor de edad)");
-//        }
 
     }
 
-    /**
-     * Valida los campos relacionados con los datos de cuenta de un cliente
-     * recibidos en un objeto ClienteNuevoDTO.
-     *
-     * @param clienteDTO Objeto ClienteNuevoDTO que contiene los datos de cuenta
-     * del cliente a validar.
-     * @throws ValidacionDTOException Si los datos de cuenta no cumplen con los
-     * criterios de validación.
-     */
-//    public void validaSeccionDatosCuenta(ClienteNuevoDTO clienteDTO) throws ValidacionDTOException {
-//        String cadenaUsuario = "^[a-zA-Z0-9]{1,30}$";
-//        String cadenaContraseña = "^[\\S]{1,20}$";
-//
-//        Pattern patronUsuario = Pattern.compile(cadenaUsuario);
-//        Pattern patronContraseña = Pattern.compile(cadenaContraseña);
-//
-//        // Verifica el campo de usuario
-//        Matcher matcher = patronUsuario.matcher(clienteDTO.getUsuario());
-//        if (!matcher.matches()) {
-//            throw new ValidacionDTOException("Nombre de usuario inválido (debe ser menor a 30 cáracteres usando solo letras y números)");
-//        }
-//
-//        // Verifica el campo de contraseña
-//        matcher = patronContraseña.matcher(clienteDTO.getContrasena());
-//        if (!matcher.matches()) {
-//            throw new ValidacionDTOException("Contraseña inválida (debe contar con máximo 20 cáracteres)");
-//        }
-//
-//    }
+
     /**
      * Valida los campos relacionados con los datos de cuenta de un cliente
      * recibidos en un objeto ClienteNuevoDTO.
@@ -239,7 +203,7 @@ public class ValidadorCampos {
      * cadena.
      */
     private String extensionCadena(int longitud) {
-        return "^[a-zA-Z\\s]{1," + longitud + "}$";
+        return "^[a-zA-Z\\sáéíóúÁÉÍÓÚüÜñÑ]{1," + longitud + "}$";
     }
 
     /**

@@ -53,6 +53,8 @@ public class Ventana extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Banco del Sol");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMaximumSize(new java.awt.Dimension(1000, 580));
         setMinimumSize(new java.awt.Dimension(1000, 580));
         setResizable(false);
@@ -282,7 +284,30 @@ public class Ventana extends javax.swing.JFrame {
         ponerEnJFrame(vistaEfectuarRetiro);
         panelActual = vistaEfectuarRetiro;
     }
+    
+    /**
+     * Método para cambiar a la ventana de generar un retiro sin cuenta Este
+     * método elimina el panel actual y muestra la pestaña de historial de
+     * operaciones.
+     */
+    public void cambiarVistaConfirmarEfectuarRetiro() {
+        limpiarFrame();
+        VistaConfirmarEfectuarRetiro vistaConfirmarEfectuarRetiro = new VistaConfirmarEfectuarRetiro(this);
+        ponerEnJFrame(vistaConfirmarEfectuarRetiro);
+        panelActual = vistaConfirmarEfectuarRetiro;
+    }
 
+    /**
+     * Método para cambiar a la vista del cliente. Este método elimina el panel
+     * actual y muestra la vista a la pantalla del cliente.
+     */
+    public void cambiarVistaInformacionRetiro() {
+        limpiarFrame();
+        VistaInformacionRetiro vistaInformacionRetiro = new VistaInformacionRetiro(this);
+        ponerEnJFrame(vistaInformacionRetiro);
+        panelActual = vistaInformacionRetiro;
+    }
+    
     /**
      * Método para agregar un panel a la ventana. Este método agrega el panel
      * especificado a la ventana, lo posiciona y ajusta su tamaño

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package bancodelsol;
 
 import bancodelsoldominio.Cuenta;
@@ -16,9 +12,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Panel para realizar un retiro sin cuenta asociada.
- * Permite al usuario ingresar el folio y contraseña para realizar un retiro sin cuenta.
-  * 
+ * Panel para realizar un retiro sin cuenta asociada. Permite al usuario
+ * ingresar el folio y contraseña para realizar un retiro sin cuenta.
+ *
  * @author José Karim Franco Valencia - 245138
  * @author Jesús Roberto García Armenta - 244913
  */
@@ -39,13 +35,12 @@ public class VistaEfectuarRetiro extends javax.swing.JPanel {
      */
     public VistaEfectuarRetiro(Ventana ventana) {
         this.ventana = ventana;
-        cuenta = ventana.getCuenta();
+        this.cuenta = new Cuenta();
         retiro = new Retiro();
-
         this.retiroDAO = new RetiroDAO(ventana.getConexion());
         this.transaccionDAO = new TransaccionDAO(ventana.getConexion());
-
         retiroValido = false;
+        ventana.setCuenta(cuenta);
         initComponents();
     }
 
@@ -126,10 +121,11 @@ public class VistaEfectuarRetiro extends javax.swing.JPanel {
 
         validarRetiro();
         if (retiro != null) {
-            ventana.setRetiro(retiro);
-            ventana.getRetiro().setIdCuenta(ventana.getCuenta().getIdCuenta());
-            ventana.getRetiro().setMonto(WIDTH);
-            ventana.cambiarVistaConfirmarRetiro();
+            if (verificarEstadoRetiro()) {
+                ventana.setRetiro(retiro);
+                obtenerCuentaMonto();
+                ventana.cambiarVistaConfirmarEfectuarRetiro();
+            }
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -147,10 +143,31 @@ public class VistaEfectuarRetiro extends javax.swing.JPanel {
     public void validarRetiro() {
         try {
             retiro = transaccionDAO.buscarRetiro(txtFolio.getText(), txtContraseña.getText());
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(VistaEfectuarRetiro.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
+        } catch (PersistenciaException ex) {
+            ventana.mostrarAviso(ex.getMessage());
+        }
+    }
+
+    public boolean verificarEstadoRetiro() {
+        if (retiro.getEstado().equalsIgnoreCase("caducado") || retiro.getEstado().equalsIgnoreCase("realizado")) {
+            ventana.mostrarAviso("El retiro ya fue cobrado");
+            return false;
+        }
+        return true;
+    }
+
+    public void obtenerCuentaMonto() {
+        Object[] datos;
+        try {
+            datos = retiroDAO.consultarRetiroSinCuenta(txtFolio.getText(), txtContraseña.getText());
+            double monto = (double) datos[0];
+            String numCuenta = String.valueOf(datos[1]);
+            ventana.getRetiro().setMonto(monto);
+            ventana.getCuenta().setNumeroCuenta(numCuenta);
+        } catch (PersistenciaException ex) {
+            ventana.mostrarAviso(ex.getMessage());
+        }
     }
 
     /**
@@ -161,7 +178,7 @@ public class VistaEfectuarRetiro extends javax.swing.JPanel {
      *
      * @throws ValidacionDTOException si alguno de los campos está en blanco
      */
-    private void verificaCampos() throws ValidacionDTOException {
+    public void verificaCampos() throws ValidacionDTOException {
         if (txtFolio.getText().isBlank() || txtContraseña.getText().isBlank()) {
             throw new ValidacionDTOException("Llene todos los campos");
         }

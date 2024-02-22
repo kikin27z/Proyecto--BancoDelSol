@@ -30,7 +30,6 @@ public class Principal {
             IConexion conexion = new Conexion(cadenaConexion, user, password);
             IClienteDAO clientesDAO = new ClienteDAO(conexion);
             ICuentaDAO cuentaDAO = new CuentaDAO(conexion);
-        
             
             Ventana ventana = new Ventana(conexion);
             ventana.cambiarVistaInicio();

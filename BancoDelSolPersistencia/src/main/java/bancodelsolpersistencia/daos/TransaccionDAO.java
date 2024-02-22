@@ -435,13 +435,14 @@ public class TransaccionDAO implements ITransaccionDAO {
      * si no hay cuenta asociada).
      * @param folio El folio del retiro.
      * @param contrasena La contraseña asociada al retiro.
+     * @param monto Monto a retirar
      * @return true si se realizó el retiro exitosamente, false en caso
      * contrario.
      * @throws PersistenciaException Si ocurre algún error durante la operación.
      */
     @Override
-    public boolean generarRetiroSinCuenta(long idCuenta, String folio, String contrasena) throws PersistenciaException {
-        String sentenciaSQL = "CALL generar_retiro_sin_cuenta(?, ?, ?)";
+    public boolean generarRetiroSinCuenta(long idCuenta, String folio, String contrasena, double monto) throws PersistenciaException {
+        String sentenciaSQL = "CALL generar_retiro(?, ?, ?, ?)";
         boolean retiroRealizado = false;
 
         try (
@@ -449,6 +450,7 @@ public class TransaccionDAO implements ITransaccionDAO {
             comando.setString(1, folio);
             comando.setString(2, contrasena);
             comando.setLong(3, idCuenta);
+            comando.setDouble(4, monto);
 
             retiroRealizado = comando.execute();
 
@@ -482,7 +484,6 @@ public class TransaccionDAO implements ITransaccionDAO {
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL)) {
             comando.setString(1, folio);
             comando.setString(2, contrasena);
-
             try (ResultSet resultado = comando.executeQuery()) {
                 if (resultado.next()) {
                     retiro = new Retiro();
@@ -493,8 +494,8 @@ public class TransaccionDAO implements ITransaccionDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al buscar el retiro por folio y contraseña", e);
-            throw new PersistenciaException("No se pudo buscar el retiro por folio y contraseña", e);
+            logger.log(Level.SEVERE, "No se encontro el retiro con dicho folio y/o contraseña", e);
+            throw new PersistenciaException("No se encontro el retiro con dicho folio y/o contraseña", e);
         }
 
         return retiro;
@@ -511,7 +512,7 @@ public class TransaccionDAO implements ITransaccionDAO {
      */
     @Override
     public boolean realizarRetiro(String folio, String contrasena) throws PersistenciaException {
-        String procedimientoAlmacenado = "{CALL actualizar_estado_retiro_sin_cuenta(?, ?)}";
+        String procedimientoAlmacenado = "{CALL efectuar_retiro(?, ?)}";
         boolean retiroRelizado = false;
 
         try (Connection conexion = this.conexionBD.obtenerConexion(); CallableStatement llamadaProcedimiento = conexion.prepareCall(procedimientoAlmacenado)) {

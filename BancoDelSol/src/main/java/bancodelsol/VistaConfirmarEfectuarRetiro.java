@@ -43,6 +43,8 @@ public class VistaConfirmarEfectuarRetiro extends javax.swing.JPanel {
         this.transaccionDAO = new TransaccionDAO(ventana.getConexion());
         retiroValido = false;
         initComponents();
+        setTexts();
+        
     }
 
     /**
@@ -138,7 +140,9 @@ public class VistaConfirmarEfectuarRetiro extends javax.swing.JPanel {
      * @param evt El evento de acción del botón "Atras".
      */
     private void bntAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAtrasActionPerformed
-        ventana.cambiarVistaEfectuarRetiro();
+        if (ventana.mostrarConfirmacion("Seguro que deseas salir?", "Cancelar retiro")) {
+            ventana.cambiarVistaEfectuarRetiro();
+        }
     }//GEN-LAST:event_bntAtrasActionPerformed
 
     /**
@@ -149,19 +153,21 @@ public class VistaConfirmarEfectuarRetiro extends javax.swing.JPanel {
      */
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
         if (ventana.mostrarConfirmacion("Deseas efectuar el retiro?", "Confirmar retiro")) {
-            ventana.cambiarVistaCuenta();
+            retirar();
+            ventana.mostrarInformacion("Dinero retirado exisotamente", "¡Felicidades!");
+            ventana.cambiarVistaInicio();
         }
         ;
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
-    
-    public void retirar(){
+    public void retirar() {
         try {
             transaccionDAO.realizarRetiro(ventana.getRetiro().getFolio(), ventana.getRetiro().getContrasena());
         } catch (PersistenciaException ex) {
             ventana.mostrarAviso(ex.getMessage());
         }
     }
+
     /**
      * Actualiza los componentes de la interfaz con la información del retiro y
      * la cuenta.
@@ -172,7 +178,8 @@ public class VistaConfirmarEfectuarRetiro extends javax.swing.JPanel {
     public void setTexts() {
         lblFolio.setText(ventana.getRetiro().getFolio());
         lblCuenta.setText(ventana.getCuenta().getNumeroCuenta());
-//        lblFolio.setText(ventana.get);
+        lblCantidad.setText(String.valueOf(ventana.getRetiro().getMonto()));
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

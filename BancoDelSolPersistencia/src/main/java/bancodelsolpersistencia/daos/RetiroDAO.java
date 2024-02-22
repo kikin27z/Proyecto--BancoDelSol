@@ -107,5 +107,40 @@ public class RetiroDAO implements IRetiroDAO {
             throw new PersistenciaException("Error al generar el registro de retiro", ex);
         }
     }
+    
+    /**
+     * Consulta el monto del retiro sin cuenta y el número de cuenta al que pertenece.
+     * @param folio El folio del retiro sin cuenta.
+     * @param contrasena La contraseña asociada al retiro sin cuenta.
+     * @return Un arreglo de objetos donde el primer elemento es el monto del retiro y el segundo elemento es el número de cuenta.
+     * @throws PersistenciaException Si ocurre algún error durante la consulta.
+     */
+    @Override
+    public Object[] consultarRetiroSinCuenta(String folio, String contrasena) throws PersistenciaException {
+        String sentenciaSQL = """
+                         SELECT t.monto, c.numero_cuenta
+                         FROM retiros r
+                         INNER JOIN transacciones t ON r.id_transaccion = t.id_transaccion
+                         INNER JOIN cuentas c ON t.id_cuenta = c.id_cuenta
+                         WHERE r.folio = ? AND r.contrasena = ?;
+                          """;
+
+        try (Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL)) {
+            comando.setString(1, folio);
+            comando.setString(2, contrasena);
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    double monto = resultado.getDouble("monto");
+                    String numeroCuenta = resultado.getString("numero_cuenta");
+                    return new Object[]{monto, numeroCuenta};
+                } else {
+                    throw new PersistenciaException("No se encontró un retiro sin cuenta con el folio y la contraseña especificados");
+                }
+            }
+        } catch (SQLException ex) {
+            throw new PersistenciaException("Error al consultar el retiro sin cuenta", ex);
+        }
+    }
+    
 
 }

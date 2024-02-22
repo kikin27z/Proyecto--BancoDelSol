@@ -69,7 +69,7 @@ public interface ITransaccionDAO {
      * @return true si se realizó el retiro exitosamente, false en caso contrario.
      * @throws PersistenciaException Si ocurre algún error durante la operación.
      */
-    boolean generarRetiroSinCuenta(long idCuenta, String folio, String contrasena) throws PersistenciaException;
+    boolean generarRetiroSinCuenta(long idCuenta, String folio, String contrasena, double monto) throws PersistenciaException;
     
     /**
      * Busca un retiro en la base de datos por su folio y contraseña asociada.

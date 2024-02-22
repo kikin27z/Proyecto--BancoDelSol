@@ -58,7 +58,9 @@ CREATE TABLE `retiros` (
     `contrasena` VARCHAR(8) NOT NULL,
     `folio` VARCHAR(16) NOT NULL,
     `estado` VARCHAR(50) DEFAULT 'en espera' CHECK (estado IN ('caducado', 'en espera', 'realizado')),
+    `fecha_registro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `id_transaccion` BIGINT NOT NULL,
+    `reembolsado` BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (`id_retiro`),
     FOREIGN KEY (`id_transaccion`) REFERENCES `transacciones`(`id_transaccion`)
 );
@@ -97,15 +99,15 @@ BEGIN
     WHERE id_cuenta = cuenta_id;
 END;
 $$
-
 DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE generar_retiro_sin_cuenta(
-    IN folio_retiro VARCHAR(16),
+CREATE PROCEDURE generar_retiro(
+	IN folio_retiro VARCHAR(16),
     IN contrasena_retiro VARCHAR(8),
-    IN cuenta_id BIGINT -- Nuevo parámetro para el ID de cuenta
+    IN cuenta_id BIGINT, -- Nuevo parámetro para el ID de cuenta
+    IN monto_retirado DOUBLE -- Nuevo parámetro para el monto retirado
 )
 BEGIN
     DECLARE id_transaccion_retiro BIGINT;
@@ -113,24 +115,22 @@ BEGIN
     -- Iniciar la transacción
     START TRANSACTION;
 
-    -- Insertar el registro en la tabla de transacciones con el id_cuenta especificado
-    INSERT INTO transacciones (tipo, monto, id_cuenta) -- Asegúrate de incluir id_cuenta
-    VALUES ('Retiro', 0, cuenta_id);
+    -- Insertar el registro en la tabla de transacciones con el id_cuenta especificado y el monto retirado
+    INSERT INTO transacciones (tipo, monto, id_cuenta) 
+    VALUES ('Retiro', monto_retirado, cuenta_id);
 
     -- Obtener el ID de la última transacción insertada
     SET id_transaccion_retiro = LAST_INSERT_ID();
 
-    -- Insertar el registro en la tabla de retiros
-    INSERT INTO retiros (contrasena, folio, id_transaccion)
-    VALUES (contrasena_retiro, folio_retiro, id_transaccion_retiro);
+    -- Insertar el registro en la tabla de retiros con el monto retirado
+    INSERT INTO retiros (contrasena, folio, estado, id_transaccion)
+    VALUES (contrasena_retiro, folio_retiro, 'en espera', id_transaccion_retiro);
 
     -- Confirmar la transacción
     COMMIT;
 END//
 
 DELIMITER ;
-
--- SET autocommit = 1;
 
 DELIMITER //
 
@@ -189,7 +189,6 @@ END//
 
 DELIMITER ;
 
-
 DELIMITER //
 
 CREATE PROCEDURE filtroPeriodo (IN fecha_desde DATE, IN fecha_hasta DATE, IN idCliente BIGINT)
@@ -220,10 +219,9 @@ END //
 
 DELIMITER ;
 
-
 DELIMITER //
 
-CREATE PROCEDURE actualizar_estado_retiro_sin_cuenta(
+CREATE PROCEDURE efectuar_retiro(
     IN folio_retiro VARCHAR(16),
     IN contrasena_retiro VARCHAR(8)
 )
@@ -261,8 +259,53 @@ BEGIN
         SET saldo = saldo - monto_retirado
         WHERE id_cuenta = cuenta_origen_id;
         
-        SELECT CONCAT('Retiro realizado por un monto de $', monto_retirado, ' de la cuenta con ID ', cuenta_origen_id) AS 'Mensaje';
+        SELECT 
+            c.numero_cuenta AS numero_cuenta_origen,
+            monto_retirado AS cantidad_retirada;
     END IF;
 END//
 
 DELIMITER ;
+
+SET GLOBAL event_scheduler = ON;
+
+DELIMITER //
+
+CREATE EVENT caducar_retiro
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+    DECLARE fecha_limite TIMESTAMP;
+    DECLARE id_retiro BIGINT;
+
+    SET fecha_limite = DATE_SUB(NOW(), INTERVAL 10 MINUTE);
+
+    UPDATE retiros
+    SET estado = 'caducado'
+    WHERE estado = 'en espera' AND fecha_registro <= fecha_limite;
+
+    -- Realizar la actualización del saldo y marcar el retiro como reembolsado si aún no se ha hecho
+	IF EXISTS (SELECT * FROM retiros WHERE estado = 'caducado' AND reembolsado = FALSE AND fecha_registro <= fecha_limite) THEN
+		-- Actualizar el saldo de la cuenta correspondiente sumándole el monto del retiro
+		SELECT id_transaccion INTO id_retiro
+		FROM retiros
+		WHERE estado = 'caducado' AND reembolsado = FALSE AND fecha_registro <= fecha_limite
+		LIMIT 1;
+
+		UPDATE cuentas c
+		INNER JOIN transacciones t ON c.id_cuenta = t.id_cuenta
+		SET c.saldo = c.saldo + t.monto
+		WHERE t.id_transaccion = id_retiro;
+
+		-- Marcar el retiro como reembolsado
+		UPDATE retiros
+		SET reembolsado = TRUE
+		WHERE id_transaccion = id_retiro;
+	END IF;
+
+END//
+
+DELIMITER ;
+
+
+select * from banco_del_sol.retiros;

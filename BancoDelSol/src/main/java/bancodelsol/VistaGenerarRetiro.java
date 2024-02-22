@@ -116,12 +116,17 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
         lblInformacion.setFont(new java.awt.Font("Amazon Ember Light", 0, 20)); // NOI18N
         lblInformacion.setForeground(new java.awt.Color(143, 143, 143));
         lblInformacion.setText("Más información");
+        lblInformacion.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                lblInformacionMouseDragged(evt);
+            }
+        });
         lblInformacion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblInformacionMouseClicked(evt);
             }
         });
-        add(lblInformacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, -1, -1));
+        add(lblInformacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 190, -1));
 
         btnInicio.setBorderPainted(false);
         btnInicio.setContentAreaFilled(false);
@@ -174,14 +179,15 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
 
         validarRetiro();
-        if (retiroValido) {
+        if (!retiroValido) {
+            ventana.mostrarAviso("El retiro con los datos acutales no existe");
+        }
             generarRetiro();
             ventana.cambiarVistaConfirmarRetiro();
-        }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void lblInformacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblInformacionMouseClicked
-        // TODO add your handling code here:
+        ventana.cambiarVistaInformacionRetiro();     // TODO add your handling code here:
     }//GEN-LAST:event_lblInformacionMouseClicked
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
@@ -208,6 +214,10 @@ public class VistaGenerarRetiro extends javax.swing.JPanel {
     private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMontoActionPerformed
+
+    private void lblInformacionMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblInformacionMouseDragged
+        ventana.cambiarVistaInformacionRetiro();     // TODO add your handling code here:
+    }//GEN-LAST:event_lblInformacionMouseDragged
 
     /**
      * Genera un nuevo retiro asignando un folio aleatorio único y la contraseña
